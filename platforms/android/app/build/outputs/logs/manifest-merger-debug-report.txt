@@ -1,13 +1,13 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
+ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
 MERGED from [:CordovaLib] D:\WebstormProjects\QuantifiedTalk\platforms\android\CordovaLib\build\intermediates\manifests\full\debug\AndroidManifest.xml:20:1-27:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
-INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-14:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
+INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:1-15:12
 	package
 		ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:2:102-135
 		INJECTED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml
@@ -86,3 +86,7 @@ MERGED from [:CordovaLib] D:\WebstormProjects\QuantifiedTalk\platforms\android\C
 		ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:13:42-71
 	android:minSdkVersion
 		ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:13:15-41
+uses-permission#android.permission.RECORD_AUDIO
+ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:14:5-71
+	android:name
+		ADDED from D:\WebstormProjects\QuantifiedTalk\platforms\android\app\src\main\AndroidManifest.xml:14:22-68

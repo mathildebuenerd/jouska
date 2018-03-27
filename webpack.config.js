@@ -2,7 +2,7 @@ const webpack = require("webpack");
 const path = require("path");
 
 module.exports = {
-    entry: "./www/js/index",
+    entry: "./www/js/index.js",
     output: {
         path: path.resolve(__dirname, "./www/dist"),
         filename: "./bundle.js"
@@ -10,18 +10,18 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /ts$/,
+                test: /\.ts$/,
                 loader: "awesome-typescript-loader",
                 options: {
                     configFileName: 'tsconfig.webpack.json'
                 }
             },
             {
-                test: /html$/,
+                test: /\.html$/,
                 loader: "html-loader"
             },
             {
-                test: /css$/,
+                test: /\.css$/,
                 loader: "css-loader"
             }
         ]
