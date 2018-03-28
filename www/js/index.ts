@@ -1,43 +1,58 @@
-var app = {
+// export class CordovaApp {
+//     constructor() {
+//
+//     }
+// }
+
+
+let app = {
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
-    onDeviceReady: function () {
+
+    onDeviceReady: function() {
         console.log("The device is ready");
-        window['plugins'].speechRecognition.isRecognitionAvailable(function (available) {
-            if (available) {
+
+        window['plugins'].speechRecognition.isRecognitionAvailable(function(available){
+            if(available){
                 console.log("speechRecognition est available");
                 console.log(available);
-                window['plugins'].speechRecognition.hasPermission(function (isGranted) {
-                    if (isGranted) {
+                window['plugins'].speechRecognition.hasPermission(function (isGranted){
+                    if(isGranted){
                         console.log("speechRecognition a la permission");
-                    }
-                    else {
+                    }else{
                         console.log("speechRecognition n'a la permission");
-                        window['plugins'].speechRecognition.requestPermission(function () {
+                        window['plugins'].speechRecognition.requestPermission(function (){
                             console.log("je requière la permission");
-                        }, function (err) {
+                        }, function (err){
                             console.log("je n'arrive pas à avoir la permission");
                             console.log(err);
                         });
                     }
-                }, function (err) {
+                }, function(err){
                     console.log(err);
                 });
-                var settings = {
+
+                // on paramètre la langue d'écoute
+                let settings = {
                     lang: "fr-FR"
+                    // showPopup: true
                 };
-                window['plugins'].speechRecognition.startListening(function (result) {
+
+                // on commence à écouter
+                window['plugins'].speechRecognition.startListening(function(result){
                     console.log(result);
-                }, function (err) {
+                }, function(err){
                     console.log(err);
                 }, settings);
+
             }
-        }, function (err) {
+        }, function(err){
             console.log("speechRecognition n'est pas available");
             console.error(err);
         });
     }
+
 };
+
 app.initialize();
-//# sourceMappingURL=index.js.map
