@@ -13,7 +13,11 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"SpeechRecognition\"><param name=\"android-package\" value=\"com.pbakondy.SpeechRecognition\" /></feature>",
+              "xml": "<feature name=\"SpeechRecognition\"><param name=\"android-package\" value=\"org.apache.cordova.speech.SpeechRecognition\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"PushNotification\"><param name=\"android-package\" value=\"com.adobe.phonegap.push.PushPlugin\" /></feature>",
               "count": 1
             }
           ]
@@ -26,6 +30,46 @@
               "xml": "<uses-permission android:name=\"android.permission.RECORD_AUDIO\" />",
               "count": 1
             }
+          ],
+          "/manifest": [
+            {
+              "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.VIBRATE\" />",
+              "count": 1
+            }
+          ],
+          "/manifest/application": [
+            {
+              "xml": "<activity android:exported=\"true\" android:name=\"com.adobe.phonegap.push.PushHandlerActivity\" android:permission=\"${applicationId}.permission.PushHandlerActivity\" />",
+              "count": 1
+            },
+            {
+              "xml": "<receiver android:name=\"com.adobe.phonegap.push.BackgroundActionButtonHandler\" />",
+              "count": 1
+            },
+            {
+              "xml": "<receiver android:name=\"com.adobe.phonegap.push.PushDismissedHandler\" />",
+              "count": 1
+            },
+            {
+              "xml": "<service android:name=\"com.adobe.phonegap.push.FCMService\"><intent-filter><action android:name=\"com.google.firebase.MESSAGING_EVENT\" /></intent-filter></service>",
+              "count": 1
+            },
+            {
+              "xml": "<service android:name=\"com.adobe.phonegap.push.PushInstanceIDListenerService\"><intent-filter><action android:name=\"com.google.firebase.INSTANCE_ID_EVENT\" /></intent-filter></service>",
+              "count": 1
+            }
           ]
         }
       }
@@ -35,23 +79,92 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-speechrecognition": {
+    "phonegap-plugin-speech-recognition": {
+      "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "phonegap-plugin-push": {
+      "FCM_VERSION": "11.6.2",
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {},
   "modules": [
     {
-      "id": "cordova-plugin-speechrecognition.SpeechRecognition",
-      "file": "plugins/cordova-plugin-speechrecognition/www/speechRecognition.js",
-      "pluginId": "cordova-plugin-speechrecognition",
-      "merges": [
-        "window.plugins.speechRecognition"
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognition",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognition.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognition"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognitionError",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognitionError.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognitionError"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognitionAlternative",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognitionAlternative.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognitionAlternative"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognitionResult",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognitionResult.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognitionResult"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognitionResultList",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognitionResultList.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognitionResultList"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechRecognitionEvent",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognitionEvent.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechRecognitionEvent"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechGrammar",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechGrammar.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechGrammar"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-speech-recognition.SpeechGrammarList",
+      "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechGrammarList.js",
+      "pluginId": "phonegap-plugin-speech-recognition",
+      "clobbers": [
+        "SpeechGrammarList"
+      ]
+    },
+    {
+      "id": "phonegap-plugin-push.PushNotification",
+      "file": "plugins/phonegap-plugin-push/www/push.js",
+      "pluginId": "phonegap-plugin-push",
+      "clobbers": [
+        "PushNotification"
       ]
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-plugin-speechrecognition": "1.1.2"
+    "phonegap-plugin-speech-recognition": "0.3.0",
+    "phonegap-plugin-push": "2.1.3"
   }
 }

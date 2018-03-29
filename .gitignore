@@ -4,3 +4,6 @@ www/.idea/
 
 # node
 node_modules
+
+# personal files
+google-services.json

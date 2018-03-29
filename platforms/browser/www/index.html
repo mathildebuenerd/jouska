@@ -41,10 +41,12 @@
             <div id="deviceready" class="blink">
                 <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
+                <p class="mytest"></p>
+                <button id="startSpeechRecognition">Start Speech Recognition</button>
             </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script src="js/speechRecognition.js"></script>
+        <script type="text/javascript" src="dist/bundle.js"></script> <!-- configuré dans le webpack.config.js -->
+        <!--<script src="js/speechRecognitionDevice.js"></script>-->
     </body>
 </html>

@@ -4,39 +4,43 @@ var app = {
     },
     onDeviceReady: function () {
         console.log("The device is ready");
-        window['plugins'].speechRecognition.isRecognitionAvailable(function (available) {
-            if (available) {
-                console.log("speechRecognition est available");
-                console.log(available);
-                window['plugins'].speechRecognition.hasPermission(function (isGranted) {
-                    if (isGranted) {
-                        console.log("speechRecognition a la permission");
-                    }
-                    else {
-                        console.log("speechRecognition n'a la permission");
-                        window['plugins'].speechRecognition.requestPermission(function () {
-                            console.log("je requière la permission");
-                        }, function (err) {
-                            console.log("je n'arrive pas à avoir la permission");
-                            console.log(err);
-                        });
-                    }
-                }, function (err) {
-                    console.log(err);
-                });
-                var settings = {
-                    lang: "fr-FR"
-                };
-                window['plugins'].speechRecognition.startListening(function (result) {
-                    console.log(result);
-                }, function (err) {
-                    console.log(err);
-                }, settings);
-            }
-        }, function (err) {
-            console.log("speechRecognition n'est pas available");
-            console.error(err);
+        var recognition = window['SpeechRecognition'];
+        var button = document.querySelector('#startSpeechRecognition');
+        button.addEventListener('click', function () {
+            console.log("le listener marche");
+            console.log(recognition);
+            recognition.start();
+            var PushNotification = window['PushNotification'];
+            var push = PushNotification.init({
+                android: {},
+                ios: {
+                    alert: "true",
+                    badge: true,
+                    sound: 'false'
+                },
+                windows: {}
+            });
+            push.on('registration', function (data) {
+                console.log(data.registrationId);
+            });
+            push.on('notification', function (data) {
+                console.log(data.message);
+                console.log(data.title);
+                console.log(data.count);
+                console.log(data.sound);
+                console.log(data.image);
+                console.log(data.additionalData);
+            });
+            push.on('error', function (e) {
+                console.log(e.message);
+            });
         });
+        console.log(recognition);
+        recognition.onresult = function (event) {
+            if (event.results.length > 0) {
+                console.log(event.results[0][0].transcript);
+            }
+        };
     }
 };
 app.initialize();

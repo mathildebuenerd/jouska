@@ -2,4 +2,5 @@
 
 ## Plugins utilisés
 
-- [cordova-plugin-speechrecognition](https://www.npmjs.com/package/cordova-plugin-speechrecognition)
+- [W3C Web Speech API - Speech Recognition plugin for PhoneGap](https://github.com/macdonst/SpeechRecognitionPlugin)
+
