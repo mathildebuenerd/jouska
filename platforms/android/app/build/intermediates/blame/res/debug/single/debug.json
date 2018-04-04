@@ -112,24 +112,24 @@
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-xhdpi-v4\\notify_panel_notification_icon_bg.png"
     },
     {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_notification_icon_background.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable\\notification_icon_background.xml"
-    },
-    {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21_notification_template_icon_group.xml.flat",
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_notification_icon_background.xml.flat",
+        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable\\notification_icon_background.xml"
     },
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_low_pressed.9.png.flat",
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-hdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\b2e0b2bbffa21c579303851a42056ed7\\res\\layout\\notification_template_big_media.xml"
-    },
-    {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21_notification_template_custom_big.xml.flat",
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_big_media.xml.flat",
+        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-26.1.0.aar\\b2e0b2bbffa21c579303851a42056ed7\\res\\layout\\notification_template_big_media.xml"
     },
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21_notification_action.xml.flat",
