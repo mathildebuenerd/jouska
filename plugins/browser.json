@@ -10,16 +10,22 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "phonegap-plugin-speech-recognition": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "phonegap-plugin-push": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "cordova-plugin-media": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
+    "phonegap-plugin-speech-recognition": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
     }
   },
   "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
     "cordova-plugin-compat": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
     }
   }
 }

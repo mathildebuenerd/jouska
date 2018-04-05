@@ -1,46 +1,42 @@
+var mybody = document.querySelector('body');
 var app = {
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
     onDeviceReady: function () {
         console.log("The device is ready");
-        var recognition = window['SpeechRecognition'];
-        var button = document.querySelector('#startSpeechRecognition');
-        button.addEventListener('click', function () {
-            console.log("le listener marche");
-            console.log(recognition);
-            recognition.start();
-            var PushNotification = window['PushNotification'];
-            var push = PushNotification.init({
-                android: {},
-                ios: {
-                    alert: "true",
-                    badge: true,
-                    sound: 'false'
-                },
-                windows: {}
-            });
-            push.on('registration', function (data) {
-                console.log(data.registrationId);
-            });
-            push.on('notification', function (data) {
-                console.log(data.message);
-                console.log(data.title);
-                console.log(data.count);
-                console.log(data.sound);
-                console.log(data.image);
-                console.log(data.additionalData);
-            });
-            push.on('error', function (e) {
-                console.log(e.message);
-            });
-        });
-        console.log(recognition);
+        var recognition = new SpeechRecognition();
+        recognition.lang = "fr-FR";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+        var recognizing = false;
+        var mybutton = document.querySelector('#startSpeechRecognition');
+        mybutton.addEventListener('click', restartRecognition);
+        recognition.start();
+        recognition.onstart = function () {
+            mybody.style.backgroundColor = "blue";
+            recognizing = true;
+        };
         recognition.onresult = function (event) {
-            if (event.results.length > 0) {
-                console.log(event.results[0][0].transcript);
+            var sentence = '';
+            for (var i = 0; i < event.results.length; i++) {
+                sentence += event.results[i][0].transcript + ' ';
+            }
+            mybody.textContent = sentence;
+            console.log(sentence);
+            if ((sentence.split(' ')).length > 10) {
+                restartRecognition();
             }
         };
+        recognition.onend = function () {
+            mybody.style.backgroundColor = "red";
+            restartRecognition();
+        };
+        function restartRecognition() {
+            recognition.stop();
+            recognition.start();
+        }
     }
 };
 app.initialize();

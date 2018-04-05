@@ -16,12 +16,12 @@
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\drawable-port-ldpi\\screen.png"
     },
     {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21_notification_action_background.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-v21\\notification_action_background.xml"
-    },
-    {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-land-mdpi_screen.png.flat",
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\drawable-land-mdpi\\screen.png"
+    },
+    {
+        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21_notification_action_background.xml.flat",
+        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-v21\\notification_action_background.xml"
     },
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_notification_bg_low_normal.9.png.flat",

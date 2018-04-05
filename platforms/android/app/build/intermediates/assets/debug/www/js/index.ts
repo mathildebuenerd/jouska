@@ -3,7 +3,10 @@
 //
 //     }
 // }
+// import 'phonegap-plugin-push'
+// import 'phonegap-plugin-speech-recognition'
 
+let mybody = document.querySelector('body');
 
 let app = {
     initialize: function () {
@@ -12,61 +15,88 @@ let app = {
 
     onDeviceReady: function() {
         console.log("The device is ready");
-        // if ('SpeechRecognition' in window) {
-        //
-        // }
-        const recognition = window['SpeechRecognition'];
 
-        // const recognition = new SpeechRecognition();
-
+        // Setup
+        const recognition = new SpeechRecognition();
         recognition.lang = "fr-FR";
         recognition.continuous = true;
-        recognition.interimResults = false;
-        let button = document.querySelector('#startSpeechRecognition');
-        button.addEventListener('click', function() {
-            console.log("le listener marche");
-            console.log(recognition);
-            recognition.start();
-        });
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 1;
+        let recognizing = false;
 
-        // Notifications
-            const PushNotification = window['PushNotification'];
-            const push = PushNotification.init({
-                android: {
-                },
-                ios: {
-                    alert: "true",
-                    badge: true,
-                    sound: 'false'
-                },
-                windows: {}
-            });
+        let mybutton = document.querySelector('#startSpeechRecognition');
 
-            push.on('registration', (data) => {
-                console.log(data.registrationId);
-            });
+        mybutton.addEventListener('click', restartRecognition);
 
-            push.on('notification', (data) => {
-                console.log(data.message);
-                console.log(data.title);
-                console.log(data.count);
-                console.log(data.sound);
-                console.log(data.image);
-                console.log(data.additionalData);
-            });
+        recognition.start();
 
-            push.on('error', (e) => {
-                console.log(e.message);
-            });
+        recognition.onstart = function() {
+            mybody.style.backgroundColor = "blue";
+            recognizing = true;
+        };
 
-        // let recognition = new SpeechRecognition();
-        console.log(recognition);
-        // recognition.start();
         recognition.onresult = function(event) {
-            if (event.results.length > 0) {
-                console.log(event.results[0][0].transcript);
+            let sentence = '';
+
+            // we go into the results in order to have the whole sentence
+            for (let i=0; i<event.results.length; i++) {
+                sentence+=event.results[i][0].transcript + ' ';
             }
+
+            mybody.textContent = sentence;
+            console.log(sentence);
+
+            // when we have 10 words, we send it to the server and restart the recording
+            if ((sentence.split(' ')).length > 10) {
+                // socket.emit('newSentence', {sentence: sentence}); // on envoie un message de type 'newsentence, avec la sentence en contenu
+                // sentences.push({sentence:sentence});
+                restartRecognition();
+            }
+        };
+
+        // permet de redémarrer la recognition quand elle s'arrête
+        recognition.onend = () => {
+            mybody.style.backgroundColor = "red";
+            restartRecognition();
+        };
+
+        function restartRecognition() {
+            recognition.stop();
+            recognition.start();
         }
+
+
+
+        // // Notifications
+        // const PushNotification = window['PushNotification'];
+        // const push = PushNotification.init({
+        //     android: {
+        //     },
+        //     ios: {
+        //         alert: "true",
+        //         badge: true,
+        //         sound: 'false'
+        //     },
+        //     windows: {}
+        // });
+        //
+        // push.on('registration', (data) => {
+        //     console.log(data.registrationId);
+        // });
+        //
+        // push.on('notification', (data) => {
+        //     console.log(data.message);
+        //     console.log(data.title);
+        //     console.log(data.count);
+        //     console.log(data.sound);
+        //     console.log(data.image);
+        //     console.log(data.additionalData);
+        // });
+        //
+        // push.on('error', (e) => {
+        //     console.log(e.message);
+        // });
+
     }
 
 };

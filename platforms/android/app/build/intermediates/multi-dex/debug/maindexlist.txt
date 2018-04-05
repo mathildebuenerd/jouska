@@ -318,6 +318,7 @@ android/support/v4/view/KeyEventCompat.class
 android/support/v4/widget/SearchViewCompat$OnCloseListener.class
 android/support/v4/view/ScaleGestureDetectorCompat.class
 android/support/v4/provider/FontsContractCompat$FontFamilyResult$FontResultStatus.class
+org/apache/cordova/file/FileUtils.class
 android/support/v4/media/session/MediaControllerCompat$Callback.class
 com/google/android/gms/common/zze.class
 android/support/v4/widget/DrawerLayout.class

@@ -1,0 +1,60 @@
+{
+    "logs": [
+        {
+            "outputFile": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-az\\values-az.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\firebase-messaging-11.6.2.aar\\d2517a7d54189f6e75d9d35b8918c15d\\res\\values-az\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "243",
+                        "endColumns": "102",
+                        "endOffsets": "345"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "326",
+                        "endColumns": "106",
+                        "endOffsets": "428"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\values-az\\values-az.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "433",
+                        "endColumns": "100",
+                        "endOffsets": "529"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\play-services-basement-11.6.2.aar\\7a5455da2aba20708e81e3918006e164\\res\\values-az\\values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "285",
+                        "endColumns": "220",
+                        "endOffsets": "505"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "220",
+                        "endOffsets": "321"
+                    }
+                }
+            ]
+        }
+    ]
+}
