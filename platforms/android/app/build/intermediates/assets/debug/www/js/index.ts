@@ -64,9 +64,17 @@ let app = {
             restartRecognition();
         };
 
+        recognition.onspeechend = (event) => {
+            console.log(event.type);
+        };
+
         function restartRecognition() {
+            console.log('je restart');
             recognition.stop();
+            console.log('jai stop dans le restart');
             recognition.start();
+            console.log('jai redemarré dans le restart');
+
         }
 
 
