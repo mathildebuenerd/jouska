@@ -20,7 +20,7 @@ let app = {
         let recognition = new SpeechRecognition();
         recognition.lang = "fr-FR";
         recognition.continuous = true;
-        recognition.interimResults = true;
+        // recognition.interimResults = true;
         recognition.maxAlternatives = 1;
         let recognizing = false;
 
@@ -45,6 +45,7 @@ let app = {
 
             mybody.textContent = sentence;
             console.log(sentence);
+            restartRecognition();
 
             // when we have 10 words, we send it to the server and restart the recording
             // if ((sentence.split(' ')).length > 10) {
@@ -55,7 +56,8 @@ let app = {
         };
 
         // permet de redémarrer la recognition quand elle s'arrête
-        recognition.onend = () => {
+        recognition.onend = (e) => {
+            console.log(e.type);
             mybody.style.backgroundColor = "red";
             restartRecognition();
         };

@@ -8,7 +8,6 @@ var app = {
         var recognition = new SpeechRecognition();
         recognition.lang = "fr-FR";
         recognition.continuous = true;
-        recognition.interimResults = true;
         recognition.maxAlternatives = 1;
         var recognizing = false;
         var mybutton = document.querySelector('#startSpeechRecognition');
@@ -25,8 +24,10 @@ var app = {
             }
             mybody.textContent = sentence;
             console.log(sentence);
+            restartRecognition();
         };
-        recognition.onend = function () {
+        recognition.onend = function (e) {
+            console.log(e.type);
             mybody.style.backgroundColor = "red";
             restartRecognition();
         };
