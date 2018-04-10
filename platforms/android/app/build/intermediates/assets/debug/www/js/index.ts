@@ -17,7 +17,7 @@ let app = {
         console.log("The device is ready");
 
         // Setup
-        const recognition = new SpeechRecognition();
+        let recognition = new SpeechRecognition();
         recognition.lang = "fr-FR";
         recognition.continuous = true;
         recognition.interimResults = true;
@@ -47,11 +47,11 @@ let app = {
             console.log(sentence);
 
             // when we have 10 words, we send it to the server and restart the recording
-            if ((sentence.split(' ')).length > 10) {
-                // socket.emit('newSentence', {sentence: sentence}); // on envoie un message de type 'newsentence, avec la sentence en contenu
-                // sentences.push({sentence:sentence});
-                restartRecognition();
-            }
+            // if ((sentence.split(' ')).length > 10) {
+            //     // socket.emit('newSentence', {sentence: sentence}); // on envoie un message de type 'newsentence, avec la sentence en contenu
+            //     // sentences.push({sentence:sentence});
+            //     restartRecognition();
+            // }
         };
 
         // permet de redémarrer la recognition quand elle s'arrête
@@ -61,7 +61,11 @@ let app = {
         };
 
         function restartRecognition() {
-            recognition.stop();
+            // recognition = new SpeechRecognition();
+            // recognition.lang = "fr-FR";
+            // recognition.continuous = true;
+            // recognition.interimResults = true;
+            // recognition.maxAlternatives = 1;
             recognition.start();
         }
 

@@ -25,16 +25,12 @@ var app = {
             }
             mybody.textContent = sentence;
             console.log(sentence);
-            if ((sentence.split(' ')).length > 10) {
-                restartRecognition();
-            }
         };
         recognition.onend = function () {
             mybody.style.backgroundColor = "red";
             restartRecognition();
         };
         function restartRecognition() {
-            recognition.stop();
             recognition.start();
         }
     }

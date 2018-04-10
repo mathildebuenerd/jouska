@@ -1,4 +1,4 @@
-#Thu Apr 05 13:04:23 CEST 2018
+#Tue Apr 10 10:21:39 CEST 2018
 base.0=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 renamed.1=classes2.dex
 renamed.0=classes.dex
