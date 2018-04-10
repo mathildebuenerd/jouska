@@ -1,4 +1,4 @@
-var mybody = document.querySelector('body');
+var blockSentences = document.querySelector('#blockSentences');
 var app = {
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
@@ -13,25 +13,28 @@ var app = {
         var mybutton = document.querySelector('#startSpeechRecognition');
         mybutton.addEventListener('click', restartRecognition);
         recognition.start();
-        recognition.onstart = function () {
-            mybody.style.backgroundColor = "blue";
+        recognition.onstart = function (event) {
+            console.log(event.type);
+            blockSentences.style.backgroundColor = "blue";
             recognizing = true;
         };
         recognition.onresult = function (event) {
+            console.log(event.type);
             var sentence = '';
             for (var i = 0; i < event.results.length; i++) {
                 sentence += event.results[i][0].transcript + ' ';
             }
-            mybody.textContent = sentence;
+            blockSentences.textContent = sentence;
             console.log(sentence);
             restartRecognition();
         };
-        recognition.onend = function (e) {
-            console.log(e.type);
-            mybody.style.backgroundColor = "red";
+        recognition.onend = function (event) {
+            console.log(event.type);
+            blockSentences.style.backgroundColor = "red";
             restartRecognition();
         };
         function restartRecognition() {
+            recognition.stop();
             recognition.start();
         }
     }

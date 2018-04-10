@@ -6,7 +6,7 @@
 // import 'phonegap-plugin-push'
 // import 'phonegap-plugin-speech-recognition'
 
-let mybody = document.querySelector('body');
+let blockSentences = document.querySelector('#blockSentences');
 
 let app = {
     initialize: function () {
@@ -30,12 +30,14 @@ let app = {
 
         recognition.start();
 
-        recognition.onstart = function() {
-            mybody.style.backgroundColor = "blue";
+        recognition.onstart = function(event) {
+            console.log(event.type);
+            blockSentences.style.backgroundColor = "blue";
             recognizing = true;
         };
 
         recognition.onresult = function(event) {
+            console.log(event.type);
             let sentence = '';
 
             // we go into the results in order to have the whole sentence
@@ -43,7 +45,7 @@ let app = {
                 sentence+=event.results[i][0].transcript + ' ';
             }
 
-            mybody.textContent = sentence;
+            blockSentences.textContent = sentence;
             console.log(sentence);
             restartRecognition();
 
@@ -56,18 +58,14 @@ let app = {
         };
 
         // permet de redémarrer la recognition quand elle s'arrête
-        recognition.onend = (e) => {
-            console.log(e.type);
-            mybody.style.backgroundColor = "red";
+        recognition.onend = (event) => {
+            console.log(event.type);
+            blockSentences.style.backgroundColor = "red";
             restartRecognition();
         };
 
         function restartRecognition() {
-            // recognition = new SpeechRecognition();
-            // recognition.lang = "fr-FR";
-            // recognition.continuous = true;
-            // recognition.interimResults = true;
-            // recognition.maxAlternatives = 1;
+            recognition.stop();
             recognition.start();
         }
 
