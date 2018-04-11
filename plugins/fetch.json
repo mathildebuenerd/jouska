@@ -46,5 +46,21 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-sms-plugin": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-sms-plugin@^0.1.11"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-sms": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-sms"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

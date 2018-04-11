@@ -12,7 +12,6 @@ var app = {
         var recognizing = false;
         var mybutton = document.querySelector('#startSpeechRecognition');
         mybutton.addEventListener('click', restartRecognition);
-        recognition.start();
         recognition.onstart = function (event) {
             console.log(event.type);
             blockSentences.style.backgroundColor = "blue";
@@ -43,6 +42,8 @@ var app = {
             recognition.start();
             console.log('jai redemarré dans le restart');
         }
+        console.log('localStorage');
+        console.log(localStorage);
     }
 };
 app.initialize();

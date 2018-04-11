@@ -260,6 +260,22 @@ module.exports = [
     "clobbers": [
       "SpeechGrammarList"
     ]
+  },
+  {
+    "id": "cordova-plugin-sms.SMS",
+    "file": "plugins/cordova-plugin-sms/www/SMS.js",
+    "pluginId": "cordova-plugin-sms",
+    "clobbers": [
+      "window.SMS"
+    ]
+  },
+  {
+    "id": "cordova-sms-plugin.Sms",
+    "file": "plugins/cordova-sms-plugin/www/sms.js",
+    "pluginId": "cordova-sms-plugin",
+    "clobbers": [
+      "window.sms"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -269,7 +285,9 @@ module.exports.metadata =
   "phonegap-plugin-push": "2.1.3",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-media": "5.0.2",
-  "phonegap-plugin-speech-recognition": "0.3.0"
+  "phonegap-plugin-speech-recognition": "0.3.0",
+  "cordova-plugin-sms": "1.0.5",
+  "cordova-sms-plugin": "0.1.11"
 };
 // BOTTOM OF METADATA
 });

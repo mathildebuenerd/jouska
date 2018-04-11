@@ -18,6 +18,12 @@
     <feature name="SpeechRecognition">
         <param name="android-package" value="org.apache.cordova.speech.SpeechRecognition" />
     </feature>
+    <feature name="SMS">
+        <param name="android-package" value="com.rjfun.cordova.sms.SMSPlugin" />
+    </feature>
+    <feature name="Sms">
+        <param name="android-package" value="com.cordova.plugins.sms.Sms" />
+    </feature>
     <name>Quantified Talk</name>
     <description>
         Quantify what you say, improve your relationships.

@@ -224,6 +224,22 @@ module.exports = [
         "id": "phonegap-plugin-speech-recognition.SpeechRecognition",
         "pluginId": "phonegap-plugin-speech-recognition",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-sms/www/SMS.js",
+        "id": "cordova-plugin-sms.SMS",
+        "pluginId": "cordova-plugin-sms",
+        "clobbers": [
+            "window.SMS"
+        ]
+    },
+    {
+        "file": "plugins/cordova-sms-plugin/www/sms.js",
+        "id": "cordova-sms-plugin.Sms",
+        "pluginId": "cordova-sms-plugin",
+        "clobbers": [
+            "window.sms"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -234,7 +250,9 @@ module.exports.metadata =
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-media": "5.0.2",
     "cordova-plugin-compat": "1.2.0",
-    "phonegap-plugin-speech-recognition": "0.3.0"
+    "phonegap-plugin-speech-recognition": "0.3.0",
+    "cordova-plugin-sms": "1.0.5",
+    "cordova-sms-plugin": "0.1.11"
 }
 // BOTTOM OF METADATA
 });

@@ -19,6 +19,12 @@
     },
     "phonegap-plugin-speech-recognition": {
       "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
+    "cordova-plugin-sms": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
+    "cordova-sms-plugin": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
     }
   },
   "dependent_plugins": {

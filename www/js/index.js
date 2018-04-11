@@ -12,7 +12,6 @@ var app = {
         var recognizing = false;
         var mybutton = document.querySelector('#startSpeechRecognition');
         mybutton.addEventListener('click', restartRecognition);
-        recognition.start();
         recognition.onstart = function (event) {
             console.log(event.type);
             blockSentences.style.backgroundColor = "blue";
@@ -43,6 +42,26 @@ var app = {
             recognition.start();
             console.log('jai redemarré dans le restart');
         }
+        var filter = {
+            box: 'inbox',
+            maxCount: 20,
+        };
+        if (SMS)
+            SMS.listSMS(filter, function (data) {
+                console.log('sms listed as json array');
+                console.log(data);
+                localStorage.setItem('allMySMS', data);
+                if (Array.isArray(data)) {
+                    for (var i in data) {
+                        var sms = data[i];
+                    }
+                }
+                console.log('success! sms :');
+            }, function (err) {
+                console.log('error list sms: ' + err);
+            });
+        console.log('localStorage');
+        console.log(localStorage);
     }
 };
 app.initialize();
