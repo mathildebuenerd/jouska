@@ -1,11 +1,3 @@
-// export class CordovaApp {
-//     constructor() {
-//
-//     }
-// }
-// import 'phonegap-plugin-push'
-// import 'phonegap-plugin-speech-recognition'
-
 let blockSentences = document.querySelector('#blockSentences');
 
 let app = {
@@ -16,98 +8,62 @@ let app = {
     onDeviceReady: function() {
         console.log("The device is ready");
 
-        // Setup
-        let recognition = new SpeechRecognition();
-        recognition.lang = "fr-FR";
-        recognition.continuous = true;
-        // recognition.interimResults = true;
-        recognition.maxAlternatives = 1;
-        let recognizing = false;
-
-        let mybutton = document.querySelector('#startSpeechRecognition');
-
-        mybutton.addEventListener('click', restartRecognition);
-
-        // recognition.start();
-
-        recognition.onstart = function(event) {
-            console.log(event.type);
-            blockSentences.style.backgroundColor = "blue";
-            recognizing = true;
-        };
-
-        recognition.onresult = function(event) {
-            console.log(event.type);
-            let sentence = '';
-
-            // we go into the results in order to have the whole sentence
-            for (let i=0; i<event.results.length; i++) {
-                sentence+=event.results[i][0].transcript + ' ';
-            }
-
-            blockSentences.textContent = sentence;
-            console.log(sentence);
-            restartRecognition();
-
-            // when we have 10 words, we send it to the server and restart the recording
-            // if ((sentence.split(' ')).length > 10) {
-            //     // socket.emit('newSentence', {sentence: sentence}); // on envoie un message de type 'newsentence, avec la sentence en contenu
-            //     // sentences.push({sentence:sentence});
-            //     restartRecognition();
-            // }
-        };
-
-        // permet de redémarrer la recognition quand elle s'arrête
-        recognition.onend = (event) => {
-            console.log(event.type);
-            blockSentences.style.backgroundColor = "red";
-            restartRecognition();
-        };
-
-        recognition.onspeechend = (event) => {
-            console.log(event.type);
-        };
-
-        function restartRecognition() {
-            console.log('je restart');
-            recognition.stop();
-            console.log('jai stop dans le restart');
-            recognition.start();
-            console.log('jai redemarré dans le restart');
-
-        }
 
 
         // SMS
-        // let filter = {
-        //     box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-        //
-        //     // following 4 filters should NOT be used together, they are OR relationship
-        //     //  read : 0, // 0 for unread SMS, 1 for SMS already read
-        //     //_id : 1234, //  specify the msg id
-        //     //address : '// +8613601234567',  sender's phone number
-        //     // body : 'This is a test SMS', // content to match
-        //
-        //     // following 2 filters can be used to list page up/down
-        //     //   indexFrom : 0, // start from index 0
-        //      maxCount : 20, // count of SMS to return each time
-        // };
-        // if(SMS) SMS.listSMS(filter, function(data){
-        //     console.log('sms listed as json array');
-        //     // console.log( JSON.stringify(data) );
-        //
-        //     console.log(data);
-        //     localStorage.setItem('allMySMS', data);
-        //     if(Array.isArray(data)) {
-        //         for(let i in data) {
-        //             let sms = data[i];
-        //         }
-        //     }
-        //     console.log('success! sms :');
-        //     // console.log(sms);
-        // }, function(err){
-        //     console.log('error list sms: ' + err);
-        // });
+        let filter = {
+            box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+            // following 4 filters should NOT be used together, they are OR relationship
+            //  read : 0, // 0 for unread SMS, 1 for SMS already read
+            //_id : 1234, //  specify the msg id
+            //address : '// +8613601234567',  sender's phone number
+            // body : 'This is a test SMS', // content to match
+            // following 2 filters can be used to list page up/down
+            //   indexFrom : 0, // start from index 0
+            maxCount : 200, // count of SMS to return each time
+        };
+        if(SMS) SMS.listSMS(filter, function(data){
+
+            // D'abord on fait une list des adresses (address)
+            // Puis on ajoute les messages correspondants dans cette liste
+            let contacts = {};
+
+            for (let i=0; i<data.length; i++) {
+                // on regarde d'abord si le numéro est un vrai numéro, pour éviter les numéros comme SNCF ou 36105 etc...
+                if ((data[i].address).length > 7 && (data[i].address).match("[0-9]+")) {
+                    if (contacts.hasOwnProperty(data[i].address)) {
+                        Object.defineProperty(
+                            contacts[data[i].address],
+                            data[i]._id,
+                            {
+                                value: {
+                                    "body": data[i].body,
+                                    "date": data[i].date
+                                }
+                            }
+                        );
+                    } else {
+                        let myid = String(data[i]._id);
+                        Object.defineProperty(
+                            contacts,
+                            data[i].address,
+                            {
+                                value: {
+                                    "000": {
+                                        "body": data[i].body,
+                                        "date": data[i].date
+                                    }
+                                }
+                            }
+                        );
+                    }
+                }
+            }
+            console.log('contacts');
+            console.log(contacts);
+        }, function(err){
+            console.log('error list sms: ' + err);
+        });
 
         console.log('localStorage');
         console.log(localStorage);
@@ -147,9 +103,39 @@ let app = {
         // push.on('error', (e) => {
         //     console.log(e.message);
         // });
-
     }
 
 };
 
 app.initialize();
+
+
+
+
+
+
+
+
+
+
+
+// -----------------------------------------------------------------------------------
+
+// import {SMSManager} from "./manageSMS";
+//
+// export class CordovaApp {
+//     constructor() {
+//         document.addEventListener('deviceready', this.onDeviceReady, false);
+//         let blockSentences = document.querySelector('#blockSentences');
+//     }
+//
+//     onDeviceReady() {
+//         console.log("The device is ready");
+//         console.log('localStorage');
+//         console.log(localStorage);
+//         let sms = new SMSManager();
+//
+//     }
+// }
+//
+// let instance = new CordovaApp();

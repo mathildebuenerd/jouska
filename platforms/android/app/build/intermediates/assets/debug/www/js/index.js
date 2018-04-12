@@ -5,43 +5,41 @@ var app = {
     },
     onDeviceReady: function () {
         console.log("The device is ready");
-        var recognition = new SpeechRecognition();
-        recognition.lang = "fr-FR";
-        recognition.continuous = true;
-        recognition.maxAlternatives = 1;
-        var recognizing = false;
-        var mybutton = document.querySelector('#startSpeechRecognition');
-        mybutton.addEventListener('click', restartRecognition);
-        recognition.onstart = function (event) {
-            console.log(event.type);
-            blockSentences.style.backgroundColor = "blue";
-            recognizing = true;
+        var filter = {
+            box: 'inbox',
+            maxCount: 200,
         };
-        recognition.onresult = function (event) {
-            console.log(event.type);
-            var sentence = '';
-            for (var i = 0; i < event.results.length; i++) {
-                sentence += event.results[i][0].transcript + ' ';
-            }
-            blockSentences.textContent = sentence;
-            console.log(sentence);
-            restartRecognition();
-        };
-        recognition.onend = function (event) {
-            console.log(event.type);
-            blockSentences.style.backgroundColor = "red";
-            restartRecognition();
-        };
-        recognition.onspeechend = function (event) {
-            console.log(event.type);
-        };
-        function restartRecognition() {
-            console.log('je restart');
-            recognition.stop();
-            console.log('jai stop dans le restart');
-            recognition.start();
-            console.log('jai redemarré dans le restart');
-        }
+        if (SMS)
+            SMS.listSMS(filter, function (data) {
+                var contacts = {};
+                for (var i = 0; i < data.length; i++) {
+                    if ((data[i].address).length > 7 && (data[i].address).match("[0-9]+")) {
+                        if (contacts.hasOwnProperty(data[i].address)) {
+                            Object.defineProperty(contacts[data[i].address], data[i]._id, {
+                                value: {
+                                    "body": data[i].body,
+                                    "date": data[i].date
+                                }
+                            });
+                        }
+                        else {
+                            var myid = String(data[i]._id);
+                            Object.defineProperty(contacts, data[i].address, {
+                                value: {
+                                    "000": {
+                                        "body": data[i].body,
+                                        "date": data[i].date
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                console.log('contacts');
+                console.log(contacts);
+            }, function (err) {
+                console.log('error list sms: ' + err);
+            });
         console.log('localStorage');
         console.log(localStorage);
     }
