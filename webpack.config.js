@@ -27,7 +27,11 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".ts", ".js", ".html", ".css"]
+        extensions: [".ts", ".js", ".html", ".css", ".json"]
+    },
+    node: {
+        fs: 'empty',
+        child_process: 'empty'
     },
     devtool: "#inline-source-map"
-}
+};

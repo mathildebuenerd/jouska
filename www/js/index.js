@@ -16,7 +16,7 @@ var CordovaApp = (function () {
         });
         sms.getAllSMS();
         var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
-        analysis.analyze('You are so stupid');
+        analysis.analyze('Tu es vraiment bête toi');
     };
     return CordovaApp;
 }());

@@ -4,6 +4,10 @@
 
 import * as sentiment from "./../../hooks/sentiment-multilang";
 import * as darktriad from "./../../hooks/darktriad";
+import * as translate from "./../../hooks/translate";
+
+translate.key = "";
+translate.from = "fr";
 
 export class SentimentAnalysis {
     language: string;
@@ -12,16 +16,17 @@ export class SentimentAnalysis {
     }
 
     public analyze(sentence: string) {
-        let test = sentiment(sentence, this.language);
-        if (this.language === 'en') {
-            let testTriad = darktriad(sentence);
-            console.log('darktriad');
+        let englishSentence = translate(sentence).then(text => {
+            console.log(text);  // Hola mundo
+            let sentimentanalysis = sentiment(text, 'en');
+            let testTriad = darktriad(text);
+            console.log(sentimentanalysis);
             console.log(testTriad);
-        } else {
-            console.log("darktriad only works with the english language");
-        }
-        console.log(test);
-        console.log('analyse');
+        });
+
+        let sentimentfrench = sentiment(sentence, 'fr');
+        console.log(sentimentfrench);
+
     }
 
 

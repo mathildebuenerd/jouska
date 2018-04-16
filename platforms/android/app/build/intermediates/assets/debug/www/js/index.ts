@@ -26,7 +26,7 @@ export class CordovaApp {
         sms.getAllSMS();
 
         let analysis = new SentimentAnalysis('en');
-        analysis.analyze('You are so stupid');
+        analysis.analyze('Tu es vraiment bête toi');
     }
 }
 
