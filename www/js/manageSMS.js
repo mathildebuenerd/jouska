@@ -1,16 +1,11 @@
-declare const SMS: any;
-// declare const SMSManager: any;
-
-
-export class SMSManager {
-
-    filters: object;
-    constructor(filter: object) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var SMSManager = (function () {
+    function SMSManager(filter) {
         this.filters = filter;
     }
-
-    public static convertUnixDate(unixTimeStamp: number): object {
-        let date = new Date(unixTimeStamp*1000); // comme javascript fonctionne en millisecondes, on multiple par 1000 les secondes unix
+    SMSManager.convertUnixDate = function (unixTimeStamp) {
+        var date = new Date(unixTimeStamp * 1000);
         console.log(date.getFullYear());
         return {
             'day': date.getDate(),
@@ -20,15 +15,14 @@ export class SMSManager {
             'minutes': date.getMinutes(),
             'seconds': date.getSeconds()
         };
-    }
-
-    public getAllSMS() {
+    };
+    SMSManager.prototype.getAllSMS = function () {
         if (SMS) {
             SMS.listSMS(this.filters, function (data) {
-                let contacts = {};
-                for (let i = 0; i < data.length; i++) {
+                var contacts = {};
+                for (var i = 0; i < data.length; i++) {
                     if ((data[i].address).length > 7 && (data[i].address).match("[0-9]+")) {
-                        let date = SMSManager.convertUnixDate(data[i].date);
+                        var date = SMSManager.convertUnixDate(data[i].date);
                         if (contacts.hasOwnProperty(data[i].address)) {
                             Object.defineProperty(contacts[data[i].address], data[i]._id, {
                                 value: {
@@ -36,8 +30,9 @@ export class SMSManager {
                                     "date": date
                                 }
                             });
-                        } else {
-                            let myid = String(data[i]._id);
+                        }
+                        else {
+                            var myid = String(data[i]._id);
                             Object.defineProperty(contacts, data[i].address, {
                                 value: {
                                     "000": {
@@ -55,12 +50,10 @@ export class SMSManager {
                 console.log('error list sms: ' + err);
             });
         }
-
-    }
-
-    public displaySMS() {
-
-    }
-
-}
-
+    };
+    SMSManager.prototype.displaySMS = function () {
+    };
+    return SMSManager;
+}());
+exports.SMSManager = SMSManager;
+//# sourceMappingURL=manageSMS.js.map
