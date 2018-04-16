@@ -28,10 +28,6 @@
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-hdpi-v4\\notification_bg_low_normal.9.png"
     },
     {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_action.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout\\notification_action.xml"
-    },
-    {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi_icon.png.flat",
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\icon.png"
     },
@@ -42,10 +38,6 @@
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-land-ldpi_screen.png.flat",
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\drawable-land-ldpi\\screen.png"
-    },
-    {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_template_icon_group.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout\\notification_template_icon_group.xml"
     },
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml_config.xml.flat",
@@ -192,10 +184,6 @@
         "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\drawable-mdpi-v4\\notification_bg_low_pressed.9.png"
     },
     {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout-v16_notification_template_custom_big.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout-v16\\notification_template_custom_big.xml"
-    },
-    {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-port-mdpi_screen.png.flat",
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\drawable-port-mdpi\\screen.png"
     },
@@ -206,10 +194,6 @@
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-port-hdpi_screen.png.flat",
         "source": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\src\\main\\res\\drawable-port-hdpi\\screen.png"
-    },
-    {
-        "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\layout_notification_action_tombstone.xml.flat",
-        "source": "C:\\Users\\mathi\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\65b807ea5ad7cd12b6c39fc3ad12352d\\res\\layout\\notification_action_tombstone.xml"
     },
     {
         "merged": "D:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4_notify_panel_notification_icon_bg.png.flat",

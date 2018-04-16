@@ -11,7 +11,6 @@ export class SMSManager {
 
     public static convertUnixDate(unixTimeStamp: number): object {
         let date = new Date(unixTimeStamp*1000); // comme javascript fonctionne en millisecondes, on multiple par 1000 les secondes unix
-        console.log(date.getFullYear());
         return {
             'day': date.getDate(),
             'month': date.getMonth(),

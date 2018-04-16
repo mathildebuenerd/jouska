@@ -276,6 +276,14 @@ module.exports = [
     "clobbers": [
       "window.sms"
     ]
+  },
+  {
+    "id": "nodejs-mobile-cordova.nodejs",
+    "file": "plugins/nodejs-mobile-cordova/www/nodejs_apis.js",
+    "pluginId": "nodejs-mobile-cordova",
+    "clobbers": [
+      "nodejs"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -286,7 +294,9 @@ module.exports.metadata =
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-media": "5.0.2",
   "phonegap-plugin-speech-recognition": "0.3.0",
-  "cordova-plugin-sms": "1.0.5"
+  "cordova-plugin-sms": "1.0.5",
+  "cordova-sms-plugin": "0.1.11",
+  "nodejs-mobile-cordova": "0.1.4"
 };
 // BOTTOM OF METADATA
 });

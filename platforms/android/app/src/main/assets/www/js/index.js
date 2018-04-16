@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var manageSMS_1 = require("./manageSMS");
+var sentimentAnalysis_1 = require("./sentimentAnalysis");
 var CordovaApp = (function () {
     function CordovaApp() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -14,6 +15,8 @@ var CordovaApp = (function () {
             maxCount: 2000,
         });
         sms.getAllSMS();
+        var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
+        analysis.analyze('You are so stupid');
     };
     return CordovaApp;
 }());

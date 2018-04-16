@@ -6,7 +6,6 @@ var SMSManager = (function () {
     }
     SMSManager.convertUnixDate = function (unixTimeStamp) {
         var date = new Date(unixTimeStamp * 1000);
-        console.log(date.getFullYear());
         return {
             'day': date.getDate(),
             'month': date.getMonth(),

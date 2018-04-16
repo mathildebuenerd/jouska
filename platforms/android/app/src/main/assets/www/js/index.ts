@@ -1,4 +1,5 @@
 import {SMSManager} from "./manageSMS";
+import {SentimentAnalysis} from "./sentimentAnalysis";
 
 export class CordovaApp {
     constructor() {
@@ -7,6 +8,7 @@ export class CordovaApp {
 
     onDeviceReady() {
         console.log("The device is ready");
+
         console.log('localStorage');
         console.log(localStorage);
         let sms = new SMSManager({
@@ -22,6 +24,9 @@ export class CordovaApp {
             maxCount : 2000, // count of SMS to return each time
         });
         sms.getAllSMS();
+
+        let analysis = new SentimentAnalysis('en');
+        analysis.analyze('You are so stupid');
     }
 }
 
