@@ -6,7 +6,7 @@ import * as sentiment from "./../../hooks/sentiment-multilang";
 import * as darktriad from "./../../hooks/darktriad";
 import * as translate from "./../../hooks/translate";
 
-translate.key = "";
+translate.key = "AIzaSyBYwKXPMsTG4zJpXt9-p2_NwDGR-A0NP9U";
 translate.from = "fr";
 
 export class SentimentAnalysis {
@@ -15,17 +15,27 @@ export class SentimentAnalysis {
         this.language = language;
     }
 
-    public analyze(sentence: string) {
-        let englishSentence = translate(sentence).then(text => {
-            console.log(text);  // Hola mundo
-            let sentimentanalysis = sentiment(text, 'en');
-            let testTriad = darktriad(text);
-            console.log(sentimentanalysis);
-            console.log(testTriad);
-        });
+    public translate(sentence: string) {
+        return translate(sentence);
+    }
 
-        let sentimentfrench = sentiment(sentence, 'fr');
-        console.log(sentimentfrench);
+    public analyze(sentence: string, language: string) {
+
+        if (language === 'en') {
+            let sentimentanalysis = sentiment(sentence, 'en');
+            let testTriad = darktriad(sentence);
+            return {
+                sentence: sentence,
+                sentiment: sentimentanalysis,
+                triad: testTriad
+            };
+        } else if (language === 'fr') {
+            let sentimentfrench = sentiment(sentence, 'fr');
+            return {
+                sentence: sentence,
+                sentiment: sentimentfrench
+            };
+        }
 
     }
 

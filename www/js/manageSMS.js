@@ -16,39 +16,48 @@ var SMSManager = (function () {
         };
     };
     SMSManager.prototype.getAllSMS = function () {
-        if (SMS) {
-            SMS.listSMS(this.filters, function (data) {
-                var contacts = {};
-                for (var i = 0; i < data.length; i++) {
-                    if ((data[i].address).length > 7 && (data[i].address).match("[0-9]+")) {
-                        var date = SMSManager.convertUnixDate(data[i].date);
-                        if (contacts.hasOwnProperty(data[i].address)) {
-                            Object.defineProperty(contacts[data[i].address], data[i]._id, {
-                                value: {
-                                    "body": data[i].body,
-                                    "date": date
-                                }
-                            });
-                        }
-                        else {
-                            var myid = String(data[i]._id);
-                            Object.defineProperty(contacts, data[i].address, {
-                                value: {
-                                    "000": {
-                                        "body": data[i].body,
-                                        "date": date
-                                    }
-                                }
-                            });
-                        }
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (SMS) {
+                SMS.listSMS(_this.filters, function (data) {
+                    resolve(data);
+                }, function (err) {
+                    console.log('error list sms: ' + err);
+                    reject(err);
+                });
+            }
+            else {
+                resolve([]);
+            }
+        }).then(function (data) {
+            var contacts = {};
+            for (var key in data) {
+                var address = data[key].address;
+                if (address.length > 7 && address.match("[0-9]+")) {
+                    var date = SMSManager.convertUnixDate(data[key].date);
+                    var myid = String(data[key]._id);
+                    if (address in contacts) {
+                        contacts[address][myid] = {
+                            "body": data[key].body,
+                            "date": date
+                        };
+                    }
+                    else {
+                        contacts[address] = {
+                            myid: {
+                                "body": data[key].body,
+                                "date": date
+                            }
+                        };
                     }
                 }
-                console.log('contacts');
-                console.log(contacts);
-            }, function (err) {
-                console.log('error list sms: ' + err);
-            });
-        }
+            }
+            return contacts;
+        });
+    };
+    SMSManager.prototype.translateSMS = function (SMS) {
+        return new Promise(function (resolve, reject) {
+        });
     };
     SMSManager.prototype.displaySMS = function () {
     };

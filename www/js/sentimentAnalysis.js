@@ -3,22 +3,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sentiment = require("./../../hooks/sentiment-multilang");
 var darktriad = require("./../../hooks/darktriad");
 var translate = require("./../../hooks/translate");
-translate.key = "";
+translate.key = "AIzaSyBYwKXPMsTG4zJpXt9-p2_NwDGR-A0NP9U";
 translate.from = "fr";
 var SentimentAnalysis = (function () {
     function SentimentAnalysis(language) {
         this.language = language;
     }
-    SentimentAnalysis.prototype.analyze = function (sentence) {
-        var englishSentence = translate(sentence).then(function (text) {
-            console.log(text);
-            var sentimentanalysis = sentiment(text, 'en');
-            var testTriad = darktriad(text);
-            console.log(sentimentanalysis);
-            console.log(testTriad);
-        });
-        var sentimentfrench = sentiment(sentence, 'fr');
-        console.log(sentimentfrench);
+    SentimentAnalysis.prototype.translate = function (sentence) {
+        return translate(sentence);
+    };
+    SentimentAnalysis.prototype.analyze = function (sentence, language) {
+        if (language === 'en') {
+            var sentimentanalysis = sentiment(sentence, 'en');
+            var testTriad = darktriad(sentence);
+            return {
+                sentence: sentence,
+                sentiment: sentimentanalysis,
+                triad: testTriad
+            };
+        }
+        else if (language === 'fr') {
+            var sentimentfrench = sentiment(sentence, 'fr');
+            return {
+                sentence: sentence,
+                sentiment: sentimentfrench
+            };
+        }
     };
     return SentimentAnalysis;
 }());

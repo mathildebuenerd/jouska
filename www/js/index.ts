@@ -1,5 +1,6 @@
 import {SMSManager} from "./manageSMS";
 import {SentimentAnalysis} from "./sentimentAnalysis";
+import set = Reflect.set;
 
 export class CordovaApp {
     constructor() {
@@ -23,10 +24,140 @@ export class CordovaApp {
             //   indexFrom : 0, // start from index 0
             maxCount : 2000, // count of SMS to return each time
         });
-        sms.getAllSMS();
 
+
+        // let allSMS = sms.getAllSMS();
+        // console.log("allSMS");
+        // console.log(allSMS);
         let analysis = new SentimentAnalysis('en');
-        analysis.analyze('Tu es vraiment bête toi');
+        let allSMS;
+
+        // let mytest = sms.getAllSMS();
+        // for (let key in allSMS) {
+        //     console.log(allSMS[key]);
+        // }
+
+
+        sms.getAllSMS().then( allSMS => {
+            console.log('allSMS');
+            console.log(allSMS);
+            console.log('then is readed');
+            for (let key in allSMS) {
+                console.log(allSMS[key]);
+            }
+        }).catch(
+            error => console.warn("quelque chose va pas!!!")
+        );
+
+
+        // let getAllSMS = new Promise(function (resolve, reject) {
+        //     console.log('getAllSMS');
+        //     let allSMS = sms.getAllSMS();
+        //
+        //     if (Object.keys(allSMS).length !== 0) {
+        //         resolve("j'ai résolu");
+        //     } else {
+        //         reject("j'ai pas résolu");
+        //     }
+        // });
+
+
+
+
+        function translate(allSMS) {
+            console.log('translate');
+            console.log('translate : allSMS: ');
+            console.log(allSMS);
+            // console.log(allSMS[0]);
+            let translatedSMS = [];
+            let counter = 0;
+            console.log('je test');
+
+
+            if (Object.keys(allSMS).length !== 0) { //
+                for (let key in allSMS) {
+                    // if (allSMS.hasOwnProperty(key)) {
+                    console.log('je test 2');
+                    // console.log(allSMS[key]);
+                    // let mykey = allSMS[key];
+                    // console.log('my key');
+                    console.log(allSMS[key]);
+                    // if (counter <20) {
+                    //     for (let subkey in allSMS[key]) {
+                    //         console.log(allSMS[key][subkey]);
+                    //         translatedSMS[counter] = analysis.translate(allSMS[key][subkey].body);
+                    //         counter++;
+                    //     }
+                    // }
+                    // } // hasownproperty
+
+                }
+            } else {
+                console.log("allSMS n'existe pas");
+            }
+
+
+
+            // setTimeout(function() {
+            //     setTimeout(function() {
+            //
+            //         setTimeout(function() {
+            //             analyze(translatedSMS);
+            //         }, 5000);
+            //     }, 5000);
+            // }, 5000);
+
+        }
+
+        function analyze(translatedSMS) {
+            console.log('analyze');
+
+            let stats = [];
+            for (let i=0; i<20; i++) {
+                stats[i] = analysis.analyze(translatedSMS[i], 'en');
+            }
+            console.log('stats');
+            console.log(stats);
+
+        }
+
+        // getAllSMS(translate);
+
+
+
+        // let getSMS = new Promise((resolve, reject) => {
+        //         allSMS = sms.getAllSMS();
+        //         if (err) {
+        //             reject(err);
+        //         } else {
+        //             resolve(allSMS);
+        //         }
+        //     }
+        // );
+        //
+        // getSMS.then(
+        //     function() {
+        //         for (let i=0; i<20; i++) {
+        //             analysisResult[i] = analysis.translate(allSMS[i][0].body);
+        //         }
+        //     }
+        // ).catch(
+        //     function () {
+        //         console.log('promesse rompue');
+        //     }
+        // );
+
+
+
+        //
+        //
+        //
+        // console.log("analysisResult");
+        // console.log(analysisResult);
+
+
+
+
     }
 }
 
