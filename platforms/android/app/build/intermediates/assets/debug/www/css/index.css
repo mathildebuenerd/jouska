@@ -38,7 +38,7 @@ section.manageSMS {
     display:inline-block;
     text-align:center;
     width: 80vw;
-    padding: 14px 0;
+    padding: 25px 0;
     border: 2px solid blue;
     transition:0.3s ease all;
     position:relative;

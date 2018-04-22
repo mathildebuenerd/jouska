@@ -16,7 +16,6 @@ var SentimentAnalysis = (function () {
             var sentimentanalysis = sentiment(sentence, 'en');
             var testTriad = darktriad(sentence);
             return {
-                sentence: sentence,
                 sentiment: sentimentanalysis,
                 triad: testTriad
             };
@@ -24,7 +23,6 @@ var SentimentAnalysis = (function () {
         else if (language === 'fr') {
             var sentimentfrench = sentiment(sentence, 'fr');
             return {
-                sentence: sentence,
                 sentiment: sentimentfrench
             };
         }

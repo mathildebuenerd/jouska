@@ -24,14 +24,12 @@ export class SentimentAnalysis {
             let sentimentanalysis = sentiment(sentence, 'en');
             let testTriad = darktriad(sentence);
             return {
-                sentence: sentence,
                 sentiment: sentimentanalysis,
                 triad: testTriad
             };
         } else if (language === 'fr') {
             let sentimentfrench = sentiment(sentence, 'fr');
             return {
-                sentence: sentence,
                 sentiment: sentimentfrench
             };
         }

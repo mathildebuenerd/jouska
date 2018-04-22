@@ -12,10 +12,6 @@ export class CordovaApp {
 
     onDeviceReady() {
 
-        console.profile();
-        console.log("The device is ready");
-
-        console.log('localStorage');
         console.log(localStorage);
         let sms = new SMSManager({
             box : 'sent', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
@@ -32,21 +28,32 @@ export class CordovaApp {
 
         let analysis = new SentimentAnalysis('en');
         let allSMS;
+        let userData;
 
 
         // si l'usager n'a jamais utilisé l'appli, on initialise son profil
-        if (localStorage.getItem("userData") === undefined) {
-            localStorage.setItem('userData', JSON.stringify({
-                firstUsage: true,
-                lastSynchro: '',
-                smsLoaded: false,
-                smsTranslated: false,
-                smsAnalyzed: {
-                    darktriad: false,
-                    sentiment: false
-                }
-            }));
-        }
+
+        // console.log(localStorage.getItem());
+        // if (localStorage.getItem("userData") === undefined) {
+        userData = {
+            firstUsage: true,
+            lastSynchro: '',
+            smsLoaded: false,
+            smsTranslated: false,
+            smsAnalyzed: {
+                darktriad: false,
+                sentiment: false
+            }
+        };
+        localStorage.setItem('userData', JSON.stringify(userData));
+        // console.log('Nouvel usager');
+        // console.log(userData);
+        // } else {
+        //     let userDataString = localStorage.getItem('userData');
+        //     userData = JSON.parse(userDataString);
+        //     console.log("Pas nouvel usager");
+        //     console.log(userData);
+        // }
 
         document.querySelector('#loadSMS').addEventListener('click', () => {
             sms.getAllSMS().then( allSMS => {
@@ -89,6 +96,34 @@ export class CordovaApp {
 
 
                 });
+
+                // analyse les phrases qui se trouvent dans l'objet allSMS
+                // La majorité des librairies d'analyse de sentiments sont en anglais, c'est pourquoi on utilise la traduction anglais pour faire cette analyse
+                document.querySelector('#analyzeSMS').addEventListener('click', () => {
+                    const allSMS = JSON.parse(localStorage.getItem('allSMS'));
+                    console.group("Analyze SMS");
+                    console.log(allSMS);
+
+                    for (const contact in allSMS) {
+                        for (const smsId in allSMS[contact]) {
+                            const englishSentence = allSMS[contact][smsId].body.en;
+                            allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
+                        }
+                    }
+
+                    console.log('allSMS + analyse');
+                    console.log(allSMS);
+                    console.groupEnd();
+
+                    document.querySelector('#addAnalyzeToStorage').addEventListener('click', () => {
+                        localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
+                        console.log("l'analyse est bien ajoutée au stockage!!");
+                    });
+
+                });
+
+
+
 
 
 

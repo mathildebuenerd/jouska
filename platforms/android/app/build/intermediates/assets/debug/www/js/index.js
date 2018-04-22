@@ -9,9 +9,6 @@ var CordovaApp = (function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     }
     CordovaApp.prototype.onDeviceReady = function () {
-        console.profile();
-        console.log("The device is ready");
-        console.log('localStorage');
         console.log(localStorage);
         var sms = new manageSMS_1.SMSManager({
             box: 'sent',
@@ -19,18 +16,18 @@ var CordovaApp = (function () {
         });
         var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
         var allSMS;
-        if (localStorage.getItem("userData") === undefined) {
-            localStorage.setItem('userData', JSON.stringify({
-                firstUsage: true,
-                lastSynchro: '',
-                smsLoaded: false,
-                smsTranslated: false,
-                smsAnalyzed: {
-                    darktriad: false,
-                    sentiment: false
-                }
-            }));
-        }
+        var userData;
+        userData = {
+            firstUsage: true,
+            lastSynchro: '',
+            smsLoaded: false,
+            smsTranslated: false,
+            smsAnalyzed: {
+                darktriad: false,
+                sentiment: false
+            }
+        };
+        localStorage.setItem('userData', JSON.stringify(userData));
         document.querySelector('#loadSMS').addEventListener('click', function () {
             sms.getAllSMS().then(function (allSMS) {
                 console.group("getAllSMS");
@@ -72,6 +69,23 @@ var CordovaApp = (function () {
                         console.log(JSON.parse(storageSMS));
                         console.groupEnd();
                     });
+                });
+                document.querySelector('#analyzeSMS').addEventListener('click', function () {
+                    var allSMS = JSON.parse(localStorage.getItem('allSMS'));
+                    console.group("Analyze SMS");
+                    console.log(allSMS);
+                    for (var contact in allSMS) {
+                        for (var smsId in allSMS[contact]) {
+                            var englishSentence = allSMS[contact][smsId].body.en;
+                            allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
+                        }
+                    }
+                    console.log('allSMS + analyse');
+                    console.log(allSMS);
+                    document.querySelector('#addAnalyzeToStorage').addEventListener('click', function () {
+                        localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
+                    });
+                    console.groupEnd();
                 });
             }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
         });
