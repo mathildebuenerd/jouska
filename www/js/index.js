@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manageSMS_1 = require("./manageSMS");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
 var translate = require("./../../hooks/translate");
+require("./visualEffects");
 var CordovaApp = (function () {
     function CordovaApp() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -18,6 +19,18 @@ var CordovaApp = (function () {
         });
         var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
         var allSMS;
+        if (localStorage.getItem("userData") === undefined) {
+            localStorage.setItem('userData', JSON.stringify({
+                firstUsage: true,
+                lastSynchro: '',
+                smsLoaded: false,
+                smsTranslated: false,
+                smsAnalyzed: {
+                    darktriad: false,
+                    sentiment: false
+                }
+            }));
+        }
         document.querySelector('#loadSMS').addEventListener('click', function () {
             sms.getAllSMS().then(function (allSMS) {
                 console.group("getAllSMS");

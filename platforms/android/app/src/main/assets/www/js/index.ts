@@ -2,6 +2,7 @@ import {SMSManager} from "./manageSMS";
 import {SentimentAnalysis} from "./sentimentAnalysis";
 import set = Reflect.set;
 import * as translate from "./../../hooks/translate";
+import "./visualEffects";
 
 
 export class CordovaApp {
@@ -29,17 +30,23 @@ export class CordovaApp {
             maxCount : 2000, // count of SMS to return each time
         });
 
-
-        // let allSMS = sms.getAllSMS();
-        // console.log("allSMS");
-        // console.log(allSMS);
         let analysis = new SentimentAnalysis('en');
         let allSMS;
 
-        // let mytest = sms.getAllSMS();
-        // for (let key in allSMS) {
-        //     console.log(allSMS[key]);
-        // }
+
+        // si l'usager n'a jamais utilisé l'appli, on initialise son profil
+        if (localStorage.getItem("userData") === undefined) {
+            localStorage.setItem('userData', JSON.stringify({
+                firstUsage: true,
+                lastSynchro: '',
+                smsLoaded: false,
+                smsTranslated: false,
+                smsAnalyzed: {
+                    darktriad: false,
+                    sentiment: false
+                }
+            }));
+        }
 
         document.querySelector('#loadSMS').addEventListener('click', () => {
             sms.getAllSMS().then( allSMS => {

@@ -12,18 +12,66 @@ section.manageSMS {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
-button {
-    padding: 25px;
+
+
+.fillButton {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
     border: none;
-    background-color: blue;
-    color: white;
-    font-size: 20px;
-    text-transform: uppercase;
+    padding: 0;
+    /*padding: 25px;*/
+
+    /*background-color: white;*/
     margin-bottom: 10px;
 }
 
-button:visited {
-    background-color: crimson;
+.linkFillButton {
+    color: blue;
+    font-size: 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+    display:inline-block;
+    text-align:center;
+    width: 80vw;
+    padding: 14px 0;
+    border: 2px solid blue;
+    transition:0.3s ease all;
+    position:relative;
 }
+
+.linkFillButton::before {
+    transition:5s all ease;
+    position:absolute;
+    top:0;
+    left:50%;
+    right:50%;
+    bottom:0;
+    opacity:0;
+    content:'';
+    background-color:blue;
+    color: white;
+    z-index:-2;
+}
+
+.linkFillButton:hover {
+    color: white;
+}
+
+.linkFillButton:hover::before {
+    transition:5s all ease;
+    left: 0;
+    right: 0;
+    opacity: 1;
+}
+
+/*button.alreadyDone {*/
+    /*border: none;*/
+    /*background-color: lightgrey;*/
+    /*color: dimgrey;*/
+    /*!* Au final ce sera en visibility: hidden *!*/
+/*}*/
