@@ -4,7 +4,6 @@ import {Datavisualisation} from "./datavisualisation";
 import set = Reflect.set;
 import * as translate from "./../../hooks/translate";
 import "./visualEffects";
-declare const navigator: any;
 
 
 export class CordovaApp {
@@ -142,34 +141,6 @@ export class CordovaApp {
             visualisationSMS.simpleContactComparison();
             console.groupEnd();
         });
-
-        findContactName("0675611341");
-        findContactName("+33681961618");
-
-        function findContactName(phonenumber) {
-            console.group("Find contact name");
-            let numberToFind = phonenumber;
-            let contactName = "";
-            navigator.contactsPhoneNumbers.list((contacts) => {
-                for (const singleContact in contacts) {
-                    let contactNumbers = contacts[singleContact].phoneNumbers;
-                    for (const numbers in contactNumbers) {
-                        let singleNumber = contactNumbers[numbers].normalizedNumber;
-                        if (singleNumber == phonenumber) {
-                            console.log("j'ai trouvé le numéro !");
-                            console.log(phonenumber);
-                            console.log(contacts[singleContact].displayName);
-                            return contacts[singleContact].displayName;
-                        }
-                    }
-                }
-            }, (error) => {
-                console.error(error);
-            });
-            console.groupEnd();
-        }
-
-
 
 
 

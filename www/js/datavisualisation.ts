@@ -1,6 +1,4 @@
-/**
- * Created by mathi on 22/04/2018.
- */
+import {SMSManager} from "./manageSMS";
 
 export class Datavisualisation {
 
@@ -14,6 +12,8 @@ export class Datavisualisation {
 
     // on ne peut utiliser cette fonction que si le type est "SMS"
     public simpleContactComparison() {
+
+        let sms = new SMSManager({}); // cet objet ne sert à rien, juste à utiliser la fonction findContactname
         console.group("Simple contact comparison");
         console.log("data reçue :");
         console.log(this.data);
@@ -34,7 +34,10 @@ export class Datavisualisation {
                         numberOfSMS++;
                     }
                 }
-                console.group("Score de " + data[contact]);
+                // console.log("data[contact]: ");
+                // console.log(Object.keys(data[contact]));
+                let contactName = sms.findContactName(contact);
+                console.group("Score de " + contactName);
                 console.log("score total: " + sentimentScore);
                 console.log("scrore relatif: " + sentimentScore/numberOfSMS);
                 console.groupEnd();

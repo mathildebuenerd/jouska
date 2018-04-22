@@ -1,6 +1,7 @@
 import * as translate from "./../../hooks/translate";
 
 declare const SMS: any;
+declare const navigator: any;
 // declare const SMSManager: any;
 
 
@@ -24,6 +25,35 @@ export class SMSManager {
             'seconds': date.getSeconds()
         };
     }
+
+    public findContactName(phonenumber): string {
+
+    let numberToFind = phonenumber;
+    let contactName = "";
+    navigator.contactsPhoneNumbers.list((contacts) => {
+        for (const singleContact in contacts) {
+            let contactNumbers = contacts[singleContact].phoneNumbers;
+            for (const numbers in contactNumbers) { // chaque contact peut avoir plusieurs numéros, il faut tous les rester pour ne pas louper
+                let singleNumber = contactNumbers[numbers].normalizedNumber;
+                if (singleNumber == phonenumber) { // quand on trouve le numéro, on note le nom du contact et on break la loop
+                    contactName = contacts[singleContact].displayName;
+                    // console.log("j'ai trouvé le numéro !");
+                    // console.log(phonenumber);
+                    // console.log(contacts[singleContact].displayName);
+                    break;
+                }
+            }
+        }
+        return contactName;
+
+    }, (error) => {
+        console.error(error);
+        return error;
+    });
+
+    return contactName;
+
+}
 
     public getAllSMS(): Promise<object> {
         return new Promise(//return a promise

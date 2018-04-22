@@ -101,30 +101,6 @@ var CordovaApp = (function () {
             visualisationSMS.simpleContactComparison();
             console.groupEnd();
         });
-        findContactName("0675611341");
-        findContactName("+33681961618");
-        function findContactName(phonenumber) {
-            console.group("Find contact name");
-            var numberToFind = phonenumber;
-            var contactName = "";
-            navigator.contactsPhoneNumbers.list(function (contacts) {
-                for (var singleContact in contacts) {
-                    var contactNumbers = contacts[singleContact].phoneNumbers;
-                    for (var numbers in contactNumbers) {
-                        var singleNumber = contactNumbers[numbers].normalizedNumber;
-                        if (singleNumber == phonenumber) {
-                            console.log("j'ai trouvé le numéro !");
-                            console.log(phonenumber);
-                            console.log(contacts[singleContact].displayName);
-                            return contacts[singleContact].displayName;
-                        }
-                    }
-                }
-            }, function (error) {
-                console.error(error);
-            });
-            console.groupEnd();
-        }
     };
     return CordovaApp;
 }());

@@ -16,6 +16,27 @@ var SMSManager = (function () {
             'seconds': date.getSeconds()
         };
     };
+    SMSManager.prototype.findContactName = function (phonenumber) {
+        var numberToFind = phonenumber;
+        var contactName = "";
+        navigator.contactsPhoneNumbers.list(function (contacts) {
+            for (var singleContact in contacts) {
+                var contactNumbers = contacts[singleContact].phoneNumbers;
+                for (var numbers in contactNumbers) {
+                    var singleNumber = contactNumbers[numbers].normalizedNumber;
+                    if (singleNumber == phonenumber) {
+                        contactName = contacts[singleContact].displayName;
+                        break;
+                    }
+                }
+            }
+            return contactName;
+        }, function (error) {
+            console.error(error);
+            return error;
+        });
+        return contactName;
+    };
     SMSManager.prototype.getAllSMS = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {

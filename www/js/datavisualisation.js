@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var manageSMS_1 = require("./manageSMS");
 var Datavisualisation = (function () {
     function Datavisualisation(data, type) {
         this.data = data;
         this.type = type;
     }
     Datavisualisation.prototype.simpleContactComparison = function () {
+        var sms = new manageSMS_1.SMSManager({});
         console.group("Simple contact comparison");
         console.log("data reçue :");
         console.log(this.data);
@@ -22,7 +24,8 @@ var Datavisualisation = (function () {
                         numberOfSMS++;
                     }
                 }
-                console.group("Score de " + data[contact]);
+                var contactName = sms.findContactName(contact);
+                console.group("Score de " + contactName);
                 console.log("score total: " + sentimentScore);
                 console.log("scrore relatif: " + sentimentScore / numberOfSMS);
                 console.groupEnd();

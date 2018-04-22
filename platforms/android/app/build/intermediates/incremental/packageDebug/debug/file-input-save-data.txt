@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sun Apr 22 19:03:08 CEST 2018
+#Sun Apr 22 19:29:26 CEST 2018
 122.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-xxhdpi-v4\\icon.png
 60.set=JAVA_RESOURCE
 129.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\layout\\notification_media_action.xml
