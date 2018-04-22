@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var manageSMS_1 = require("./manageSMS");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
+var datavisualisation_1 = require("./datavisualisation");
 var translate = require("./../../hooks/translate");
 require("./visualEffects");
 var CordovaApp = (function () {
@@ -70,34 +71,59 @@ var CordovaApp = (function () {
                         console.groupEnd();
                     });
                 });
-                document.querySelector('#analyzeSMS').addEventListener('click', function () {
-                    var allSMS = JSON.parse(localStorage.getItem('allSMS'));
-                    console.group("Analyze SMS");
-                    console.log(allSMS);
-                    for (var contact in allSMS) {
-                        for (var smsId in allSMS[contact]) {
-                            var englishSentence = allSMS[contact][smsId].body.en;
-                            allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
-                        }
-                    }
-                    console.log('allSMS + analyse');
-                    console.log(allSMS);
-                    console.groupEnd();
-                    document.querySelector('#addAnalyzeToStorage').addEventListener('click', function () {
-                        localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
-                        console.log("l'analyse est bien ajoutée au stockage!!");
-                    });
-                });
             }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
         });
-        function analyze(translatedSMS) {
-            console.log('analyze');
-            var stats = [];
-            for (var i = 0; i < 20; i++) {
-                stats[i] = analysis.analyze(translatedSMS[i], 'en');
+        document.querySelector('#analyzeSMS').addEventListener('click', function () {
+            var allSMS = JSON.parse(localStorage.getItem('allSMS'));
+            console.group("Analyze SMS");
+            console.log(allSMS);
+            for (var contact in allSMS) {
+                for (var smsId in allSMS[contact]) {
+                    var englishSentence = allSMS[contact][smsId].body.en;
+                    allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
+                }
             }
-            console.log('stats');
-            console.log(stats);
+            console.log('allSMS + analyse');
+            console.log(allSMS);
+            console.groupEnd();
+            document.querySelector('#addAnalyzeToStorage').addEventListener('click', function () {
+                localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
+                console.log("l'analyse est bien ajoutée au stockage!!");
+            });
+        });
+        document.querySelector("#startVisualisation").addEventListener('click', function () {
+            console.group("Start visualisation selector");
+            var stringyfiedSMSData = localStorage.getItem('allSMSanalyzed');
+            var SMSdata = JSON.parse(stringyfiedSMSData);
+            console.log("SMSdata:");
+            console.log(SMSdata);
+            var visualisationSMS = new datavisualisation_1.Datavisualisation(SMSdata, 'sms');
+            visualisationSMS.simpleContactComparison();
+            console.groupEnd();
+        });
+        findContactName("0675611341");
+        findContactName("+33681961618");
+        function findContactName(phonenumber) {
+            console.group("Find contact name");
+            var numberToFind = phonenumber;
+            var contactName = "";
+            navigator.contactsPhoneNumbers.list(function (contacts) {
+                for (var singleContact in contacts) {
+                    var contactNumbers = contacts[singleContact].phoneNumbers;
+                    for (var numbers in contactNumbers) {
+                        var singleNumber = contactNumbers[numbers].normalizedNumber;
+                        if (singleNumber == phonenumber) {
+                            console.log("j'ai trouvé le numéro !");
+                            console.log(phonenumber);
+                            console.log(contacts[singleContact].displayName);
+                            return contacts[singleContact].displayName;
+                        }
+                    }
+                }
+            }, function (error) {
+                console.error(error);
+            });
+            console.groupEnd();
         }
     };
     return CordovaApp;

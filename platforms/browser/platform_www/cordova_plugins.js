@@ -240,6 +240,14 @@ module.exports = [
         "clobbers": [
             "window.sms"
         ]
+    },
+    {
+        "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
+        "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
+        "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
+        "clobbers": [
+            "navigator.contactsPhoneNumbers"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -252,7 +260,8 @@ module.exports.metadata =
     "cordova-plugin-compat": "1.2.0",
     "phonegap-plugin-speech-recognition": "0.3.0",
     "cordova-plugin-sms": "1.0.5",
-    "cordova-sms-plugin": "0.1.11"
+    "cordova-sms-plugin": "0.1.11",
+    "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10"
 }
 // BOTTOM OF METADATA
 });

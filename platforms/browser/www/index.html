@@ -28,22 +28,51 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <!--<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">-->
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>Quantified talk</title>
+
+        <script src='../apikeys.js'></script>
+
     </head>
     <body>
         <div class="app">
             <h1>Quantified talk</h1>
             <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
             </div>
 
-            <button id="startSpeechRecognition">Start Speech Recognition</button>
+            <section id="manageSMS">
+                <button id="loadSMS" class="fillButton">
+                    <a class="linkFillButton">Load SMS</a>
+                </button>
+                <button id="translateSMS" class="fillButton">
+                    <a class="linkFillButton">Translate SMS to english</a>
+                </button>
+                <button id="addToStorage" class="fillButton">
+                    <a class="linkFillButton">Add to storage</a>
+                </button>
+                <button id="analyzeSMS" class="fillButton">
+                    <a class="linkFillButton">Analyze SMS</a>
+                </button>
+                <button id="addAnalyzeToStorage" class="fillButton">
+                    <a class="linkFillButton">Add analyze to storage</a>
+                </button>
+                <button id="startVisualisation" class="fillButton pink">
+                    <a class="linkFillButton">Start visualisation</a>
+                </button>
+                <button id="hide-setup" class="hide">Hide setup</button>
+            </section>
+
+            <section id="visualisation-sms" class="visualisation">
+
+            </section>
+
+
+            <!--<button id="startSpeechRecognition">Start Speech Recognition</button>-->
             <section id="blockSentences"></section>
 
         </div>

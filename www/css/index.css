@@ -69,6 +69,21 @@ section.manageSMS {
     opacity: 1;
 }
 
+.pink {
+    color: #FD6E88;
+    border-color: #FD6E88;
+}
+
+.pink::before {
+    background-color:#FD6E88;
+}
+
+.hide {
+    background-color: black;
+    padding: 15px;
+    color: white;
+}
+
 /*button.alreadyDone {*/
     /*border: none;*/
     /*background-color: lightgrey;*/

@@ -24,6 +24,9 @@
     },
     "cordova-sms-plugin": {
       "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
+    "com.dbaq.cordova.contactsPhoneNumbers": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
     }
   },
   "dependent_plugins": {

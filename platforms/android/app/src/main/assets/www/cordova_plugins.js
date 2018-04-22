@@ -278,11 +278,11 @@ module.exports = [
     ]
   },
   {
-    "id": "nodejs-mobile-cordova.nodejs",
-    "file": "plugins/nodejs-mobile-cordova/www/nodejs_apis.js",
-    "pluginId": "nodejs-mobile-cordova",
+    "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
+    "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
+    "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
     "clobbers": [
-      "nodejs"
+      "navigator.contactsPhoneNumbers"
     ]
   }
 ];
@@ -296,7 +296,7 @@ module.exports.metadata =
   "phonegap-plugin-speech-recognition": "0.3.0",
   "cordova-plugin-sms": "1.0.5",
   "cordova-sms-plugin": "0.1.11",
-  "nodejs-mobile-cordova": "0.1.4"
+  "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10"
 };
 // BOTTOM OF METADATA
 });

@@ -1,8 +1,10 @@
 import {SMSManager} from "./manageSMS";
 import {SentimentAnalysis} from "./sentimentAnalysis";
+import {Datavisualisation} from "./datavisualisation";
 import set = Reflect.set;
 import * as translate from "./../../hooks/translate";
 import "./visualEffects";
+declare const navigator: any;
 
 
 export class CordovaApp {
@@ -97,41 +99,6 @@ export class CordovaApp {
 
                 });
 
-                // analyse les phrases qui se trouvent dans l'objet allSMS
-                // La majorité des librairies d'analyse de sentiments sont en anglais, c'est pourquoi on utilise la traduction anglais pour faire cette analyse
-                document.querySelector('#analyzeSMS').addEventListener('click', () => {
-                    const allSMS = JSON.parse(localStorage.getItem('allSMS'));
-                    console.group("Analyze SMS");
-                    console.log(allSMS);
-
-                    for (const contact in allSMS) {
-                        for (const smsId in allSMS[contact]) {
-                            const englishSentence = allSMS[contact][smsId].body.en;
-                            allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
-                        }
-                    }
-
-                    console.log('allSMS + analyse');
-                    console.log(allSMS);
-                    console.groupEnd();
-
-                    document.querySelector('#addAnalyzeToStorage').addEventListener('click', () => {
-                        localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
-                        console.log("l'analyse est bien ajoutée au stockage!!");
-                    });
-
-                });
-
-
-
-
-
-
-                // localStorage.setItem("allSMS", JSON.stringify(allSMS)); // On ne peut stocker que des string dans le local storage, il faut donc strigifier
-
-
-
-
 
             }).catch(
                 error => console.error("la promesse concernant getAllSMS a échoué")
@@ -140,20 +107,70 @@ export class CordovaApp {
 
 
 
+        // analyse les phrases qui se trouvent dans l'objet allSMS
+        // La majorité des librairies d'analyse de sentiments sont en anglais, c'est pourquoi on utilise la traduction anglais pour faire cette analyse
+        document.querySelector('#analyzeSMS').addEventListener('click', () => {
+            const allSMS = JSON.parse(localStorage.getItem('allSMS'));
+            console.group("Analyze SMS");
+            console.log(allSMS);
 
-
-
-        function analyze(translatedSMS) {
-            console.log('analyze');
-
-            let stats = [];
-            for (let i=0; i<20; i++) {
-                stats[i] = analysis.analyze(translatedSMS[i], 'en');
+            for (const contact in allSMS) {
+                for (const smsId in allSMS[contact]) {
+                    const englishSentence = allSMS[contact][smsId].body.en;
+                    allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
+                }
             }
-            console.log('stats');
-            console.log(stats);
 
+            console.log('allSMS + analyse');
+            console.log(allSMS);
+            console.groupEnd();
+
+            document.querySelector('#addAnalyzeToStorage').addEventListener('click', () => {
+                localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
+                console.log("l'analyse est bien ajoutée au stockage!!");
+            });
+
+        });
+
+        document.querySelector("#startVisualisation").addEventListener('click', () => {
+            console.group("Start visualisation selector");
+            const stringyfiedSMSData = localStorage.getItem('allSMSanalyzed');
+            const SMSdata = JSON.parse(stringyfiedSMSData);
+            console.log("SMSdata:");
+            console.log(SMSdata);
+            let visualisationSMS = new Datavisualisation(SMSdata, 'sms');
+            visualisationSMS.simpleContactComparison();
+            console.groupEnd();
+        });
+
+        findContactName("0675611341");
+        findContactName("+33681961618");
+
+        function findContactName(phonenumber) {
+            console.group("Find contact name");
+            let numberToFind = phonenumber;
+            let contactName = "";
+            navigator.contactsPhoneNumbers.list((contacts) => {
+                for (const singleContact in contacts) {
+                    let contactNumbers = contacts[singleContact].phoneNumbers;
+                    for (const numbers in contactNumbers) {
+                        let singleNumber = contactNumbers[numbers].normalizedNumber;
+                        if (singleNumber == phonenumber) {
+                            console.log("j'ai trouvé le numéro !");
+                            console.log(phonenumber);
+                            console.log(contacts[singleContact].displayName);
+                            return contacts[singleContact].displayName;
+                        }
+                    }
+                }
+            }, (error) => {
+                console.error(error);
+            });
+            console.groupEnd();
         }
+
+
+
 
 
 

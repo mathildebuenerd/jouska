@@ -39,6 +39,10 @@
             {
               "xml": "<feature name=\"Sms\"><param name=\"android-package\" value=\"com.cordova.plugins.sms.Sms\" /></feature>",
               "count": 1
+            },
+            {
+              "xml": "<feature name=\"ContactsPhoneNumbers\"><param name=\"android-package\" value=\"com.dbaq.cordova.contactsPhoneNumbers.ContactsManager\" /></feature>",
+              "count": 1
             }
           ]
         }
@@ -88,6 +92,10 @@
             },
             {
               "xml": "<uses-permission android:name=\"android.permission.SEND_SMS\" />",
+              "count": 1
+            },
+            {
+              "xml": "<uses-permission android:name=\"android.permission.READ_CONTACTS\" />",
               "count": 1
             }
           ],
@@ -165,6 +173,9 @@
       "PACKAGE_NAME": "com.quantifiedtalk.test"
     },
     "cordova-sms-plugin": {
+      "PACKAGE_NAME": "com.quantifiedtalk.test"
+    },
+    "com.dbaq.cordova.contactsPhoneNumbers": {
       "PACKAGE_NAME": "com.quantifiedtalk.test"
     }
   },
@@ -446,6 +457,14 @@
       "clobbers": [
         "window.sms"
       ]
+    },
+    {
+      "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
+      "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
+      "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
+      "clobbers": [
+        "navigator.contactsPhoneNumbers"
+      ]
     }
   ],
   "plugin_metadata": {
@@ -455,6 +474,7 @@
     "cordova-plugin-media": "5.0.2",
     "phonegap-plugin-speech-recognition": "0.3.0",
     "cordova-plugin-sms": "1.0.5",
-    "cordova-sms-plugin": "0.1.11"
+    "cordova-sms-plugin": "0.1.11",
+    "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10"
   }
 }

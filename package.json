@@ -37,6 +37,7 @@
     "cordova-android": "^7.0.0",
     "cordova-browser": "^5.0.3",
     "cordova-plugin-compat": "^1.2.0",
+    "cordova-plugin-contacts-phonenumbers": "0.0.10",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-media": "^5.0.2",
     "cordova-plugin-sms": "^1.0.5",
@@ -57,7 +58,8 @@
       "cordova-plugin-media": {},
       "phonegap-plugin-speech-recognition": {},
       "cordova-sms-plugin": {},
-      "cordova-plugin-sms": {}
+      "cordova-plugin-sms": {},
+      "com.dbaq.cordova.contactsPhoneNumbers": {}
     },
     "platforms": [
       "browser",

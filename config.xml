@@ -30,6 +30,7 @@
     <plugin name="phonegap-plugin-speech-recognition" spec="^0.3.0" />
     <plugin name="cordova-sms-plugin" spec="^0.1.11" />
     <plugin name="cordova-plugin-sms" spec="^1.0.5" />
+    <plugin name="com.dbaq.cordova.contactsPhoneNumbers" spec="~0.0.10" />
     <engine name="browser" spec="^5.0.3" />
     <engine name="android" spec="^7.0.0" />
 </widget>
