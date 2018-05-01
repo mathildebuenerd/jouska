@@ -17,25 +17,30 @@ var SMSManager = (function () {
         };
     };
     SMSManager.prototype.findContactName = function (phonenumber) {
-        var numberToFind = phonenumber;
-        var contactName = "";
-        navigator.contactsPhoneNumbers.list(function (contacts) {
-            for (var singleContact in contacts) {
-                var contactNumbers = contacts[singleContact].phoneNumbers;
-                for (var numbers in contactNumbers) {
-                    var singleNumber = contactNumbers[numbers].normalizedNumber;
-                    if (singleNumber == phonenumber) {
-                        contactName = contacts[singleContact].displayName;
-                        break;
+        return new Promise(function (resolve, reject) {
+            var numberToFind = phonenumber;
+            var contactName = "";
+            navigator.contactsPhoneNumbers.list(function (contacts) {
+                for (var singleContact in contacts) {
+                    var contactNumbers = contacts[singleContact].phoneNumbers;
+                    for (var numbers in contactNumbers) {
+                        var singleNumber = contactNumbers[numbers].normalizedNumber;
+                        if (singleNumber == phonenumber) {
+                            contactName = contacts[singleContact].displayName;
+                            break;
+                        }
                     }
                 }
-            }
-            return contactName;
-        }, function (error) {
-            console.error(error);
-            return error;
+                console.group("findContactName");
+                console.log('contact name: ' + contactName);
+                console.groupEnd();
+                return contactName;
+            }, function (error) {
+                console.error(error);
+                reject(error);
+            });
+            resolve(contactName);
         });
-        return contactName;
     };
     SMSManager.prototype.getAllSMS = function () {
         var _this = this;
@@ -88,7 +93,6 @@ var SMSManager = (function () {
                 if (allSMS.hasOwnProperty(key)) {
                     if (counter < 20) {
                         for (var subkey in allSMS[key]) {
-                            console.trace();
                             var englishSentence = translate(allSMS[key][subkey].body.fr);
                             allSMS[key][subkey].body.en = englishSentence;
                             console.log(englishSentence);

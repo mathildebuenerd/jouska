@@ -46,6 +46,7 @@ export class CordovaApp {
                 sentiment: false
             }
         };
+
         localStorage.setItem('userData', JSON.stringify(userData));
         // console.log('Nouvel usager');
         // console.log(userData);

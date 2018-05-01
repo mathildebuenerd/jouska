@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var sentiment = require("./../../hooks/sentiment-multilang");
 var darktriad = require("./../../hooks/darktriad");
 var translate = require("./../../hooks/translate");
+translate.key = "AIzaSyBYwKXPMsTG4zJpXt9-p2_NwDGR-A0NP9U";
 translate.from = "fr";
 var SentimentAnalysis = (function () {
     function SentimentAnalysis(language) {

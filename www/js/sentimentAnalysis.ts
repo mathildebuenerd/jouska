@@ -6,6 +6,7 @@ import * as sentiment from "./../../hooks/sentiment-multilang";
 import * as darktriad from "./../../hooks/darktriad";
 import * as translate from "./../../hooks/translate";
 
+translate.key = "AIzaSyBYwKXPMsTG4zJpXt9-p2_NwDGR-A0NP9U";
 translate.from = "fr";
 
 export class SentimentAnalysis {

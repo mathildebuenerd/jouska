@@ -90,3 +90,63 @@ section.manageSMS {
     /*color: dimgrey;*/
     /*!* Au final ce sera en visibility: hidden *!*/
 /*}*/
+
+/*******
+
+    Bottom navigation
+    Messages - Write - Stats
+
+ *******/
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    background-color: white;
+    height: 50px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 -1px 5px rgba(0,0,0,0.15);
+}
+
+.bottom-nav ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.bottom-nav ul li.nav-element {
+    width: 33vw;
+    overflow: hidden;
+}
+
+.bottom-nav a.nav-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-nav .icon img {
+    height: 22px;
+    width: auto;
+}
+
+.bottom-nav .nav-item-text {
+    font-size: 0.9em;
+}
+
+.nav-link.active {
+    color: blue;
+}
+
+
+
+
+
+#manageSMS {
+    display: none;
+}

@@ -2,7 +2,7 @@
   "name": "quantifiedtalk",
   "displayName": "HelloCordova",
   "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "description": "A personnal assistant to manage relationships",
   "main": "index.js",
   "scripts": {
     "start": "tsc && npm run bundle && cordova run android",

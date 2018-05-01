@@ -22,6 +22,8 @@ export class Datavisualisation {
         classifyContacts();
         function classifyContacts() {
 
+            let contactScores = {};
+
             for (const contact in data) {
 
                 let sentimentScore = 0;
@@ -34,14 +36,30 @@ export class Datavisualisation {
                         numberOfSMS++;
                     }
                 }
-                // console.log("data[contact]: ");
-                // console.log(Object.keys(data[contact]));
-                let contactName = sms.findContactName(contact);
-                console.group("Score de " + contactName);
+
+                contactScores[contact] = {
+                    sentimentScore: sentimentScore,
+                    numberOfSMS: numberOfSMS,
+                    relativeScore: sentimentScore/numberOfSMS
+                };
+
+
+
+                console.group("Score de " + contactScores[contact].contactName);
                 console.log("score total: " + sentimentScore);
                 console.log("scrore relatif: " + sentimentScore/numberOfSMS);
                 console.groupEnd();
             }
+
+            for (const contact in contactScores) {
+                sms.findContactName(contact).then( (contactName) => {
+                    contactScores[contact].contactName = contactName;
+                });
+            }
+
+            console.log("contactScores: ");
+            console.log(contactScores);
+
         }
 
 

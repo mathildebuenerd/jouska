@@ -14,6 +14,7 @@ var Datavisualisation = (function () {
         var data = this.data;
         classifyContacts();
         function classifyContacts() {
+            var contactScores = {};
             for (var contact in data) {
                 var sentimentScore = 0;
                 var numberOfSMS = 0;
@@ -24,12 +25,26 @@ var Datavisualisation = (function () {
                         numberOfSMS++;
                     }
                 }
-                var contactName = sms.findContactName(contact);
-                console.group("Score de " + contactName);
+                contactScores[contact] = {
+                    sentimentScore: sentimentScore,
+                    numberOfSMS: numberOfSMS,
+                    relativeScore: sentimentScore / numberOfSMS
+                };
+                console.group("Score de " + contactScores[contact].contactName);
                 console.log("score total: " + sentimentScore);
                 console.log("scrore relatif: " + sentimentScore / numberOfSMS);
                 console.groupEnd();
             }
+            var _loop_1 = function (contact) {
+                sms.findContactName(contact).then(function (contactName) {
+                    contactScores[contact].contactName = contactName;
+                });
+            };
+            for (var contact in contactScores) {
+                _loop_1(contact);
+            }
+            console.log("contactScores: ");
+            console.log(contactScores);
         }
         console.groupEnd();
     };
