@@ -26,7 +26,11 @@ export class SMSManager {
         };
     }
 
+
+
     public findContactName(phonenumber: string): Promise<string> {
+
+        // console.log(contacts);
 
         return new Promise(
             (resolve, reject) => {
@@ -34,6 +38,8 @@ export class SMSManager {
                 let numberToFind = phonenumber;
                 let contactName = "";
                 navigator.contactsPhoneNumbers.list((contacts) => {
+                    // console.log('les contacts du téléphone :');
+                    // console.log(contacts);
                     for (const singleContact in contacts) {
                         let contactNumbers = contacts[singleContact].phoneNumbers;
                         for (const numbers in contactNumbers) { // chaque contact peut avoir plusieurs numéros, il faut tous les rester pour ne pas louper
@@ -47,17 +53,18 @@ export class SMSManager {
                             }
                         }
                     }
-                    console.group("findContactName");
-                    console.log('contact name: ' + contactName);
-                    console.groupEnd();
-                    return contactName;
+                    // console.group("findContactName");
+                    // console.log('contact name: ' + contactName);
+                    // console.groupEnd();
+                    resolve(contactName);
+                    // return contactName;
 
                 }, (error) => {
                     console.error(error);
                     reject(error);
                 });
 
-                resolve(contactName);
+
 
         });
 

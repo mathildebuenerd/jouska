@@ -31,15 +31,11 @@ var SMSManager = (function () {
                         }
                     }
                 }
-                console.group("findContactName");
-                console.log('contact name: ' + contactName);
-                console.groupEnd();
-                return contactName;
+                resolve(contactName);
             }, function (error) {
                 console.error(error);
                 reject(error);
             });
-            resolve(contactName);
         });
     };
     SMSManager.prototype.getAllSMS = function () {

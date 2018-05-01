@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue May 01 19:52:14 CEST 2018
+#Tue May 01 20:39:40 CEST 2018
 122.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\mipmap-ldpi-v4\\icon.png
 60.set=ASSET
 129.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\assets\\debug\\www\\js\\index.ts
