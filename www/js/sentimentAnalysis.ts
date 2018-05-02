@@ -2,38 +2,39 @@
  * Created by mathi on 16/04/2018.
  */
 
-import * as sentiment from "./../../hooks/sentiment-multilang";
+import * as sentiment from "./../../hooks/ml-sentiment/src";
 import * as darktriad from "./../../hooks/darktriad";
+import * as bigfive from "./../../hooks/bigfive";
+import * as predictgender from "./../../hooks/predictgender";
+import * as prospectimo from "./../../hooks/prospectimo";
 import * as translate from "./../../hooks/translate";
 
 translate.from = "fr";
 
-export class SentimentAnalysis {
-    language: string;
-    constructor(language: string) {
-        this.language = language;
-    }
+export class TextAnalysis {
+
 
     public translate(sentence: string) {
         return translate(sentence);
     }
 
-    public analyze(sentence: string, language: string) {
+    public sentimentAnalysis(sentence: string, language: string = 'en') {
+    }
 
-        if (language === 'en') {
-            let sentimentanalysis = sentiment(sentence, 'en');
-            let testTriad = darktriad(sentence);
-            return {
-                sentiment: sentimentanalysis,
-                triad: testTriad
-            };
-        } else if (language === 'fr') {
-            let sentimentfrench = sentiment(sentence, 'fr');
-            return {
-                sentiment: sentimentfrench
-            };
-        }
+    public darktriadAnalysis(sentence: string, language: string = 'en') {
+        return darktriad(sentence);
+    }
 
+    public personalityAnalysis(sentence: string, language: string = 'en') {
+        return bigfive(sentence);
+    }
+
+    public genderPrediction(sentence: string, language: string = 'en') {
+        return predictgender(sentence);
+    }
+
+    public temporalOrientationPrediction(sentence: string, language: string = 'en') {
+        return prospectimo(sentence);
     }
 
 

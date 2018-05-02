@@ -1,5 +1,5 @@
 import {SMSManager} from "./manageSMS";
-import {SentimentAnalysis} from "./sentimentAnalysis";
+import {TextAnalysis} from "./sentimentAnalysis";
 import {Datavisualisation} from "./datavisualisation";
 import set = Reflect.set;
 import * as translate from "./../../hooks/translate";
@@ -17,6 +17,7 @@ export class CordovaApp {
         function installTheApp() {
 
             let sms = new SMSManager(); // on instancie l'objet sms pour utiliser les fonctions de la classe
+            let textAnalysis = new TextAnalysis();
             let smsData = {}; // on crée un objet qui va contenir toutes les données récupérées sur les messages
 
             const install = document.querySelector("#installTheApp");
@@ -87,10 +88,38 @@ export class CordovaApp {
 
             // -------- Analyze text content ----------
             // Sentiment analysis
+            const sentimentAnalysis = install.querySelector("#analyzeSentiment");
+            sentimentAnalysis.addEventListener('click', () => {
+                let test = textAnalysis.sentimentAnalysis(`How are you doing today ? I feel a bit strange I think`);
+                console.log('test sentiment analysis: ');
+                console.log(test);
+            });
 
             // Darktriad analysis
+            const darktriadAnalysis = install.querySelector("#analyzeDarktriad");
+            darktriadAnalysis.addEventListener('click', () => {
+
+            });
+
 
             // Personality analysis (Big Five)
+            const bigfiveAnalysis = install.querySelector("#analyzePersonality");
+            bigfiveAnalysis.addEventListener('click', () => {
+
+            });
+
+            // Personality analysis (Big Five)
+            const genderPrediction = install.querySelector("#analyzeGender");
+            genderPrediction.addEventListener('click', () => {
+
+            });
+
+            // Personality analysis (Big Five)
+            const temporalOrientation = install.querySelector("#analyzeTemporalOrientation");
+            genderPrediction.addEventListener('click', () => {
+
+            });
+
 
 
 
@@ -106,16 +135,13 @@ export class CordovaApp {
             // Get contact names
             const getContactNames = install.querySelector("#getContactNames");
             getContactNames.addEventListener('click', () => {
-                // for (const contact in smsData) {
-                    sms.findContactsName(smsData).then((smsDataWithNames) => {
-                        // for (let contact in smsData) {
-                        //     Object.assign(smsData[contact], allSMS[contact]); // on ajoute les messages envoyés à l'objet qui sert de base de données
-                        // }
-                        smsData = smsDataWithNames;
-                    }, (error) => {
-                        console.error(error);
-                    });
-                // }
+
+                sms.findContactsName(smsData).then((smsDataWithNames) => {
+                    smsData = smsDataWithNames; // on récupère le même json mais avec les noms en plus
+                }, (error) => {
+                    console.error(error);
+                });
+
                 console.group("Get contact names");
                 console.log(smsData);
                 console.groupEnd();
@@ -136,7 +162,6 @@ export class CordovaApp {
 
         console.log(localStorage);
 
-        let analysis = new SentimentAnalysis('en');
         let allSMS;
         let userData;
 
@@ -169,32 +194,6 @@ export class CordovaApp {
         // document.querySelector('#loadSMS').addEventListener('click', () => {
         // });
 
-
-
-        // analyse les phrases qui se trouvent dans l'objet allSMS
-        // La majorité des librairies d'analyse de sentiments sont en anglais, c'est pourquoi on utilise la traduction anglais pour faire cette analyse
-        document.querySelector('#analyzeSMS').addEventListener('click', () => {
-            const allSMS = JSON.parse(localStorage.getItem('allSMS'));
-            console.group("Analyze SMS");
-            console.log(allSMS);
-
-            for (const contact in allSMS) {
-                for (const smsId in allSMS[contact]) {
-                    const englishSentence = allSMS[contact][smsId].body.en;
-                    allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
-                }
-            }
-
-            console.log('allSMS + analyse');
-            console.log(allSMS);
-            console.groupEnd();
-
-            document.querySelector('#addAnalyzeToStorage').addEventListener('click', () => {
-                localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
-                console.log("l'analyse est bien ajoutée au stockage!!");
-            });
-
-        });
 
         document.querySelector("#startVisualisation").addEventListener('click', () => {
             console.group("Start visualisation selector");

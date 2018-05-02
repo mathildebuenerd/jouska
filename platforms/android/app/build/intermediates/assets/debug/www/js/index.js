@@ -13,6 +13,7 @@ var CordovaApp = (function () {
         installTheApp();
         function installTheApp() {
             var sms = new manageSMS_1.SMSManager();
+            var textAnalysis = new sentimentAnalysis_1.TextAnalysis();
             var smsData = {};
             var install = document.querySelector("#installTheApp");
             var getReceivedMessages = install.querySelector("#getReceivedMessages");
@@ -65,6 +66,24 @@ var CordovaApp = (function () {
                 console.log("avec traduction");
                 console.log(smsData);
             });
+            var sentimentAnalysis = install.querySelector("#analyzeSentiment");
+            sentimentAnalysis.addEventListener('click', function () {
+                var test = textAnalysis.sentimentAnalysis("How are you doing today ? I feel a bit strange I think");
+                console.log('test sentiment analysis: ');
+                console.log(test);
+            });
+            var darktriadAnalysis = install.querySelector("#analyzeDarktriad");
+            darktriadAnalysis.addEventListener('click', function () {
+            });
+            var bigfiveAnalysis = install.querySelector("#analyzePersonality");
+            bigfiveAnalysis.addEventListener('click', function () {
+            });
+            var genderPrediction = install.querySelector("#analyzeGender");
+            genderPrediction.addEventListener('click', function () {
+            });
+            var temporalOrientation = install.querySelector("#analyzeTemporalOrientation");
+            genderPrediction.addEventListener('click', function () {
+            });
             var getContactNames = install.querySelector("#getContactNames");
             getContactNames.addEventListener('click', function () {
                 sms.findContactsName(smsData).then(function (smsDataWithNames) {
@@ -78,7 +97,6 @@ var CordovaApp = (function () {
             });
         }
         console.log(localStorage);
-        var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
         var allSMS;
         var userData;
         userData = {
@@ -92,24 +110,6 @@ var CordovaApp = (function () {
             }
         };
         localStorage.setItem('userData', JSON.stringify(userData));
-        document.querySelector('#analyzeSMS').addEventListener('click', function () {
-            var allSMS = JSON.parse(localStorage.getItem('allSMS'));
-            console.group("Analyze SMS");
-            console.log(allSMS);
-            for (var contact in allSMS) {
-                for (var smsId in allSMS[contact]) {
-                    var englishSentence = allSMS[contact][smsId].body.en;
-                    allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
-                }
-            }
-            console.log('allSMS + analyse');
-            console.log(allSMS);
-            console.groupEnd();
-            document.querySelector('#addAnalyzeToStorage').addEventListener('click', function () {
-                localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
-                console.log("l'analyse est bien ajoutée au stockage!!");
-            });
-        });
         document.querySelector("#startVisualisation").addEventListener('click', function () {
             console.group("Start visualisation selector");
             var stringyfiedSMSData = localStorage.getItem('allSMSanalyzed');

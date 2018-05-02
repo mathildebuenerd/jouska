@@ -10,9 +10,9 @@ The app analyzes the valence of the user’s text messages, and gives clues abou
 The app also contains an interactive writing interface, which analyses in real time the quality of messages about to be sent, in order to help the user to be more positive.
 
 ## Plugins used
-As sentiment analysis is far more developped for the English language, all text messages are translated to english before being analyzed.
+As sentiment analysis is far more developed for the English language, all text messages are translated to English before being analyzed.
 
-Then, several analysis are done :
+Then, several text analysis are done :
 - Positivity/Négativity with [ml-sentiment](https://www.npmjs.com/package/ml-sentiment)
 - Dark Triad with [darktriad](https://www.npmjs.com/package/darktriad)
 - Big Five personality traits with [bigfive](https://www.npmjs.com/package/bigfive)
@@ -29,7 +29,7 @@ Enfin, l'application possède une interface d'écriture de SMS interactive, qui 
 ## Fonctionnement et plugins
 L'analyse de sentiment étant largement plus développée pour la langue anglaise que les autres langues, tous les SMS sont traduits vers l'anglais avant d'être analysés.
 
-Plusieurs analyses sont ensuite effectuées :
+Plusieurs analyses de texte sont ensuite effectuées :
 - Positivité/Négativité avec [ml-sentiment](https://www.npmjs.com/package/ml-sentiment)
 - Triade noire avec [darktriad](https://www.npmjs.com/package/darktriad)
 - Big Five (personnalité) avec [bigfive](https://www.npmjs.com/package/bigfive)
