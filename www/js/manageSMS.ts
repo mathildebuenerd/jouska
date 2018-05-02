@@ -26,7 +26,24 @@ export class SMSManager {
         };
     }
 
-
+    public static normalizeAddress(address: string): string {
+        let normalizedAddress = address.replace(' ', ''); // le numéro est peut-être mal formaté (06 xx xx xx xx au lieu de 06xxxxxxxx), donc on enlève les espaces
+        let plusSign = new RegExp(/\+/);
+        let doubleZero = new RegExp(/^0{2}/);
+        if (plusSign.exec(address) !== null) { // si l'adresse contient un identifiant national comme +33 ou +41, on l'enlève pour avoir un numéro de la forme 06xxxxxx, ça permet d'éviter les doublons
+            console.log(address);
+            const identifiant = new RegExp(/\+[0-9]{2}/); // un identifiant est un + (/+) suivit de deux nombres ([0-9]{2})
+            normalizedAddress = normalizedAddress.replace(identifiant, '0'); // on remplace l'identifiant par un zéro
+        } else if (doubleZero.exec(address) !== null) {
+            const identifiant = new RegExp(/^0{2}[0-9]{2}/); // un identifiant est un 00 suivi de deux nombres, par exemple 0033 ou 0041
+            normalizedAddress = normalizedAddress.replace(identifiant, '0');
+        }
+        console.group("Normalized adress");
+        console.log('address: ' + address);
+        console.log('normalized address: ' + normalizedAddress);
+        console.groupEnd();
+        return normalizedAddress;
+    }
 
     public findContactName(phonenumber: string): Promise<string> {
 
@@ -66,7 +83,7 @@ export class SMSManager {
 
 
 
-        });
+            });
 
     }
 
@@ -89,31 +106,43 @@ export class SMSManager {
                 // On remplir ici l'objet contacts avec les SMS
                 let contacts = {};
                 for (const key in data) {
-                    const address = data[key].address;
+                    // let address = data[key].address;
+                    // console.log("ma fonction");
+                    // let plusSign = new RegExp('\+', '');
+                    // console.log(plusSign.exec(address));
+                    let address = SMSManager.normalizeAddress(data[key].address); // on normalize le numéro pour enlever les espaces et les +33, +41...
+                    const myid = data[key]._id; // chaque numéro possède un identifiant unique
+
                     // on checke si le numéro de téléphone est standard pour éviter pubs et numéros spéciaux : constitué de chiffres et de + seulement et au moins 7 chiffres
                     if (address.length > 7 && address.match("[0-9]+")) {
                         const date = SMSManager.convertUnixDate(data[key].date); // on converti le format de date de listSMS
-                        const myid = data[key]._id;
-                        if (address in contacts) {
+                        if (address in contacts) { // si le numéro est vu dans la liste, on ajoute les sms dans ce numéro
                             contacts[address][myid] = {
-                                "body": {
+                                "text": {
                                     "fr": data[key].body
                                 },
                                 "date": date
                             };
-                        }
-                        else {
-                            contacts[address] = {
-                                "0000": {
-                                    "body": {
-                                        "fr": data[key].body
-                                    },
-                                    "date": date
-                                }
+                        } else { // si le numéro n'est pas dans la liste, on le crée
+                            contacts[address] = {}; // on doit initialiser la nouvelle adresse
+                            contacts[address][myid] = {
+                                "text": {
+                                    "fr": data[key].body
+                                },
+                                "date": date
                             };
+                            // contacts[address] = {
+                            //     "0000": {
+                            //         "text": {
+                            //             "fr": data[key].body
+                            //         },
+                            //         "date": date
+                            //     }
+                            // };
                         }
-                    }
-                }
+                    } // if address est correct
+                    // }
+                } // for key in data
                 return contacts;
             }
         );
@@ -145,7 +174,6 @@ export class SMSManager {
                 // reject();
             });
     }
-
 
     public displaySMS() {
 

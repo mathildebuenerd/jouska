@@ -11,7 +11,7 @@
 //     });
 // }
 
-document.querySelector('#hide-setup').addEventListener('click', () => {
-    let setupSection = document.querySelector('#manageSMS') as HTMLElement;
-    setupSection.style.display = "none";
-});
+// document.querySelector('#hide-setup').addEventListener('click', () => {
+//     let setupSection = document.querySelector('#manageSMS') as HTMLElement;
+//     setupSection.style.display = "none";
+// });

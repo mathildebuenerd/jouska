@@ -16,6 +16,25 @@ var SMSManager = (function () {
             'seconds': date.getSeconds()
         };
     };
+    SMSManager.normalizeAddress = function (address) {
+        var normalizedAddress = address.replace(' ', '');
+        var plusSign = new RegExp(/\+/);
+        var doubleZero = new RegExp(/^0{2}/);
+        if (plusSign.exec(address) !== null) {
+            console.log(address);
+            var identifiant = new RegExp(/\+[0-9]{2}/);
+            normalizedAddress = normalizedAddress.replace(identifiant, '0');
+        }
+        else if (doubleZero.exec(address) !== null) {
+            var identifiant = new RegExp(/^0{2}[0-9]{2}/);
+            normalizedAddress = normalizedAddress.replace(identifiant, '0');
+        }
+        console.group("Normalized adress");
+        console.log('address: ' + address);
+        console.log('normalized address: ' + normalizedAddress);
+        console.groupEnd();
+        return normalizedAddress;
+    };
     SMSManager.prototype.findContactName = function (phonenumber) {
         return new Promise(function (resolve, reject) {
             var numberToFind = phonenumber;
@@ -55,26 +74,25 @@ var SMSManager = (function () {
         }).then(function (data) {
             var contacts = {};
             for (var key in data) {
-                var address = data[key].address;
+                var address = SMSManager.normalizeAddress(data[key].address);
+                var myid = data[key]._id;
                 if (address.length > 7 && address.match("[0-9]+")) {
                     var date = SMSManager.convertUnixDate(data[key].date);
-                    var myid = data[key]._id;
                     if (address in contacts) {
                         contacts[address][myid] = {
-                            "body": {
+                            "text": {
                                 "fr": data[key].body
                             },
                             "date": date
                         };
                     }
                     else {
-                        contacts[address] = {
-                            "0000": {
-                                "body": {
-                                    "fr": data[key].body
-                                },
-                                "date": date
-                            }
+                        contacts[address] = {};
+                        contacts[address][myid] = {
+                            "text": {
+                                "fr": data[key].body
+                            },
+                            "date": date
                         };
                     }
                 }

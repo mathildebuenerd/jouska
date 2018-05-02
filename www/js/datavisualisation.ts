@@ -10,6 +10,30 @@ export class Datavisualisation {
         this.type = type;
     }
 
+    public calculateUserScore() {
+
+    }
+
+    public calculateUserScoreWithContact(contact) {
+
+    }
+
+    public calculateScorePerDay() {
+
+    }
+
+    public calculateScorePerWeek() {
+
+    }
+
+    public getMostPositiveMessage() {
+
+    }
+
+    public getMostNegativeMessage() {
+
+    }
+
     // on ne peut utiliser cette fonction que si le type est "SMS"
     public simpleContactComparison() {
 
@@ -24,6 +48,10 @@ export class Datavisualisation {
             console.log(contactList);
             localStorage.setItem("contactList", JSON.stringify(contactList));
         });
+
+        function getScoresPerContact() {
+
+        }
 
 
         function classifyContacts(): Promise<object> {

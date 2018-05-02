@@ -6,6 +6,18 @@ var Datavisualisation = (function () {
         this.data = data;
         this.type = type;
     }
+    Datavisualisation.prototype.calculateUserScore = function () {
+    };
+    Datavisualisation.prototype.calculateUserScoreWithContact = function (contact) {
+    };
+    Datavisualisation.prototype.calculateScorePerDay = function () {
+    };
+    Datavisualisation.prototype.calculateScorePerWeek = function () {
+    };
+    Datavisualisation.prototype.getMostPositiveMessage = function () {
+    };
+    Datavisualisation.prototype.getMostNegativeMessage = function () {
+    };
     Datavisualisation.prototype.simpleContactComparison = function () {
         var sms = new manageSMS_1.SMSManager({});
         console.log("data reçue :");
@@ -16,6 +28,8 @@ var Datavisualisation = (function () {
             console.log(contactList);
             localStorage.setItem("contactList", JSON.stringify(contactList));
         });
+        function getScoresPerContact() {
+        }
         function classifyContacts() {
             return new Promise(function (resolve, reject) {
                 var contactScores = {};
