@@ -9,11 +9,6 @@ declare const navigator: any;
 
 export class SMSManager {
 
-    // filters: object;
-    // constructor(filter: object) {
-    //     this.filters = filter;
-    // }
-
     public static convertUnixDate(unixTimeStamp: number): object {
         let date = new Date(unixTimeStamp*1000); // comme javascript fonctionne en millisecondes, on multiple par 1000 les secondes unix
         return {
@@ -44,43 +39,49 @@ export class SMSManager {
         return normalizedAddress;
     }
 
-    public findContactName(phonenumber: string): Promise<string> {
+    public findContactsName(smsData: any): Promise<object> {
 
         // console.log(contacts);
 
         return new Promise(
             (resolve, reject) => {
 
-                let numberToFind = phonenumber;
-                let contactName = "";
-                navigator.contactsPhoneNumbers.list((contacts) => {
-                    // console.log('les contacts du téléphone :');
-                    // console.log(contacts);
-                    for (const singleContact in contacts) {
-                        let contactNumbers = contacts[singleContact].phoneNumbers;
-                        for (const numbers in contactNumbers) { // chaque contact peut avoir plusieurs numéros, il faut tous les rester pour ne pas louper
-                            let singleNumber = contactNumbers[numbers].normalizedNumber;
-                            if (singleNumber == phonenumber) { // quand on trouve le numéro, on note le nom du contact et on break la loop
-                                contactName = contacts[singleContact].displayName;
-                                // console.log("j'ai trouvé le numéro !");
-                                // console.log(phonenumber);
-                                // console.log(contacts[singleContact].displayName);
-                                break;
+                navigator.contactsPhoneNumbers.list((phoneContacts) => { // on récupère la liste des contacts du téléphone
+                    for (const phonenumber in smsData) { // pour chaque numéro qui se trouve dans smsData, on cherche le nom du contact correspondant
+
+                        // d'abord on normalise le numéro à chercher,
+                        // on enlève le premier zéro du numéro, c'est-à-dire qu'on transforme 06xxxxx and 6xxxxx
+                        // ça permet de retrouver le numéro s'il est inscrit dans le téléphone comme 00336xxxxx ou +336xxxxx
+                        const numberToFind = phonenumber.replace(/^0/, '');
+
+                        for (const singleContact in phoneContacts) {
+                            let contactNumbers = phoneContacts[singleContact].phoneNumbers;
+                            for (const numbers in contactNumbers) { // chaque contact peut avoir plusieurs numéros, il faut tous les rester pour ne pas louper
+                                const espace = new RegExp(' ', 'g');
+                                const singleNumber = (contactNumbers[numbers].normalizedNumber).replace(espace, ''); // on enlève les espaces car certains numéros normalisés en contiennent
+                                if (singleNumber.match(numberToFind) !== null) { // si le numéro à trouver est égal à un des numéros, on récupère le nom et on break la loop
+                                    smsData[phonenumber].name = {}; // on initialise
+                                    smsData[phonenumber].name = phoneContacts[singleContact].displayName;
+                                    break; // break permet de sortir de la boucle for
+                                }
                             }
                         }
                     }
-                    // console.group("findContactName");
-                    // console.log('contact name: ' + contactName);
-                    // console.groupEnd();
-                    resolve(contactName);
-                    // return contactName;
-
+                    resolve(smsData);
                 }, (error) => {
                     console.error(error);
                     reject(error);
                 });
 
 
+
+
+
+
+
+
+
+                // resolve(contactName);
 
             });
 

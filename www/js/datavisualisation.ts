@@ -92,7 +92,7 @@ export class Datavisualisation {
             ).then(
                 contactScores => {
                     for (const contact in contactScores) {
-                        const contactName = sms.findContactName(contact).then(contactName => {
+                        const contactName = sms.findContactsName(contact).then(contactName => {
                             contactScores[contact].contactName = contactName;
                         });
                     }

@@ -56,7 +56,7 @@ var Datavisualisation = (function () {
                 resolve(contactScores);
             }).then(function (contactScores) {
                 var _loop_1 = function (contact) {
-                    var contactName = sms.findContactName(contact).then(function (contactName) {
+                    var contactName = sms.findContactsName(contact).then(function (contactName) {
                         contactScores[contact].contactName = contactName;
                     });
                 };

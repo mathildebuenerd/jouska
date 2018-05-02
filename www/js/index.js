@@ -65,6 +65,17 @@ var CordovaApp = (function () {
                 console.log("avec traduction");
                 console.log(smsData);
             });
+            var getContactNames = install.querySelector("#getContactNames");
+            getContactNames.addEventListener('click', function () {
+                sms.findContactsName(smsData).then(function (smsDataWithNames) {
+                    smsData = smsDataWithNames;
+                }, function (error) {
+                    console.error(error);
+                });
+                console.group("Get contact names");
+                console.log(smsData);
+                console.groupEnd();
+            });
         }
         console.log(localStorage);
         var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');

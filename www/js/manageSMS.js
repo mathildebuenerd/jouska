@@ -29,22 +29,25 @@ var SMSManager = (function () {
         }
         return normalizedAddress;
     };
-    SMSManager.prototype.findContactName = function (phonenumber) {
+    SMSManager.prototype.findContactsName = function (smsData) {
         return new Promise(function (resolve, reject) {
-            var numberToFind = phonenumber;
-            var contactName = "";
-            navigator.contactsPhoneNumbers.list(function (contacts) {
-                for (var singleContact in contacts) {
-                    var contactNumbers = contacts[singleContact].phoneNumbers;
-                    for (var numbers in contactNumbers) {
-                        var singleNumber = contactNumbers[numbers].normalizedNumber;
-                        if (singleNumber == phonenumber) {
-                            contactName = contacts[singleContact].displayName;
-                            break;
+            navigator.contactsPhoneNumbers.list(function (phoneContacts) {
+                for (var phonenumber in smsData) {
+                    var numberToFind = phonenumber.replace(/^0/, '');
+                    for (var singleContact in phoneContacts) {
+                        var contactNumbers = phoneContacts[singleContact].phoneNumbers;
+                        for (var numbers in contactNumbers) {
+                            var espace = new RegExp(' ', 'g');
+                            var singleNumber = (contactNumbers[numbers].normalizedNumber).replace(espace, '');
+                            if (singleNumber.match(numberToFind) !== null) {
+                                smsData[phonenumber].name = {};
+                                smsData[phonenumber].name = phoneContacts[singleContact].displayName;
+                                break;
+                            }
                         }
                     }
                 }
-                resolve(contactName);
+                resolve(smsData);
             }, function (error) {
                 console.error(error);
                 reject(error);

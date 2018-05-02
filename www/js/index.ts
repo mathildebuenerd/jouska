@@ -24,7 +24,6 @@ export class CordovaApp {
             // -------- Get text messages ----------
             // Get received messages
             const getReceivedMessages = install.querySelector("#getReceivedMessages");
-
             getReceivedMessages.addEventListener('click', () => {
                 sms.getAllSMS({
                     box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
@@ -105,6 +104,20 @@ export class CordovaApp {
 
             // -------- Get contact names ----------
             // Get contact names
+            const getContactNames = install.querySelector("#getContactNames");
+            getContactNames.addEventListener('click', () => {
+
+                sms.findContactsName(smsData).then((smsDataWithNames) => {
+                    smsData = smsDataWithNames; // on récupère le même json mais avec les noms en plus
+                }, (error) => {
+                    console.error(error);
+                });
+
+                console.group("Get contact names");
+                console.log(smsData);
+                console.groupEnd();
+            });
+
 
 
 
