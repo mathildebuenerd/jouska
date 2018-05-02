@@ -16,6 +16,7 @@ export class CordovaApp {
         installTheApp();
         function installTheApp() {
 
+            let sms = new SMSManager(); // on instancie l'objet sms pour utiliser les fonctions de la classe
             let smsData = {}; // on crée un objet qui va contenir toutes les données récupérées sur les messages
 
             const install = document.querySelector("#installTheApp");
@@ -25,12 +26,13 @@ export class CordovaApp {
             const getReceivedMessages = install.querySelector("#getReceivedMessages");
 
             getReceivedMessages.addEventListener('click', () => {
-                sms.getAllSMS().then( allSMS => {
-                    console.group("getAllSMS");
-                    console.log('je suis dans then getAllSMS');
-                    console.log('typeof allSMS : ' + typeof allSMS);
-                    console.log(allSMS);
-                    console.groupEnd();
+                sms.getAllSMS({
+                    box : 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+                    //   indexFrom : 0, // start from index 0
+                    maxCount : 10000, // count of SMS to return each time
+                }).then( allSMS => {
+                    smsData = allSMS;
+                    console.log(smsData);
                 }).catch(
                     error => console.error("la promesse concernant getAllSMS a échoué")
                 );
@@ -39,7 +41,19 @@ export class CordovaApp {
 
             // Get sent messages
             const getSentMessages = document.querySelector("#getSentMessages");
-
+            getSentMessages.addEventListener('click', () => {
+                sms.getAllSMS({
+                    box : 'sent', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+                    //   indexFrom : 0, // start from index 0
+                    maxCount : 10000, // count of SMS to return each time
+                }).then( allSMS => {
+                    for (let contact in smsData) {
+                        Object.assign(smsData[contact], allSMS[contact]); // on ajoute les messages envoyés à l'objet qui sert de base de données
+                    }
+                }).catch(
+                    error => console.error("la promesse concernant getAllSMS a échoué")
+                );
+            });
 
 
 
@@ -48,36 +62,26 @@ export class CordovaApp {
 
             const translateMessagesToEnglish = install.querySelector("#translateMessages");
             translateMessagesToEnglish.addEventListener('click', () => {
-                console.group("translate");
-                console.log(allSMS);
-                for (const contact in allSMS) {
-                    console.log(allSMS[contact]);
-                    for (const smsID in allSMS[contact]) {
-                        console.log(allSMS[contact][smsID].body.fr);
-                        translate(allSMS[contact][smsID].body.fr, {to: 'en'}).then(translatedText => {
-                            let text = translatedText;
-                            if (translatedText.indexOf('&#39;') !== -1) {
-                                text = translatedText.replace('&#39;', "'"); // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
-                            }
-                            allSMS[contact][smsID].body.en = text;
-                        });
-                        // allTranslatedSMS[contact][smsID].body.en = "test";
+                for (const contact in smsData) {
+                    console.log(smsData[contact]);
+                    for (const type in smsData[contact]) { // le type correspond à 'sent' ou 'inbox' (messages reçus ou envoyés)
+                        // console.log("type:");
+                        // console.log(sms)
+                        for (const smsID in smsData[contact][type]) {
+                            console.log(smsData[contact][type][smsID].text.fr);
+                            translate(smsData[contact][type][smsID].text.fr, {to: 'en'}).then(translatedText => {
+                                let text = translatedText;
+                                if (translatedText.indexOf('&#39;') !== -1) { // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
+                                    text = translatedText.replace('&#39;', "'");
+                                }
+                                smsData[contact][type][smsID].text.en = text;
+                            });
+                            // allTranslatedSMS[contact][smsID].body.en = "test";
+                        }
                     }
                 }
-                console.log('Mes traductions :');
-                console.log(allSMS);
-                console.groupEnd();
-
-                document.querySelector('#addToStorage').addEventListener('click', () => {
-                    console.log('Storage');
-                    localStorage.removeItem('allSMS');
-                    localStorage.setItem("allSMS", JSON.stringify(allSMS)); // On ne peut stocker que des string dans le local storage, il faut donc strigifier
-                    let storageSMS = localStorage.getItem("allSMS");
-                    console.log("Mon local storage :");
-                    console.log(JSON.parse(storageSMS));
-                    console.groupEnd();
-                });
-
+                console.log("avec traduction");
+                console.log(smsData);
             });
 
 
@@ -115,18 +119,6 @@ export class CordovaApp {
         }
 
         console.log(localStorage);
-        let sms = new SMSManager({
-            box : 'sent', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-            // following 4 filters should NOT be used together, they are OR relationship
-            //  read : 0, // 0 for unread SMS, 1 for SMS already read
-            //_id : 1234, //  specify the msg id
-            //address : '// +8613601234567',  sender's phone number
-            // body : 'This is a test SMS', // content to match
-
-            // following 2 filters can be used to list page up/down
-            //   indexFrom : 0, // start from index 0
-            maxCount : 2000, // count of SMS to return each time
-        });
 
         let analysis = new SentimentAnalysis('en');
         let allSMS;

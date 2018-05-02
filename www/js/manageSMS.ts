@@ -9,17 +9,17 @@ declare const navigator: any;
 
 export class SMSManager {
 
-    filters: object;
-    constructor(filter: object) {
-        this.filters = filter;
-    }
+    // filters: object;
+    // constructor(filter: object) {
+    //     this.filters = filter;
+    // }
 
     public static convertUnixDate(unixTimeStamp: number): object {
         let date = new Date(unixTimeStamp*1000); // comme javascript fonctionne en millisecondes, on multiple par 1000 les secondes unix
         return {
             'day': date.getDate(),
             'month': date.getMonth(),
-            'year': date.getUTCFullYear(),
+            'year': date.getFullYear(),
             'hour': date.getHours(),
             'minutes': date.getMinutes(),
             'seconds': date.getSeconds()
@@ -31,17 +31,16 @@ export class SMSManager {
         let plusSign = new RegExp(/\+/);
         let doubleZero = new RegExp(/^0{2}/);
         if (plusSign.exec(address) !== null) { // si l'adresse contient un identifiant national comme +33 ou +41, on l'enlève pour avoir un numéro de la forme 06xxxxxx, ça permet d'éviter les doublons
-            console.log(address);
             const identifiant = new RegExp(/\+[0-9]{2}/); // un identifiant est un + (/+) suivit de deux nombres ([0-9]{2})
             normalizedAddress = normalizedAddress.replace(identifiant, '0'); // on remplace l'identifiant par un zéro
         } else if (doubleZero.exec(address) !== null) {
             const identifiant = new RegExp(/^0{2}[0-9]{2}/); // un identifiant est un 00 suivi de deux nombres, par exemple 0033 ou 0041
             normalizedAddress = normalizedAddress.replace(identifiant, '0');
         }
-        console.group("Normalized adress");
-        console.log('address: ' + address);
-        console.log('normalized address: ' + normalizedAddress);
-        console.groupEnd();
+        // console.group("Normalized adress");
+        // console.log('address: ' + address);
+        // console.log('normalized address: ' + normalizedAddress);
+        // console.groupEnd();
         return normalizedAddress;
     }
 
@@ -87,11 +86,11 @@ export class SMSManager {
 
     }
 
-    public getAllSMS(): Promise<object> {
+    public getAllSMS(filters: any): Promise<object> { // on met le type any pour les filters pour permettre d'accéder à filters.box
         return new Promise(//return a promise
             (resolve,reject)=>{
                 if (SMS) {
-                    SMS.listSMS(this.filters, function (data) {
+                    SMS.listSMS(filters, function (data) {
                         resolve(data);//added this, resolve promise
                     }, function (err) {
                         console.log('error list sms: ' + err);
@@ -106,18 +105,16 @@ export class SMSManager {
                 // On remplir ici l'objet contacts avec les SMS
                 let contacts = {};
                 for (const key in data) {
-                    // let address = data[key].address;
-                    // console.log("ma fonction");
-                    // let plusSign = new RegExp('\+', '');
-                    // console.log(plusSign.exec(address));
-                    let address = SMSManager.normalizeAddress(data[key].address); // on normalize le numéro pour enlever les espaces et les +33, +41...
-                    const myid = data[key]._id; // chaque numéro possède un identifiant unique
+                    let type = filters.box;
+                    let address = SMSManager.normalizeAddress(data[key].address); // on normalise le numéro pour enlever les espaces, les +33, +41 et les 0033...
+                    const myid = data[key]._id; // chaque SMS possède un identifiant unique
+                    // let type = filters.box;
 
                     // on checke si le numéro de téléphone est standard pour éviter pubs et numéros spéciaux : constitué de chiffres et de + seulement et au moins 7 chiffres
                     if (address.length > 7 && address.match("[0-9]+")) {
                         const date = SMSManager.convertUnixDate(data[key].date); // on converti le format de date de listSMS
                         if (address in contacts) { // si le numéro est vu dans la liste, on ajoute les sms dans ce numéro
-                            contacts[address][myid] = {
+                            contacts[address][type][myid] = {
                                 "text": {
                                     "fr": data[key].body
                                 },
@@ -125,7 +122,8 @@ export class SMSManager {
                             };
                         } else { // si le numéro n'est pas dans la liste, on le crée
                             contacts[address] = {}; // on doit initialiser la nouvelle adresse
-                            contacts[address][myid] = {
+                            contacts[address][type] = {}; // idem
+                            contacts[address][type][myid] = {
                                 "text": {
                                     "fr": data[key].body
                                 },

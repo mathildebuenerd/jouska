@@ -2,15 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var translate = require("./../../hooks/translate");
 var SMSManager = (function () {
-    function SMSManager(filter) {
-        this.filters = filter;
+    function SMSManager() {
     }
     SMSManager.convertUnixDate = function (unixTimeStamp) {
         var date = new Date(unixTimeStamp * 1000);
         return {
             'day': date.getDate(),
             'month': date.getMonth(),
-            'year': date.getUTCFullYear(),
+            'year': date.getFullYear(),
             'hour': date.getHours(),
             'minutes': date.getMinutes(),
             'seconds': date.getSeconds()
@@ -21,7 +20,6 @@ var SMSManager = (function () {
         var plusSign = new RegExp(/\+/);
         var doubleZero = new RegExp(/^0{2}/);
         if (plusSign.exec(address) !== null) {
-            console.log(address);
             var identifiant = new RegExp(/\+[0-9]{2}/);
             normalizedAddress = normalizedAddress.replace(identifiant, '0');
         }
@@ -29,10 +27,6 @@ var SMSManager = (function () {
             var identifiant = new RegExp(/^0{2}[0-9]{2}/);
             normalizedAddress = normalizedAddress.replace(identifiant, '0');
         }
-        console.group("Normalized adress");
-        console.log('address: ' + address);
-        console.log('normalized address: ' + normalizedAddress);
-        console.groupEnd();
         return normalizedAddress;
     };
     SMSManager.prototype.findContactName = function (phonenumber) {
@@ -57,11 +51,10 @@ var SMSManager = (function () {
             });
         });
     };
-    SMSManager.prototype.getAllSMS = function () {
-        var _this = this;
+    SMSManager.prototype.getAllSMS = function (filters) {
         return new Promise(function (resolve, reject) {
             if (SMS) {
-                SMS.listSMS(_this.filters, function (data) {
+                SMS.listSMS(filters, function (data) {
                     resolve(data);
                 }, function (err) {
                     console.log('error list sms: ' + err);
@@ -74,12 +67,13 @@ var SMSManager = (function () {
         }).then(function (data) {
             var contacts = {};
             for (var key in data) {
+                var type = filters.box;
                 var address = SMSManager.normalizeAddress(data[key].address);
                 var myid = data[key]._id;
                 if (address.length > 7 && address.match("[0-9]+")) {
                     var date = SMSManager.convertUnixDate(data[key].date);
                     if (address in contacts) {
-                        contacts[address][myid] = {
+                        contacts[address][type][myid] = {
                             "text": {
                                 "fr": data[key].body
                             },
@@ -88,7 +82,8 @@ var SMSManager = (function () {
                     }
                     else {
                         contacts[address] = {};
-                        contacts[address][myid] = {
+                        contacts[address][type] = {};
+                        contacts[address][type][myid] = {
                             "text": {
                                 "fr": data[key].body
                             },

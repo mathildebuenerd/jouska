@@ -19,7 +19,7 @@ var Datavisualisation = (function () {
     Datavisualisation.prototype.getMostNegativeMessage = function () {
     };
     Datavisualisation.prototype.simpleContactComparison = function () {
-        var sms = new manageSMS_1.SMSManager({});
+        var sms = new manageSMS_1.SMSManager();
         console.log("data reçue :");
         console.log(this.data);
         var data = this.data;

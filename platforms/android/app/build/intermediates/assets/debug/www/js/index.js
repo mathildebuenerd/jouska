@@ -12,61 +12,61 @@ var CordovaApp = (function () {
     CordovaApp.prototype.onDeviceReady = function () {
         installTheApp();
         function installTheApp() {
+            var sms = new manageSMS_1.SMSManager();
             var smsData = {};
             var install = document.querySelector("#installTheApp");
             var getReceivedMessages = install.querySelector("#getReceivedMessages");
             getReceivedMessages.addEventListener('click', function () {
-                sms.getAllSMS().then(function (allSMS) {
-                    console.group("getAllSMS");
-                    console.log('je suis dans then getAllSMS');
-                    console.log('typeof allSMS : ' + typeof allSMS);
-                    console.log(allSMS);
-                    console.groupEnd();
+                sms.getAllSMS({
+                    box: 'inbox',
+                    maxCount: 10000,
+                }).then(function (allSMS) {
+                    smsData = allSMS;
+                    console.log(smsData);
                 }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
             });
             var getSentMessages = document.querySelector("#getSentMessages");
+            getSentMessages.addEventListener('click', function () {
+                sms.getAllSMS({
+                    box: 'sent',
+                    maxCount: 10000,
+                }).then(function (allSMS) {
+                    for (var contact in smsData) {
+                        Object.assign(smsData[contact], allSMS[contact]);
+                    }
+                }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
+            });
             var translateMessagesToEnglish = install.querySelector("#translateMessages");
             translateMessagesToEnglish.addEventListener('click', function () {
-                console.group("translate");
-                console.log(allSMS);
                 var _loop_1 = function (contact) {
-                    console.log(allSMS[contact]);
-                    var _loop_2 = function (smsID) {
-                        console.log(allSMS[contact][smsID].body.fr);
-                        translate(allSMS[contact][smsID].body.fr, { to: 'en' }).then(function (translatedText) {
-                            var text = translatedText;
-                            if (translatedText.indexOf('&#39;') !== -1) {
-                                text = translatedText.replace('&#39;', "'");
-                            }
-                            allSMS[contact][smsID].body.en = text;
-                        });
+                    console.log(smsData[contact]);
+                    var _loop_2 = function (type) {
+                        var _loop_3 = function (smsID) {
+                            console.log(smsData[contact][type][smsID].text.fr);
+                            translate(smsData[contact][type][smsID].text.fr, { to: 'en' }).then(function (translatedText) {
+                                var text = translatedText;
+                                if (translatedText.indexOf('&#39;') !== -1) {
+                                    text = translatedText.replace('&#39;', "'");
+                                }
+                                smsData[contact][type][smsID].text.en = text;
+                            });
+                        };
+                        for (var smsID in smsData[contact][type]) {
+                            _loop_3(smsID);
+                        }
                     };
-                    for (var smsID in allSMS[contact]) {
-                        _loop_2(smsID);
+                    for (var type in smsData[contact]) {
+                        _loop_2(type);
                     }
                 };
-                for (var contact in allSMS) {
+                for (var contact in smsData) {
                     _loop_1(contact);
                 }
-                console.log('Mes traductions :');
-                console.log(allSMS);
-                console.groupEnd();
-                document.querySelector('#addToStorage').addEventListener('click', function () {
-                    console.log('Storage');
-                    localStorage.removeItem('allSMS');
-                    localStorage.setItem("allSMS", JSON.stringify(allSMS));
-                    var storageSMS = localStorage.getItem("allSMS");
-                    console.log("Mon local storage :");
-                    console.log(JSON.parse(storageSMS));
-                    console.groupEnd();
-                });
+                console.log("avec traduction");
+                console.log(smsData);
             });
         }
         console.log(localStorage);
-        var sms = new manageSMS_1.SMSManager({
-            box: 'sent',
-            maxCount: 2000,
-        });
         var analysis = new sentimentAnalysis_1.SentimentAnalysis('en');
         var allSMS;
         var userData;

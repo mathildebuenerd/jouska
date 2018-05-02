@@ -37,7 +37,7 @@ export class Datavisualisation {
     // on ne peut utiliser cette fonction que si le type est "SMS"
     public simpleContactComparison() {
 
-        let sms = new SMSManager({}); // cet objet ne sert à rien, juste à utiliser la fonction findContactname
+        let sms = new SMSManager(); // cet objet ne sert à rien, juste à utiliser la fonction findContactname
         // console.group("Simple contact comparison");
         console.log("data reçue :");
         console.log(this.data);
