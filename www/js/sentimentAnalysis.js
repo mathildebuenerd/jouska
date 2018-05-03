@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var ml = require("./../../hooks/ml-sentiment");
 var darktriad = require("./../../hooks/darktriad");
 var bigfive = require("./../../hooks/bigfive");
 var predictgender = require("./../../hooks/predictgender");
@@ -14,6 +15,8 @@ var TextAnalysis = (function () {
     };
     TextAnalysis.prototype.sentimentAnalysis = function (sentence, language) {
         if (language === void 0) { language = 'en'; }
+        var sentiment = ml({ lang: 'en' });
+        return sentiment.classify(sentence);
     };
     TextAnalysis.prototype.darktriadAnalysis = function (sentence, language) {
         if (language === void 0) { language = 'en'; }
