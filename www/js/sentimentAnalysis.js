@@ -36,12 +36,12 @@ var TextAnalysis = (function () {
         if (Array.isArray(message)) {
             var analysis = [];
             for (var clause in message) {
-                analysis.push(sentiment(message[clause]));
+                analysis.push(sentiment(message[clause]), language);
             }
             return analysis;
         }
         else {
-            return sentiment(message);
+            return sentiment(message, language);
         }
     };
     TextAnalysis.prototype.darktriadAnalysis = function (sentence, language) {

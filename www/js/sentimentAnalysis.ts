@@ -55,11 +55,11 @@ export class TextAnalysis {
         if (Array.isArray(message)) { // si c'est un tableau, ça veut dire qu'il y a plusieurs propositions à analyser séparement
             let analysis = []; // on crée un tableau pour stocker les analyses
             for (const clause in message) {  // on analyse les propositions une par une et on les ajoute au tableau
-                analysis.push(sentiment(message[clause]));
+                analysis.push(sentiment(message[clause]), language);
             }
             return analysis; // on retourne le tableau
         } else { // si ce n'est pas un tableau, c'est que c'est une phrase seule, donc on peut utiliser la fonction directement
-            return sentiment(message);
+            return sentiment(message, language);
         }
 
     }

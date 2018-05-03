@@ -32,10 +32,15 @@ export class CordovaApp {
                     maxCount : 10000, // count of SMS to return each time
                 }).then( allSMS => {
                     smsData = allSMS;
+                    console.group(`Get received messages (inbox)`);
+                    console.log('smsData: ');
                     console.log(smsData);
+                    console.groupEnd();
                 }).catch(
                     error => console.error("la promesse concernant getAllSMS a échoué")
                 );
+
+
             });
 
 
@@ -50,9 +55,15 @@ export class CordovaApp {
                     for (let contact in smsData) {
                         Object.assign(smsData[contact], allSMS[contact]); // on ajoute les messages envoyés à l'objet qui sert de base de données
                     }
+                    console.group(`Get sent messages`);
+                    console.log('smsData: ');
+                    console.log(smsData);
+                    console.groupEnd();
                 }).catch(
                     error => console.error("la promesse concernant getAllSMS a échoué")
                 );
+
+
             });
 
 
@@ -94,7 +105,7 @@ export class CordovaApp {
                     for (const type in smsData[contact]) { // type = inbox | sent | name
                         if (type !== 'name') { // on ne boucle que dans inbox et sent
                             for (const singleSMS in smsData[contact][type]) {
-                                const englishSMS = smsData[contact][type][singleSMS].text.fr;
+                                const englishSMS = smsData[contact][type][singleSMS].text.en;
                                 smsData[contact][type][singleSMS].analysis = {}; // on initialise
                                 smsData[contact][type][singleSMS].analysis.sentiment = {};
                                 smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS);
@@ -103,47 +114,95 @@ export class CordovaApp {
                     }
                 }
 
-
-                // let test = textAnalysis.sentimentAnalysis(`How are you doing today ? I feel a bit strange I think`);
-                // console.log('test sentiment analysis: ');
-                // console.log(test);
-                console.log('smsData after analysis');
+                console.group(`Sentiment analysis`);
+                console.log('smsData: ');
                 console.log(smsData);
+                console.groupEnd();
+                // console.log(textAnalysis.sentimentAnalysis('😊', 'en'));
             });
 
             // Darktriad analysis
             const darktriadAnalysis = install.querySelector("#analyzeDarktriad");
             darktriadAnalysis.addEventListener('click', () => {
+                for (const contact in smsData) {
+                    for (const type in smsData[contact]) { // type = inbox | sent | name
+                        if (type !== 'name') { // on ne boucle que dans inbox et sent
+                            for (const singleSMS in smsData[contact][type]) {
+                                const englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.darktriad = {};
+                                smsData[contact][type][singleSMS].analysis.darktriad = textAnalysis.darktriadAnalysis(englishSMS);
+                            }
+                        }
+                    }
+                }
 
+                console.group(`Dark triad`);
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
 
 
             // Personality analysis (Big Five)
             const bigfiveAnalysis = install.querySelector("#analyzePersonality");
             bigfiveAnalysis.addEventListener('click', () => {
-
+                for (const contact in smsData) {
+                    for (const type in smsData[contact]) { // type = inbox | sent | name
+                        if (type !== 'name') { // on ne boucle que dans inbox et sent
+                            for (const singleSMS in smsData[contact][type]) {
+                                const englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.bigfive = {};
+                                smsData[contact][type][singleSMS].analysis.bigfive = textAnalysis.personalityAnalysis(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group(`Big Five`);
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
 
             // Personality analysis (Big Five)
             const genderPrediction = install.querySelector("#analyzeGender");
             genderPrediction.addEventListener('click', () => {
-
+                for (const contact in smsData) {
+                    for (const type in smsData[contact]) { // type = inbox | sent | name
+                        if (type !== 'name') { // on ne boucle que dans inbox et sent
+                            for (const singleSMS in smsData[contact][type]) {
+                                const englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.gender = {};
+                                smsData[contact][type][singleSMS].analysis.gender = textAnalysis.genderPrediction(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group(`Gender prediction`);
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
 
             // Personality analysis (Big Five)
             const temporalOrientation = install.querySelector("#analyzeTemporalOrientation");
-            genderPrediction.addEventListener('click', () => {
-
+            temporalOrientation.addEventListener('click', () => {
+                for (const contact in smsData) {
+                    for (const type in smsData[contact]) { // type = inbox | sent | name
+                        if (type !== 'name') { // on ne boucle que dans inbox et sent
+                            for (const singleSMS in smsData[contact][type]) {
+                                const englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.temporalOrientation = {};
+                                smsData[contact][type][singleSMS].analysis.temporalOrientation = textAnalysis.temporalOrientationPrediction(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group(`Temporal Orientation`);
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
 
-
-
-
-
-            // -------- Calculate average scores ----------
-            // Calculate average score of each contact
-
-            // Calculate average score of the user per contact
 
 
 
@@ -164,6 +223,22 @@ export class CordovaApp {
             });
 
 
+            // -------- Add to localStorage ----------
+            // Add to localStorage
+            const addToLocalStorage = install.querySelector('#addToLocalStorage');
+            addToLocalStorage.addEventListener('click', () => {
+                console.group("Finalisation de l'installation");
+                console.log("Final sms data: ");
+                console.log(smsData);
+                localStorage.setItem('smsData', JSON.stringify(smsData));
+                console.log(`Local storage: `);
+                console.log(localStorage);
+                console.groupEnd();
+            });
+
+
+
+
 
 
             // -------- Get meta data from the installation ----------
@@ -176,27 +251,14 @@ export class CordovaApp {
             });
 
 
+
+            // -------- Calculate average scores ----------
+            // Calculate average score of each contact
+
+            // Calculate average score of the user per contact
+
+
         }
-
-        let userData;
-
-
-        // si l'usager n'a jamais utilisé l'appli, on initialise son profil
-
-        // console.log(localStorage.getItem());
-        // if (localStorage.getItem("userData") === undefined) {
-        userData = {
-            firstUsage: true,
-            lastSynchro: '',
-            smsLoaded: false,
-            smsTranslated: false,
-            smsAnalyzed: {
-                darktriad: false,
-                sentiment: false
-            }
-        };
-
-        localStorage.setItem('userData', JSON.stringify(userData));
 
     }
 

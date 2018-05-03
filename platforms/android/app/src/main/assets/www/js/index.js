@@ -22,7 +22,10 @@ var CordovaApp = (function () {
                     maxCount: 10000,
                 }).then(function (allSMS) {
                     smsData = allSMS;
+                    console.group("Get received messages (inbox)");
+                    console.log('smsData: ');
                     console.log(smsData);
+                    console.groupEnd();
                 }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
             });
             var getSentMessages = document.querySelector("#getSentMessages");
@@ -34,6 +37,10 @@ var CordovaApp = (function () {
                     for (var contact in smsData) {
                         Object.assign(smsData[contact], allSMS[contact]);
                     }
+                    console.group("Get sent messages");
+                    console.log('smsData: ');
+                    console.log(smsData);
+                    console.groupEnd();
                 }).catch(function (error) { return console.error("la promesse concernant getAllSMS a échoué"); });
             });
             var translateMessagesToEnglish = install.querySelector("#translateMessages");
@@ -71,7 +78,7 @@ var CordovaApp = (function () {
                     for (var type in smsData[contact]) {
                         if (type !== 'name') {
                             for (var singleSMS in smsData[contact][type]) {
-                                var englishSMS = smsData[contact][type][singleSMS].text.fr;
+                                var englishSMS = smsData[contact][type][singleSMS].text.en;
                                 smsData[contact][type][singleSMS].analysis = {};
                                 smsData[contact][type][singleSMS].analysis.sentiment = {};
                                 smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS);
@@ -79,20 +86,82 @@ var CordovaApp = (function () {
                         }
                     }
                 }
-                console.log('smsData after analysis');
+                console.group("Sentiment analysis");
+                console.log('smsData: ');
                 console.log(smsData);
+                console.groupEnd();
             });
             var darktriadAnalysis = install.querySelector("#analyzeDarktriad");
             darktriadAnalysis.addEventListener('click', function () {
+                for (var contact in smsData) {
+                    for (var type in smsData[contact]) {
+                        if (type !== 'name') {
+                            for (var singleSMS in smsData[contact][type]) {
+                                var englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.darktriad = {};
+                                smsData[contact][type][singleSMS].analysis.darktriad = textAnalysis.darktriadAnalysis(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group("Dark triad");
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
             var bigfiveAnalysis = install.querySelector("#analyzePersonality");
             bigfiveAnalysis.addEventListener('click', function () {
+                for (var contact in smsData) {
+                    for (var type in smsData[contact]) {
+                        if (type !== 'name') {
+                            for (var singleSMS in smsData[contact][type]) {
+                                var englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.bigfive = {};
+                                smsData[contact][type][singleSMS].analysis.bigfive = textAnalysis.personalityAnalysis(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group("Big Five");
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
             var genderPrediction = install.querySelector("#analyzeGender");
             genderPrediction.addEventListener('click', function () {
+                for (var contact in smsData) {
+                    for (var type in smsData[contact]) {
+                        if (type !== 'name') {
+                            for (var singleSMS in smsData[contact][type]) {
+                                var englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.gender = {};
+                                smsData[contact][type][singleSMS].analysis.gender = textAnalysis.genderPrediction(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group("Gender prediction");
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
             var temporalOrientation = install.querySelector("#analyzeTemporalOrientation");
-            genderPrediction.addEventListener('click', function () {
+            temporalOrientation.addEventListener('click', function () {
+                for (var contact in smsData) {
+                    for (var type in smsData[contact]) {
+                        if (type !== 'name') {
+                            for (var singleSMS in smsData[contact][type]) {
+                                var englishSMS = smsData[contact][type][singleSMS].text.en;
+                                smsData[contact][type][singleSMS].analysis.temporalOrientation = {};
+                                smsData[contact][type][singleSMS].analysis.temporalOrientation = textAnalysis.temporalOrientationPrediction(englishSMS);
+                            }
+                        }
+                    }
+                }
+                console.group("Temporal Orientation");
+                console.log('smsData: ');
+                console.log(smsData);
+                console.groupEnd();
             });
             var getContactNames = install.querySelector("#getContactNames");
             getContactNames.addEventListener('click', function () {
@@ -105,6 +174,16 @@ var CordovaApp = (function () {
                 console.log(smsData);
                 console.groupEnd();
             });
+            var addToLocalStorage = install.querySelector('#addToLocalStorage');
+            addToLocalStorage.addEventListener('click', function () {
+                console.group("Finalisation de l'installation");
+                console.log("Final sms data: ");
+                console.log(smsData);
+                localStorage.setItem('smsData', JSON.stringify(smsData));
+                console.log("Local storage: ");
+                console.log(localStorage);
+                console.groupEnd();
+            });
             var getCurrentDate = install.querySelector("#getCurrentDate");
             getCurrentDate.addEventListener('click', function () {
                 var today = new Date();
@@ -112,18 +191,6 @@ var CordovaApp = (function () {
                 localStorage.setItem('installation', JSON.stringify(today));
             });
         }
-        var userData;
-        userData = {
-            firstUsage: true,
-            lastSynchro: '',
-            smsLoaded: false,
-            smsTranslated: false,
-            smsAnalyzed: {
-                darktriad: false,
-                sentiment: false
-            }
-        };
-        localStorage.setItem('userData', JSON.stringify(userData));
     };
     return CordovaApp;
 }());

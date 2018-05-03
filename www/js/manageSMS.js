@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var translate = require("./../../hooks/translate");
+var LanguageDetect = require("./../../hooks/languagedetect");
 var SMSManager = (function () {
     function SMSManager() {
     }
@@ -30,7 +31,16 @@ var SMSManager = (function () {
         return normalizedAddress;
     };
     SMSManager.detectLanguage = function (sms) {
-        return 'fr';
+        var languageDetector = new LanguageDetect();
+        var lang = languageDetector.detect(sms)[0][0];
+        var confidence = languageDetector.detect(sms)[0][1];
+        console.log([lang, confidence]);
+        if (lang !== undefined) {
+            return [lang, confidence];
+        }
+        else {
+            return [];
+        }
     };
     SMSManager.prototype.findContactsName = function (smsData) {
         return new Promise(function (resolve, reject) {
@@ -76,7 +86,6 @@ var SMSManager = (function () {
                 var type = filters.box;
                 var address = SMSManager.normalizeAddress(data[key].address);
                 var myid = data[key]._id;
-                var language = SMSManager.detectLanguage(data[key].body);
                 if (address.length > 7 && address.match("[0-9]+")) {
                     var date = SMSManager.convertUnixDate(data[key].date);
                     if (address in contacts) {

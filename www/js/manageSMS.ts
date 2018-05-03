@@ -1,4 +1,5 @@
 import * as translate from "./../../hooks/translate";
+import * as LanguageDetect from "./../../hooks/languagedetect";
 import {TextAnalysis} from "./sentimentAnalysis";
 
 declare const SMS: any;
@@ -40,8 +41,17 @@ export class SMSManager {
         return normalizedAddress;
     }
 
-    public static detectLanguage(sms: string): string {
-        return 'fr';
+    public static detectLanguage(sms: string): object {
+        const languageDetector = new LanguageDetect();
+        const lang = languageDetector.detect(sms)[0][0];// correspond à la première langue détectée
+        const confidence = languageDetector.detect(sms)[0][1]; // correspond à la confidence de la langue
+        console.log([lang, confidence]);
+
+        if (lang !== undefined) { // la langue peut être inconnue
+            return [lang, confidence];
+        } else {
+            return [];
+        }
     }
 
     public findContactsName(smsData: any): Promise<object> {
@@ -115,12 +125,11 @@ export class SMSManager {
                     let address = SMSManager.normalizeAddress(data[key].address); // on normalise le numéro pour enlever les espaces, les +33, +41 et les 0033...
                     const myid = data[key]._id; // chaque SMS possède un identifiant unique
                     // let type = filters.box;
-
-                    let language = SMSManager.detectLanguage(data[key].body);
-
                     // on checke si le numéro de téléphone est standard pour éviter pubs et numéros spéciaux : constitué de chiffres et de + seulement et au moins 7 chiffres
                     if (address.length > 7 && address.match("[0-9]+")) {
                         const date = SMSManager.convertUnixDate(data[key].date); // on converti le format de date de listSMS
+                        // let language = SMSManager.detectLanguage(data[key].body);
+
                         if (address in contacts) { // si le numéro est vu dans la liste, on ajoute les sms dans ce numéro
                             contacts[address][type][myid] = {
                                 "text": {

@@ -63,10 +63,7 @@ module.exports = function (sPhrase, sLangCode, mCallback) {
 
     // Detect language if needed (beta must be performed on each word for more efficiency)
     if (sLangCode == null) {
-        var aDetectedLang = oLangDetect.detect(aTokens.join(' '), 2);
-        console.log('aDetectLang');
-        console.log(`sentence ${aTokens.join(' ')}`);
-        console.log(aDetectedLang);
+        var aDetectedLang = oLangDetect.detect(aTokens.join(' '), 1);
         if (aDetectedLang[0]) {
             sLangCode = aDetectedLang[0][0].substring(0, 2);
         }
