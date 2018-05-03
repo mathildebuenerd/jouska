@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ml = require("./../../hooks/ml-sentiment");
+var sentiment = require("./../../hooks/node-sentiment");
 var darktriad = require("./../../hooks/darktriad");
 var bigfive = require("./../../hooks/bigfive");
 var predictgender = require("./../../hooks/predictgender");
@@ -13,10 +13,36 @@ var TextAnalysis = (function () {
     TextAnalysis.prototype.translate = function (sentence) {
         return translate(sentence);
     };
-    TextAnalysis.prototype.sentimentAnalysis = function (sentence, language) {
+    TextAnalysis.extractClauses = function (sentence) {
+        var sentenceToSlice = sentence;
+        var separators = new RegExp(/[.?!,]\s| et | and /, 'gim');
+        var array;
+        var subSentences = [];
+        while ((array = separators.exec(sentenceToSlice)) !== null) {
+            var subSentence = sentenceToSlice.slice(0, array.index);
+            subSentences.push(subSentence);
+            sentenceToSlice = sentenceToSlice.replace(subSentence, '');
+        }
+        if (subSentences.length > 1) {
+            return subSentences;
+        }
+        else {
+            return sentence;
+        }
+    };
+    TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
-        var sentiment = ml({ lang: 'en' });
-        return sentiment.classify(sentence);
+        var message = TextAnalysis.extractClauses(textMessage);
+        if (Array.isArray(message)) {
+            var analysis = [];
+            for (var clause in message) {
+                analysis.push(sentiment(message[clause]));
+            }
+            return analysis;
+        }
+        else {
+            return sentiment(message);
+        }
     };
     TextAnalysis.prototype.darktriadAnalysis = function (sentence, language) {
         if (language === void 0) { language = 'en'; }

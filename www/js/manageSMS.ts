@@ -1,4 +1,5 @@
 import * as translate from "./../../hooks/translate";
+import {TextAnalysis} from "./sentimentAnalysis";
 
 declare const SMS: any;
 declare const navigator: any;
@@ -37,6 +38,10 @@ export class SMSManager {
         // console.log('normalized address: ' + normalizedAddress);
         // console.groupEnd();
         return normalizedAddress;
+    }
+
+    public static detectLanguage(sms: string): string {
+        return 'fr';
     }
 
     public findContactsName(smsData: any): Promise<object> {
@@ -110,6 +115,8 @@ export class SMSManager {
                     let address = SMSManager.normalizeAddress(data[key].address); // on normalise le numéro pour enlever les espaces, les +33, +41 et les 0033...
                     const myid = data[key]._id; // chaque SMS possède un identifiant unique
                     // let type = filters.box;
+
+                    let language = SMSManager.detectLanguage(data[key].body);
 
                     // on checke si le numéro de téléphone est standard pour éviter pubs et numéros spéciaux : constitué de chiffres et de + seulement et au moins 7 chiffres
                     if (address.length > 7 && address.match("[0-9]+")) {

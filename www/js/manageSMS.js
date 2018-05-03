@@ -29,6 +29,9 @@ var SMSManager = (function () {
         }
         return normalizedAddress;
     };
+    SMSManager.detectLanguage = function (sms) {
+        return 'fr';
+    };
     SMSManager.prototype.findContactsName = function (smsData) {
         return new Promise(function (resolve, reject) {
             navigator.contactsPhoneNumbers.list(function (phoneContacts) {
@@ -73,6 +76,7 @@ var SMSManager = (function () {
                 var type = filters.box;
                 var address = SMSManager.normalizeAddress(data[key].address);
                 var myid = data[key]._id;
+                var language = SMSManager.detectLanguage(data[key].body);
                 if (address.length > 7 && address.match("[0-9]+")) {
                     var date = SMSManager.convertUnixDate(data[key].date);
                     if (address in contacts) {

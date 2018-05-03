@@ -90,9 +90,25 @@ export class CordovaApp {
             // Sentiment analysis
             const sentimentAnalysis = install.querySelector("#analyzeSentiment");
             sentimentAnalysis.addEventListener('click', () => {
-                let test = textAnalysis.sentimentAnalysis(`How are you doing today ? I feel a bit strange I think`);
-                console.log('test sentiment analysis: ');
-                console.log(test);
+                for (const contact in smsData) {
+                    for (const type in smsData[contact]) { // type = inbox | sent | name
+                        if (type !== 'name') { // on ne boucle que dans inbox et sent
+                            for (const singleSMS in smsData[contact][type]) {
+                                const englishSMS = smsData[contact][type][singleSMS].text.fr;
+                                smsData[contact][type][singleSMS].analysis = {}; // on initialise
+                                smsData[contact][type][singleSMS].analysis.sentiment = {};
+                                smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS);
+                            }
+                        }
+                    }
+                }
+
+
+                // let test = textAnalysis.sentimentAnalysis(`How are you doing today ? I feel a bit strange I think`);
+                // console.log('test sentiment analysis: ');
+                // console.log(test);
+                console.log('smsData after analysis');
+                console.log(smsData);
             });
 
             // Darktriad analysis
@@ -152,17 +168,16 @@ export class CordovaApp {
 
             // -------- Get meta data from the installation ----------
             // Get current date/hour
-
-            // Get last SMS ids
-
-            // Add average scores to metadata
+            const getCurrentDate = install.querySelector("#getCurrentDate");
+            getCurrentDate.addEventListener('click', () => {
+                const today = new Date(); // on récupère la date d'installation
+                console.log(typeof today);
+                localStorage.setItem('installation', JSON.stringify(today));
+            });
 
 
         }
 
-        console.log(localStorage);
-
-        let allSMS;
         let userData;
 
 
@@ -182,33 +197,6 @@ export class CordovaApp {
         };
 
         localStorage.setItem('userData', JSON.stringify(userData));
-        // console.log('Nouvel usager');
-        // console.log(userData);
-        // } else {
-        //     let userDataString = localStorage.getItem('userData');
-        //     userData = JSON.parse(userDataString);
-        //     console.log("Pas nouvel usager");
-        //     console.log(userData);
-        // }
-
-        // document.querySelector('#loadSMS').addEventListener('click', () => {
-        // });
-
-
-        document.querySelector("#startVisualisation").addEventListener('click', () => {
-            console.group("Start visualisation selector");
-            const stringyfiedSMSData = localStorage.getItem('allSMSanalyzed');
-            const SMSdata = JSON.parse(stringyfiedSMSData);
-            console.log("SMSdata:");
-            console.log(SMSdata);
-            let visualisationSMS = new Datavisualisation(SMSdata, 'sms');
-            visualisationSMS.simpleContactComparison();
-            console.groupEnd();
-        });
-
-
-
-
 
     }
 
