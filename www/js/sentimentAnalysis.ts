@@ -79,5 +79,4 @@ export class TextAnalysis {
         return prospectimo(textMessage);
     }
 
-
 }

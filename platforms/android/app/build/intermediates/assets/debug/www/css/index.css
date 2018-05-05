@@ -8,6 +8,10 @@ h1 {
     font-size: 50px;
 }
 
+h1#app-title {
+    margin-top: 50px;
+}
+
 section.manageSMS {
     display: flex;
     flex-direction: column;
@@ -98,50 +102,90 @@ section.manageSMS {
 
  *******/
 
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    background-color: white;
-    height: 50px;
+
+nav {
     overflow: hidden;
     display: flex;
     align-items: center;
-    box-shadow: 0 -1px 5px rgba(0,0,0,0.15);
 }
 
-.bottom-nav ul {
-    list-style-type: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-}
-
-.bottom-nav ul li.nav-element {
-    width: 33vw;
-    overflow: hidden;
-}
-
-.bottom-nav a.nav-link {
+nav a.nav-link {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.bottom-nav .icon img {
+nav ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+nav .icon img {
     height: 22px;
     width: auto;
 }
 
-.bottom-nav .nav-item-text {
+nav .nav-item-text {
     font-size: 0.9em;
 }
 
 .nav-link.active {
     color: blue;
 }
+
+nav ul li.nav-element {
+    overflow: hidden;
+}
+
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: white;
+    width: 100vw;
+    height: 50px;
+    box-shadow: 0 -1px 5px rgba(0,0,0,0.15);
+}
+
+
+.bottom-nav ul li.nav-element {
+    width: 33vw;
+}
+
+
+/********
+
+    Stats nav
+
+ */
+
+.stats-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: 100vw;
+    height: 50px;
+    box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+}
+
+.stats-nav ul li.nav-element {
+    width: 50vw;
+}
+
+.stats-nav .nav-link {
+    height: 50px;
+}
+
+.stats-nav .active {
+    border-bottom:  4px solid blue;
+}
+
+
 
 
 

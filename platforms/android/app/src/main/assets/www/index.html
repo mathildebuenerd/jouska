@@ -42,7 +42,7 @@
 </head>
 <body>
 <div class="app">
-    <h1>Quantified talk</h1>
+    <h1 id="app-title">Quantified talk</h1>
     <div id="deviceready" class="blink">
     </div>
 
@@ -97,11 +97,36 @@
 
 
 
-    <!--<section class="stats">-->
-        <!--<button id="startVisualisation" class="fillButton pink">-->
-            <!--<a class="linkFillButton">Get contacts names</a>-->
-        <!--</button>-->
-    <!--</section>-->
+    <section class="stats">
+
+        <nav class="stats-nav">
+            <ul>
+                <li class="nav-element">
+                    <a class="nav-link active">
+                        <span class="icon user"><img alt="" src=""></span>
+                        <span class="nav-item-text">Moi</span>
+                    </a>
+                </li>
+                <li class="nav-element">
+                    <a class="nav-link">
+                        <span class="icon contacts"><img alt="" src=""></span>
+                        <span class="nav-item-text">Mes contacts</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!--statistiques de l'usager-->
+        <section id="userStats">
+
+        </section>
+
+        <!--statistiques des contacts-->
+        <section id="contactsStats">
+
+        </section>
+
+    </section>
 
 
     <nav class="bottom-nav">

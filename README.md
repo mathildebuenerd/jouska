@@ -13,9 +13,12 @@ The app also contains an interactive writing interface, which analyses in real t
 As sentiment analysis is far more developed for the English language, all text messages are translated to English before being analyzed.
 
 Then, several text analysis are done :
-- Positivity/Négativity with [ml-sentiment](https://www.npmjs.com/package/ml-sentiment)
-- Dark Triad with [darktriad](https://www.npmjs.com/package/darktriad)
-- Big Five personality traits with [bigfive](https://www.npmjs.com/package/bigfive)
+- Positivity/Negativity with [node-sentiment](https://www.npmjs.com/package/node-sentiment) + a custom emoji recognition.
+- Dark Triad with [darktriad](https://www.npmjs.com/package/darktriad) ([P. Hughes](https://www.phugh.es/))
+- Big Five personality traits with [bigfive](https://www.npmjs.com/package/bigfive) ([P. Hughes](https://www.phugh.es/))
+
+## Context
+Quantified Talk is a master's project made at HEAD - Geneva, in the Media Design master.
 
 -----
 

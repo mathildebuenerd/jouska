@@ -1,9 +1,8 @@
 import * as getData from "./getData";
 const installation = new getData.Installation();
-// import {Installation} from "./getData";
-import {Datavisualisation} from "./datavisualisation";
+import * as score from "./calculateScores";
+const calculate = new score.CalculateScore();
 import set = Reflect.set;
-import "./visualEffects";
 
 
 
@@ -16,9 +15,26 @@ export class CordovaApp {
 
     onDeviceReady() {
 
+        // s'il n'y a pas de smsData, ça veut dire qu'on a pas encore installé l'application
         if (localStorage.getItem('smsData') === null) {
             installation.start();
         }
+
+        let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        let clemence = calculate.scoreWithContact('0783094512', 'inbox');
+        let samy = calculate.scoreWithContact('0638768915', 'inbox');
+
+        console.group("Résultats des scores");
+        console.log('my score:');
+        console.log(myscore);
+        console.log('mom score:');
+        console.log(momscore);
+        console.log('clemence:');
+        console.log(clemence);
+        console.log('samy:');
+        console.log(samy);
+        console.groupEnd();
 
 
 
