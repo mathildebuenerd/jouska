@@ -157,6 +157,10 @@ section.manageSMS {
 
  *********/
 
+#installTheApp {
+    display: none;
+}
+
 #installTheApp h1 {
     font-size: 1.7em;
     border-bottom: 2px solid black;

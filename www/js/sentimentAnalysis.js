@@ -44,21 +44,21 @@ var TextAnalysis = (function () {
             return sentiment(message, language);
         }
     };
-    TextAnalysis.prototype.darktriadAnalysis = function (sentence, language) {
+    TextAnalysis.prototype.darktriadAnalysis = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
-        return darktriad(sentence);
+        return darktriad(textMessage);
     };
-    TextAnalysis.prototype.personalityAnalysis = function (sentence, language) {
+    TextAnalysis.prototype.personalityAnalysis = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
-        return bigfive(sentence);
+        return bigfive(textMessage);
     };
-    TextAnalysis.prototype.genderPrediction = function (sentence, language) {
+    TextAnalysis.prototype.genderPrediction = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
-        return predictgender(sentence);
+        return predictgender(textMessage);
     };
-    TextAnalysis.prototype.temporalOrientationPrediction = function (sentence, language) {
+    TextAnalysis.prototype.temporalOrientationPrediction = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
-        return prospectimo(sentence);
+        return prospectimo(textMessage);
     };
     return TextAnalysis;
 }());

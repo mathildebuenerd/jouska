@@ -9,7 +9,6 @@ import * as predictgender from "./../../hooks/predictgender";
 import * as prospectimo from "./../../hooks/prospectimo";
 import * as translate from "./../../hooks/translate";
 
-
 translate.from = "fr";
 
 export class TextAnalysis {
@@ -64,20 +63,20 @@ export class TextAnalysis {
 
     }
 
-    public darktriadAnalysis(sentence: string, language: string = 'en') {
-        return darktriad(sentence);
+    public darktriadAnalysis(textMessage: string, language: string = 'en') {
+        return darktriad(textMessage);
     }
 
-    public personalityAnalysis(sentence: string, language: string = 'en') {
-        return bigfive(sentence);
+    public personalityAnalysis(textMessage: string, language: string = 'en') {
+        return bigfive(textMessage);
     }
 
-    public genderPrediction(sentence: string, language: string = 'en') {
-        return predictgender(sentence);
+    public genderPrediction(textMessage: string, language: string = 'en') {
+        return predictgender(textMessage);
     }
 
-    public temporalOrientationPrediction(sentence: string, language: string = 'en') {
-        return prospectimo(sentence);
+    public temporalOrientationPrediction(textMessage: string, language: string = 'en') {
+        return prospectimo(textMessage);
     }
 
 
