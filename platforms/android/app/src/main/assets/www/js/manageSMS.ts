@@ -145,7 +145,7 @@ export class SMSManager {
                         if (address in contacts) { // si le numéro est vu dans la liste, on ajoute les sms dans ce numéro
                             contacts[address][type][myid] = {
                                 "text": {
-                                    "fr": data[key].body
+                                    "original": data[key].body
                                 },
                                 "date": date
                             };
@@ -154,18 +154,10 @@ export class SMSManager {
                             contacts[address][type] = {}; // idem
                             contacts[address][type][myid] = {
                                 "text": {
-                                    "fr": data[key].body
+                                    "original": data[key].body
                                 },
                                 "date": date
                             };
-                            // contacts[address] = {
-                            //     "0000": {
-                            //         "text": {
-                            //             "fr": data[key].body
-                            //         },
-                            //         "date": date
-                            //     }
-                            // };
                         }
                     } // if address est correct
                     // }

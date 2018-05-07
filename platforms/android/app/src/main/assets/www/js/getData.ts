@@ -114,8 +114,8 @@ export class Installation {
                 // console.log("type:");
                 // console.log(sms)
                 for (const smsID in smsData[contact][type]) {
-                    console.log(smsData[contact][type][smsID].text.fr);
-                    translate(smsData[contact][type][smsID].text.fr, {to: 'en'}).then(translatedText => {
+                    console.log(smsData[contact][type][smsID].text.original);
+                    translate(smsData[contact][type][smsID].text.original, {to: 'en'}).then(translatedText => {
                         let text = translatedText;
                         if (translatedText.indexOf('&#39;') !== -1) { // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
                             text = translatedText.replace('&#39;', "'");
@@ -136,7 +136,7 @@ export class Installation {
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
                     for (const singleSMS in smsData[contact][type]) {
                         const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        const originalSMS = smsData[contact][type][singleSMS].text.fr;
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis = {}; // on initialise
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');

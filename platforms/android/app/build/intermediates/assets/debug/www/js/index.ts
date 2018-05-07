@@ -33,10 +33,10 @@ export class CordovaApp {
         //     console.log(`lang: ${lang}`);
         // });
 
-        let myscore = calculate.scoreWithContact('0675611341', 'sent');
-        let momscore = calculate.scoreWithContact('0675611341', 'inbox');
-        let clemence = calculate.scoreWithContact('0783094512', 'inbox');
-        let samy = calculate.scoreWithContact('0638768915', 'inbox');
+        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
+        // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
         // console.group("Résultats des scores");
         // console.log('my score:');
@@ -49,7 +49,9 @@ export class CordovaApp {
         // console.log(samy);
         // console.groupEnd();
 
-        console.log(text.sentimentAnalysis('Salut :)', 'Hi; )', 'en'));
+        let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "The team has just finished. So we can meet now? What did you do yesterday I was looking for you in the playground", 'en');
+        console.log(`test:`);
+        console.log(test);
 
         writingAssistant.startAssistance();
 

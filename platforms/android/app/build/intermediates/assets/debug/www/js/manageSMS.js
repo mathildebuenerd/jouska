@@ -100,7 +100,7 @@ var SMSManager = (function () {
                     if (address in contacts) {
                         contacts[address][type][myid] = {
                             "text": {
-                                "fr": data[key].body
+                                "original": data[key].body
                             },
                             "date": date
                         };
@@ -110,7 +110,7 @@ var SMSManager = (function () {
                         contacts[address][type] = {};
                         contacts[address][type][myid] = {
                             "text": {
-                                "fr": data[key].body
+                                "original": data[key].body
                             },
                             "date": date
                         };

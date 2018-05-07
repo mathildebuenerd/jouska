@@ -21,11 +21,9 @@ var CordovaApp = (function () {
         if (localStorage.getItem('smsData') === null) {
             installation.start();
         }
-        var myscore = calculate.scoreWithContact('0675611341', 'sent');
-        var momscore = calculate.scoreWithContact('0675611341', 'inbox');
-        var clemence = calculate.scoreWithContact('0783094512', 'inbox');
-        var samy = calculate.scoreWithContact('0638768915', 'inbox');
-        console.log(text.sentimentAnalysis('Salut :)', 'Hi; )', 'en'));
+        var test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "The team has just finished. So we can meet now? What did you do yesterday I was looking for you in the playground", 'en');
+        console.log("test:");
+        console.log(test);
         writingAssistant.startAssistance();
     };
     return CordovaApp;

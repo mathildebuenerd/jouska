@@ -70,8 +70,8 @@ var Installation = (function () {
             console.log(smsData[contact]);
             var _loop_2 = function (type) {
                 var _loop_3 = function (smsID) {
-                    console.log(smsData[contact][type][smsID].text.fr);
-                    translate(smsData[contact][type][smsID].text.fr, { to: 'en' }).then(function (translatedText) {
+                    console.log(smsData[contact][type][smsID].text.original);
+                    translate(smsData[contact][type][smsID].text.original, { to: 'en' }).then(function (translatedText) {
                         var text = translatedText;
                         if (translatedText.indexOf('&#39;') !== -1) {
                             text = translatedText.replace('&#39;', "'");
@@ -99,7 +99,7 @@ var Installation = (function () {
                 if (type !== 'name') {
                     for (var singleSMS in smsData[contact][type]) {
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var originalSMS = smsData[contact][type][singleSMS].text.fr;
+                        var originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');

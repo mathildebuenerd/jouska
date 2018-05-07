@@ -107,12 +107,8 @@ module.exports = function (originalPhrase, sPhrase, sLangCode, mCallback) {
 
 function getSmileys(sentence) {
 
-    console.log(`get smuiley`);
+    let inlineSmileys = new RegExp(/(<[\/\\]?3|[()/|*$][-^]?[:;=]|x[d()]|\^[a-z._-]{0,1}\^['"]{0,1}|[:;=B8][\-^]?[3DOPp@$*\\)(\/|])(?=\s|[!.?]|$)/, 'gim'); // detect smileys like :) ;) :p :/ =/ :-) :( :D xD :-) ^^
 
-    // On regarde s'il y a des smileys 'inline' comme :) ou :-) ou ^^
-    // On le fait après le calcul de la négation, car leur valeur ne doit pas être inversée s'il y a une négation
-    let inlineSmileys = new RegExp(/(<[\/\\]?3|[()/|*$][-^]?[:;=]|x[d()]|\^[a-z._-]{0,1}\^['"]{0,1}|[:;=B8][\-^]?[3DOPp@$*\\)(\/|])(?=\s|[!.?]|$)/, 'gim'); // detect smileys like :) ;) :p :/ =/ :-) :( :D xD :-)
-    // il faut convertir les smileys reçus en lowercase
     const smileyValues = {
         ':)': 5,
         ';)': 5,
@@ -166,16 +162,12 @@ function getSmileys(sentence) {
     };
 
     let smileyArray;
-    while ((smileyArray = inlineSmileys.exec(sentence.toLocaleLowerCase())) !== null) { // pour chaque smiley
-        console.log('smileyArray');
-        console.log(smileyArray);
+    while ((smileyArray = inlineSmileys.exec(sentence.toLocaleLowerCase())) !== null) { // convert to lowercase for smileys like :s :S
 
-        // la fonction ne trouve que le premier smiley de la proposition
-        // elle pourrait être améliorée
-        const smileyScore = smileyValues[smileyArray[0]]; // on récupère la valeur du smiley
-        iGlobalScore += Number(smileyScore); // on ajoute la valeur du smiley au score global
+        const smileyScore = smileyValues[smileyArray[0]]; // get the smiley score
+        iGlobalScore += Number(smileyScore); // add the score to the global score
 
-        // on ajoute le smiley dans le tableau des mots positfs/négatifs
+        // add the smiley into the positive/negative arrays
         if (smileyScore > 0) {
             aPositive.push(String(smileyArray[0]));
         } else {
