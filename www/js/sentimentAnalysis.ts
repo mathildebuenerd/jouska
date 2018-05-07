@@ -7,15 +7,12 @@ import * as darktriad from "./../../hooks/darktriad";
 import * as bigfive from "./../../hooks/bigfive";
 import * as predictgender from "./../../hooks/predictgender";
 import * as prospectimo from "./../../hooks/prospectimo";
-import * as translate from "./../../hooks/translate";
-
-translate.from = "fr";
 
 export class TextAnalysis {
 
-    public translate(sentence: string) {
-        return translate(sentence);
-    }
+    // public translate(sentence: string) {
+    //     return translate(sentence);
+    // }
 
     public static extractClauses(sentence) {
 
@@ -47,18 +44,18 @@ export class TextAnalysis {
 
     }
 
-    public sentimentAnalysis(textMessage: string, language: string = 'en'): object {
+    public sentimentAnalysis(originalMessage: string, textMessage: string, language: string = 'en'): object {
 
         const message = TextAnalysis.extractClauses(textMessage);
 
         if (Array.isArray(message)) { // si c'est un tableau, ça veut dire qu'il y a plusieurs propositions à analyser séparement
             let analysis = []; // on crée un tableau pour stocker les analyses
             for (const clause in message) {  // on analyse les propositions une par une et on les ajoute au tableau
-                analysis.push(sentiment(message[clause]), language);
+                analysis.push(sentiment(originalMessage, message[clause], language));
             }
             return analysis; // on retourne le tableau
         } else { // si ce n'est pas un tableau, c'est que c'est une phrase seule, donc on peut utiliser la fonction directement
-            return sentiment(message, language);
+            return sentiment(originalMessage, message, language);
         }
 
     }

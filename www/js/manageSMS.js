@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var translate = require("./../../hooks/translate");
 var LanguageDetect = require("./../../hooks/languagedetect");
 var SMSManager = (function () {
     function SMSManager() {
@@ -30,13 +29,23 @@ var SMSManager = (function () {
         }
         return normalizedAddress;
     };
-    SMSManager.detectLanguage = function (sms) {
+    SMSManager.prototype.detectLanguage = function (sms) {
+        var i = 0;
         var languageDetector = new LanguageDetect();
-        var lang = languageDetector.detect(sms)[0][0];
-        var confidence = languageDetector.detect(sms)[0][1];
-        console.log([lang, confidence]);
+        var lang = languageDetector.detect(sms)[i][0];
+        console.log("lang " + lang);
         if (lang !== undefined) {
-            return [lang, confidence];
+            while (lang === ('latvian' || 'pidgin' || 'latin' || 'estonian' || 'turkish')) {
+                console.group('Detect language');
+                console.log("while lang: " + lang);
+                console.log("while i: " + i);
+                i++;
+                lang = languageDetector.detect(sms)[i][0];
+                console.log("while lang after: " + lang);
+                console.log("while i after: " + i);
+                console.groupEnd();
+            }
+            return [languageDetector.detect(sms)[i][0], languageDetector.detect(sms)[i][1]];
         }
         else {
             return [];
@@ -109,25 +118,6 @@ var SMSManager = (function () {
                 }
             }
             return contacts;
-        });
-    };
-    SMSManager.prototype.translateSMS = function (allSMS) {
-        return new Promise(function (resolve, reject) {
-            var counter = 0;
-            for (var key in allSMS) {
-                if (allSMS.hasOwnProperty(key)) {
-                    if (counter < 20) {
-                        for (var subkey in allSMS[key]) {
-                            var englishSentence = translate(allSMS[key][subkey].body.fr);
-                            allSMS[key][subkey].body.en = englishSentence;
-                            console.log(englishSentence);
-                            counter++;
-                        }
-                    }
-                }
-            }
-            console.log('translate: je vais résoudre la promesse');
-            resolve(allSMS);
         });
     };
     SMSManager.prototype.displaySMS = function () {

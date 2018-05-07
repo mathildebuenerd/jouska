@@ -5,14 +5,9 @@ var darktriad = require("./../../hooks/darktriad");
 var bigfive = require("./../../hooks/bigfive");
 var predictgender = require("./../../hooks/predictgender");
 var prospectimo = require("./../../hooks/prospectimo");
-var translate = require("./../../hooks/translate");
-translate.from = "fr";
 var TextAnalysis = (function () {
     function TextAnalysis() {
     }
-    TextAnalysis.prototype.translate = function (sentence) {
-        return translate(sentence);
-    };
     TextAnalysis.extractClauses = function (sentence) {
         var sentenceToSlice = sentence;
         var separators = new RegExp(/[.?!,]\s| et | and /, 'gim');
@@ -30,18 +25,18 @@ var TextAnalysis = (function () {
             return sentence;
         }
     };
-    TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language) {
+    TextAnalysis.prototype.sentimentAnalysis = function (originalMessage, textMessage, language) {
         if (language === void 0) { language = 'en'; }
         var message = TextAnalysis.extractClauses(textMessage);
         if (Array.isArray(message)) {
             var analysis = [];
             for (var clause in message) {
-                analysis.push(sentiment(message[clause]), language);
+                analysis.push(sentiment(originalMessage, message[clause], language));
             }
             return analysis;
         }
         else {
-            return sentiment(message, language);
+            return sentiment(originalMessage, message, language);
         }
     };
     TextAnalysis.prototype.darktriadAnalysis = function (textMessage, language) {

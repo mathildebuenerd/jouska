@@ -6,9 +6,6 @@ declare const SMS: any;
 declare const navigator: any;
 // declare const SMSManager: any;
 
-
-
-
 export class SMSManager {
 
     public static convertUnixDate(unixTimeStamp: number): object {
@@ -41,14 +38,29 @@ export class SMSManager {
         return normalizedAddress;
     }
 
-    public static detectLanguage(sms: string): object {
+    public detectLanguage(sms: string): object {
+        let i = 0;
         const languageDetector = new LanguageDetect();
-        const lang = languageDetector.detect(sms)[0][0];// correspond à la première langue détectée
-        const confidence = languageDetector.detect(sms)[0][1]; // correspond à la confidence de la langue
-        console.log([lang, confidence]);
+        let lang = languageDetector.detect(sms)[i][0];// correspond à la première langue détectée
+        // const confidence = languageDetector.detect(sms)[i][1]; // correspond à la confidence de la langue
+        // console.log([lang, confidence]);
+
+        console.log(`lang ${lang}`);
 
         if (lang !== undefined) { // la langue peut être inconnue
-            return [lang, confidence];
+            while (lang === ('latvian' || 'pidgin' || 'latin' || 'estonian' || 'turkish')) {
+                console.group('Detect language');
+                console.log(`while lang: ${lang}`);
+                console.log(`while i: ${i}`);
+                i++;
+                lang = languageDetector.detect(sms)[i][0];
+                console.log(`while lang after: ${lang}`);
+                console.log(`while i after: ${i}`);
+                console.groupEnd();
+            }
+            // return [lang, confidence];
+            return [languageDetector.detect(sms)[i][0], languageDetector.detect(sms)[i][1]];
+
         } else {
             return [];
         }
@@ -163,32 +175,32 @@ export class SMSManager {
         );
     }
 
-    public translateSMS(allSMS: any) {
-        return new Promise(
-            (resolve, reject) => {
-                let counter = 0;
-                for (const key in allSMS) {
-                    if (allSMS.hasOwnProperty(key)) {
-                        if (counter <20) {
-                            for (let subkey in allSMS[key]) {
-                                // const englishSentence = translate(allSMS[key][subkey].body).then( text => {
-                                //     allSMS[key][subkey].body.en = text;
-                                //     console.log(text);
-                                // });
-                                const englishSentence = translate(allSMS[key][subkey].body.fr);
-                                allSMS[key][subkey].body.en = englishSentence;
-                                console.log(englishSentence);
-                                counter++;
-                            }
-                        }
-                    } // hasownproperty
-                }
-                console.log('translate: je vais résoudre la promesse');
-                resolve(allSMS);
-                //         console.log('translate: je vais rejeter la promesse');
-                // reject();
-            });
-    }
+    // public translateSMS(allSMS: any) {
+    //     return new Promise(
+    //         (resolve, reject) => {
+    //             let counter = 0;
+    //             for (const key in allSMS) {
+    //                 if (allSMS.hasOwnProperty(key)) {
+    //                     if (counter <20) {
+    //                         for (let subkey in allSMS[key]) {
+    //                             // const englishSentence = translate(allSMS[key][subkey].body).then( text => {
+    //                             //     allSMS[key][subkey].body.en = text;
+    //                             //     console.log(text);
+    //                             // });
+    //                             const englishSentence = translate(allSMS[key][subkey].body.fr);
+    //                             allSMS[key][subkey].body.en = englishSentence;
+    //                             console.log(englishSentence);
+    //                             counter++;
+    //                         }
+    //                     }
+    //                 } // hasownproperty
+    //             }
+    //             console.log('translate: je vais résoudre la promesse');
+    //             resolve(allSMS);
+    //             //         console.log('translate: je vais rejeter la promesse');
+    //             // reject();
+    //         });
+    // }
 
     public displaySMS() {
 

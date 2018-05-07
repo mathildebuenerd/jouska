@@ -1,7 +1,10 @@
 import {SMSManager} from "./manageSMS";
 import {TextAnalysis} from "./sentimentAnalysis";
 import * as translate from "./../../hooks/translate";
-
+import * as keys from './apiKeys';
+const Keys = new keys.Keys();
+translate.key = Keys.API_KEY;
+translate.from ='fr';
 
 const sms: SMSManager = new SMSManager();
 const textAnalysis: TextAnalysis = new TextAnalysis();
@@ -133,9 +136,10 @@ export class Installation {
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
                     for (const singleSMS in smsData[contact][type]) {
                         const englishSMS = smsData[contact][type][singleSMS].text.en;
+                        const originalSMS = smsData[contact][type][singleSMS].text.fr;
                         smsData[contact][type][singleSMS].analysis = {}; // on initialise
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS, 'en');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');
                     }
                 }
             }

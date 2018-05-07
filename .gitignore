@@ -6,5 +6,7 @@ www/.idea/
 node_modules
 
 # personal files
-apikeys.js
+apiKeys.ts
+apiKeys.js
+apiKeys.js.map
 google-services.json

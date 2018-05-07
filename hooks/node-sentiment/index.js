@@ -45,7 +45,7 @@ function tokenize(sInput) {
 };
 
 // Performs sentiment analysis on the provided input 'phrase'
-module.exports = function (sPhrase, sLangCode, mCallback) {
+module.exports = function (originalPhrase, sPhrase, sLangCode, mCallback) {
 
     if (typeof sPhrase === 'undefined') {
         sPhrase = '';
@@ -103,9 +103,11 @@ module.exports = function (sPhrase, sLangCode, mCallback) {
     // Plutot que de multiplier par -1 s'il y a une négation, on enlève -3, ça évite qu'il y ai des scores trop bas dans des propositions où il n'y a qu'une négation et plusieurs mots positifs
     iGlobalScore = iGlobalScore + (bNegation === true ? -3 : 0);
 
+    getSmileys(originalPhrase);
 
+function getSmileys(sentence) {
 
-
+    console.log(`get smuiley`);
 
     // On regarde s'il y a des smileys 'inline' comme :) ou :-) ou ^^
     // On le fait après le calcul de la négation, car leur valeur ne doit pas être inversée s'il y a une négation
@@ -164,7 +166,7 @@ module.exports = function (sPhrase, sLangCode, mCallback) {
     };
 
     let smileyArray;
-    while ((smileyArray = inlineSmileys.exec(sPhrase.toLocaleLowerCase())) !== null) { // pour chaque smiley
+    while ((smileyArray = inlineSmileys.exec(sentence.toLocaleLowerCase())) !== null) { // pour chaque smiley
         console.log('smileyArray');
         console.log(smileyArray);
 
@@ -180,6 +182,7 @@ module.exports = function (sPhrase, sLangCode, mCallback) {
             aNegative.push(String(smileyArray[0]));
         }
     }
+}
 
     // Handle optional async interface
     var oResult = {

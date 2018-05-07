@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var manageSMS_1 = require("./manageSMS");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
 var translate = require("./../../hooks/translate");
+var keys = require("./apiKeys");
+var Keys = new keys.Keys();
+translate.key = Keys.API_KEY;
+translate.from = 'fr';
 var sms = new manageSMS_1.SMSManager();
 var textAnalysis = new sentimentAnalysis_1.TextAnalysis();
 var smsData = {};
@@ -95,9 +99,10 @@ var Installation = (function () {
                 if (type !== 'name') {
                     for (var singleSMS in smsData[contact][type]) {
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
+                        var originalSMS = smsData[contact][type][singleSMS].text.fr;
                         smsData[contact][type][singleSMS].analysis = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS, 'en');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');
                     }
                 }
             }

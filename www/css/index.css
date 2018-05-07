@@ -4,6 +4,10 @@
     font-family: "Arimo", Roboto, Arial, sans-serif;
 }
 
+body {
+    margin: 0;
+}
+
 h1 {
     font-size: 50px;
 }
@@ -11,6 +15,7 @@ h1 {
 h1#app-title {
     margin-top: 50px;
 }
+
 
 section.manageSMS {
     display: flex;
@@ -228,4 +233,44 @@ nav ul li.nav-element {
 #installTheApp button:hover, #installTheApp button:active {
     background-color: blue;
     color: white;
+}
+
+/************
+
+    Writing interface
+
+***********/
+
+#writing input#contactName, #writing textarea#smsContent {
+    width: 80vw;
+    margin: 0 0 20px 10vw;
+    border: 0;
+    border-bottom: 1px solid lightgrey;
+}
+
+input#contactName {
+    margin-top: 180px;
+    font-size: 1.6em;
+    padding: 15px 0;
+}
+
+#warning {
+    width: 80vw;
+    margin-left: 10vw;
+    margin-bottom: 20px;
+    color: red;
+}
+
+input#sendMessage {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    padding: 15px 20px;
+    background-color: #eee;
+    border: 0;
+    border-bottom: 3px solid #ddd;
+    font-size: 1.1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
