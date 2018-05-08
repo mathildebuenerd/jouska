@@ -104,12 +104,19 @@
         </div>
 
         <div id="write">
-            <input type="text" id="contactName" placeholder="Contact">
+            <div id="contact">
+                <span id="contactName"></span>
+                <input type="text" id="contactNumber" placeholder="Destinataire">
+            </div>
+
             <textarea id="smsContent" placeholder="Ecris un message positif..."></textarea>
+
             <div id="warning">
                 <span class="icon warning"></span>
                 <!--<p>Ton message est trop négatif, tu devrais le rendre plus positif</p>-->
             </div>
+
+            <div id="confirmationMessage"></div>
 
             <input type="submit" id="sendMessage" value="Envoyer">
         </div>
@@ -147,8 +154,6 @@
         </section>
 
     </section>
-
-
     <nav class="bottom-nav">
         <ul>
             <li class="nav-element">

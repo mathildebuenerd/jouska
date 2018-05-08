@@ -4,7 +4,6 @@ import {TextAnalysis} from "./sentimentAnalysis";
 
 declare const SMS: any;
 declare const navigator: any;
-// declare const SMSManager: any;
 
 export class SMSManager {
 

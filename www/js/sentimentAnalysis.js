@@ -27,7 +27,7 @@ var TextAnalysis = (function () {
     };
     TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language, originalMessage) {
         if (language === void 0) { language = 'en'; }
-        if (originalMessage === void 0) { originalMessage = ''; }
+        if (originalMessage === void 0) { originalMessage = textMessage; }
         var message = TextAnalysis.extractClauses(textMessage);
         if (Array.isArray(message)) {
             var analysis = [];

@@ -1,11 +1,14 @@
 /**
  * Created by mathi on 05/05/2018.
  */
-import * as SMS from "./manageSMS";
+import * as _SMS from "./manageSMS";
 import getPrototypeOf = Reflect.getPrototypeOf;
-const sms = new SMS.SMSManager();
+const sms = new _SMS.SMSManager();
 import {TextAnalysis} from "./sentimentAnalysis";
 const textAnalysis: TextAnalysis = new TextAnalysis();
+// import * as {SMSMa} from "./manageSMS";
+
+declare const SMS: any;
 
 
 export class WritingInterface {
@@ -14,13 +17,24 @@ export class WritingInterface {
     startAssistance= () => {
         const textArea = <HTMLTextAreaElement>document.querySelector('#smsContent');
         textArea.addEventListener('keyup', this.analyzeText); // keypress ne fontionne pas avec le clavier android, il faut utiliser keyup
-    }
+
+        const sendButton = <HTMLElement>document.querySelector('#sendMessage');
+        sendButton.addEventListener('click', this.sendMessage);
+    };
 
     public changeSidebarColor= (color: string) => {
         let sidebar = <HTMLElement>document.querySelector('#feedback');
         sidebar.style.backgroundColor = '#' + color;
     };
 
+    public getColor= (object: object, value: number): string => {
+        if (value > 8) {
+            value = 8;
+        } else if (value < -8) {
+            value = -8;
+        }
+        return Object.keys(object).find(key => object[key] === value);
+    };
 
     public analyzeText=() => {
         const language = 'fr';
@@ -29,7 +43,7 @@ export class WritingInterface {
         console.log(`text: ${text}`);
         const allWordsExceptLast = new RegExp(/.+ /, 'gim'); // récupère tous les mots suivits d'un espace (tous sauf celui qui est en train d'être écrit)
         const sentence = text.match(allWordsExceptLast); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
-        const letters = new RegExp(/[a-z]/, 'i');
+        const letters = new RegExp(/\S/, 'gi');
 
         if (letters.test(sentence[0])) { // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
             console.log(`Sentence existe, voici son analyse:`);
@@ -88,14 +102,25 @@ export class WritingInterface {
         }
     };
 
-    public getColor= (object: object, value: number): string => {
-        if (value > 8) {
-            value = 8;
-        } else if (value < -8) {
-            value = -8;
-        }
-        return Object.keys(object).find(key => object[key] === value);
+    sendMessage= () => {
+        const recipientElement = <HTMLInputElement>document.querySelector('#contactNumber');
+        const recipient = recipientElement.value;
+        const messageElement = <HTMLTextAreaElement>document.querySelector('#smsContent');
+        const message = messageElement.value;
+        let confirmationMessage = document.querySelector('#confirmationMessage');
+
+        SMS.sendSMS(recipient, message, () => {
+            console.log(`sms envoyé! destinaire: ${recipient}; message: ${message}`);
+            recipientElement.value = '';
+            messageElement.value = '';
+            confirmationMessage.textContent = "Message correctement envoyé :)";
+        }, (err) => {
+            confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...";
+            throw err;
+        });
+
     };
+
 
 
 }

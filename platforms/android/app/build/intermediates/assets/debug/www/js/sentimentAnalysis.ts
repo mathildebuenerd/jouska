@@ -44,7 +44,7 @@ export class TextAnalysis {
 
     }
 
-    public sentimentAnalysis(textMessage: string, language: string = 'en', originalMessage: string = ''): object {
+    public sentimentAnalysis(textMessage: string, language: string = 'en', originalMessage: string = textMessage): object {
 
         const message = TextAnalysis.extractClauses(textMessage);
 

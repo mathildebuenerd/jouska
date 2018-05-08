@@ -14,6 +14,7 @@ var frenchExtraWords = {
     'comme': 0,
     'coucou': 2,
     'dommage': -4,
+    'dsl': -2,
     'nickel': 2,
     'morte': -3,
     'nul': -3,
@@ -43,6 +44,7 @@ function tokenize(sInput) {
         .toLowerCase()
         .replace(/\r?\n|\r/g, ' ') // line breaks replaced by space https://stackoverflow.com/a/10805292
         .replace(/[.,\/#!$%\^&\*;:{}=_`\"~()]/g, '')
+        .replace(/-/g, ' ')
         .replace(/\s{2,}/g, ' ') // remove extra spaces https://stackoverflow.com/a/4328722
         .split(' ');
 };
