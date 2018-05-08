@@ -16,7 +16,10 @@ var frenchExtraWords = {
     'dommage': -4,
     'nickel': 2,
     'morte': -3,
+    'nul': -3,
+    'nulle': -3,
     'parfait': 3,
+    'parfaite': 3,
     'ptin': -5,
     'super': 5
 };
@@ -45,7 +48,7 @@ function tokenize(sInput) {
 };
 
 // Performs sentiment analysis on the provided input 'phrase'
-module.exports = function (originalPhrase, sPhrase, sLangCode, mCallback) {
+module.exports = function (sPhrase, sLangCode, originalPhrase, mCallback) {
 
     if (typeof sPhrase === 'undefined') {
         sPhrase = '';

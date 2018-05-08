@@ -21,7 +21,7 @@ var CordovaApp = (function () {
         if (localStorage.getItem('smsData') === null) {
             installation.start();
         }
-        var test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "The team has just finished. So we can meet now? What did you do yesterday I was looking for you in the playground", 'en');
+        var test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
         console.log("test:");
         console.log(test);
         writingAssistant.startAssistance();

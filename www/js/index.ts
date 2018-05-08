@@ -49,9 +49,11 @@ export class CordovaApp {
         // console.log(samy);
         // console.groupEnd();
 
-        let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "The team has just finished. So we can meet now? What did you do yesterday I was looking for you in the playground", 'en');
+        let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
         console.log(`test:`);
         console.log(test);
+
+        // console.log(text.sentimentAnalysis())
 
         writingAssistant.startAssistance();
 

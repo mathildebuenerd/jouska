@@ -25,18 +25,19 @@ var TextAnalysis = (function () {
             return sentence;
         }
     };
-    TextAnalysis.prototype.sentimentAnalysis = function (originalMessage, textMessage, language) {
+    TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language, originalMessage) {
         if (language === void 0) { language = 'en'; }
+        if (originalMessage === void 0) { originalMessage = ''; }
         var message = TextAnalysis.extractClauses(textMessage);
         if (Array.isArray(message)) {
             var analysis = [];
             for (var clause in message) {
-                analysis.push(sentiment(originalMessage, message[clause], language));
+                analysis.push(sentiment(message[clause], language, originalMessage));
             }
             return analysis;
         }
         else {
-            return sentiment(originalMessage, message, language);
+            return sentiment(message, language, originalMessage);
         }
     };
     TextAnalysis.prototype.darktriadAnalysis = function (textMessage, language) {

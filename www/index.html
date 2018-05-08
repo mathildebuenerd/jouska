@@ -42,7 +42,7 @@
 </head>
 <body>
 <div class="app">
-    <h1 id="app-title">Quantified talk</h1>
+    <!--<h1 id="app-title">Quantified talk</h1>-->
     <div id="deviceready" class="blink">
     </div>
 
@@ -97,16 +97,23 @@
 
     <section id="writing">
 
-        <input type="text" id="contactName" placeholder="Contact">
-        <textarea id="smsContent" placeholder="Ecris un message positif...">
-
-        </textarea>
-        <div id="warning">
-            <span class="icon warning"></span>
-            <!--<p>Ton message est trop négatif, tu devrais le rendre plus positif</p>-->
+        <div id="feedback">
+            <div id="gauge">
+                <div id="fill"></div>
+            </div>
         </div>
 
-        <input type="submit" id="sendMessage" value="Envoyer">
+        <div id="write">
+            <input type="text" id="contactName" placeholder="Contact">
+            <textarea id="smsContent" placeholder="Ecris un message positif..."></textarea>
+            <div id="warning">
+                <span class="icon warning"></span>
+                <!--<p>Ton message est trop négatif, tu devrais le rendre plus positif</p>-->
+            </div>
+
+            <input type="submit" id="sendMessage" value="Envoyer">
+        </div>
+
 
     </section>
 

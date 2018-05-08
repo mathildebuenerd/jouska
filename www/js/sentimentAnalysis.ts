@@ -44,18 +44,18 @@ export class TextAnalysis {
 
     }
 
-    public sentimentAnalysis(originalMessage: string, textMessage: string, language: string = 'en'): object {
+    public sentimentAnalysis(textMessage: string, language: string = 'en', originalMessage: string = ''): object {
 
         const message = TextAnalysis.extractClauses(textMessage);
 
         if (Array.isArray(message)) { // si c'est un tableau, ça veut dire qu'il y a plusieurs propositions à analyser séparement
             let analysis = []; // on crée un tableau pour stocker les analyses
             for (const clause in message) {  // on analyse les propositions une par une et on les ajoute au tableau
-                analysis.push(sentiment(originalMessage, message[clause], language));
+                analysis.push(sentiment(message[clause], language, originalMessage));
             }
             return analysis; // on retourne le tableau
         } else { // si ce n'est pas un tableau, c'est que c'est une phrase seule, donc on peut utiliser la fonction directement
-            return sentiment(originalMessage, message, language);
+            return sentiment(message, language, originalMessage);
         }
 
     }

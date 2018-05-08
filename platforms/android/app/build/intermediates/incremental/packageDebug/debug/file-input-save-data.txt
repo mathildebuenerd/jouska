@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Mon May 07 16:55:12 CEST 2018
+#Mon May 07 17:33:58 CEST 2018
 122.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\layout-v21\\notification_template_icon_group.xml
 60.set=ASSET
 129.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\drawable-mdpi-v4\\notification_bg_low_normal.9.png
