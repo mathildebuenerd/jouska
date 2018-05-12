@@ -22,6 +22,7 @@ var frenchExtraWords = {
     'parfait': 3,
     'parfaite': 3,
     'ptin': -5,
+    'sens': 0,
     'super': 5
 };
 

@@ -13,9 +13,8 @@ declare const SMS: any;
 
 export class WritingInterface {
 
-
     startAssistance= () => {
-        const textArea = <HTMLTextAreaElement>document.querySelector('#smsContent');
+        const textArea = <HTMLElement>document.querySelector('#smsContent');
         textArea.addEventListener('keyup', this.analyzeText); // keypress ne fontionne pas avec le clavier android, il faut utiliser keyup
 
         const sendButton = <HTMLElement>document.querySelector('#sendMessage');
@@ -38,10 +37,10 @@ export class WritingInterface {
 
     public analyzeText=() => {
         const language = 'fr';
-        const textArea = <HTMLTextAreaElement>document.querySelector('#smsContent');
-        const text = textArea.value;
+        const textArea = <HTMLElement>document.querySelector('#smsContent');
+        const text = textArea.textContent;
         console.log(`text: ${text}`);
-        const allWordsExceptLast = new RegExp(/.+ /, 'gim'); // récupère tous les mots suivits d'un espace (tous sauf celui qui est en train d'être écrit)
+        const allWordsExceptLast = new RegExp(/.+/, 'gim'); // récupère tous les mots
         const sentence = text.match(allWordsExceptLast); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
         const letters = new RegExp(/\S/, 'gi');
 
@@ -72,9 +71,6 @@ export class WritingInterface {
             const analysis = textAnalysis.sentimentAnalysis(sentence[0], language);
             console.log(`analysis:`);
             console.dir(analysis);
-            console.log(`analysis['score']`);
-            console.log(analysis['score']);
-            console.log(`for in loop`);
 
             if (analysis['score'] !== undefined) {
                 console.log(`analysis['score'] existe`);
@@ -93,6 +89,11 @@ export class WritingInterface {
             this.changeSidebarColor(color);
             console.log(`score: ${score}`);
 
+            if (analysis["negative"].length > 0) {
+                console.log(`analysis.negative length > 0`);
+                this.animateNegativeWords(analysis["negative"]);
+            }
+
 
             // const languages = sms.detectLanguage(String(sentence));
             // console.log(`languages: `);
@@ -101,6 +102,38 @@ export class WritingInterface {
             console.warn(`sentence n'existe pas, elle est égale à ${sentence} et est de type ${typeof sentence}`);
         }
     };
+
+    animateNegativeWords= (words: string[]) => {
+        console.log(`words:`);
+        console.log(words);
+        const textArea = <HTMLElement>document.querySelector('#smsContent');
+        for (const word in words) {
+            let slicedWord = `<span class="negative">`;
+            for (let letter = 0; letter < words[word].length; letter++) {
+                slicedWord += `<span>${words[word][letter]}</span>`; // on ajoute chaque lettre entourée d'un span, comme ça on pourra les animer séparement
+            }
+            slicedWord += `</span>`;
+            console.log(`slicedWord:`);
+            console.log(slicedWord);
+            console.log(`textarea.value: ${textArea.textContent}`);
+            textArea.innerHTML = (textArea.textContent).replace(words[word], slicedWord);
+        }
+
+        const wordsToAnimate = document.querySelectorAll(`.negative`);
+        if (wordsToAnimate !== undefined) {
+            for (const singleWord in wordsToAnimate) {
+                let lettersToAnimate = wordsToAnimate[singleWord].querySelectorAll(`span`);
+                for (const letter in lettersToAnimate) {
+                    const aLetter = <HTMLElement>lettersToAnimate[letter];
+                    const randomValue = Math.floor(Math.random()*3);
+                    aLetter.style.animationName = `marionettes${randomValue}`;
+                }
+            }
+        }
+
+    };
+
+
 
     sendMessage= () => {
         const recipientElement = <HTMLInputElement>document.querySelector('#contactNumber');

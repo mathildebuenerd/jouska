@@ -94,10 +94,10 @@ section.manageSMS {
 }
 
 /*button.alreadyDone {*/
-    /*border: none;*/
-    /*background-color: lightgrey;*/
-    /*color: dimgrey;*/
-    /*!* Au final ce sera en visibility: hidden *!*/
+/*border: none;*/
+/*background-color: lightgrey;*/
+/*color: dimgrey;*/
+/*!* Au final ce sera en visibility: hidden *!*/
 /*}*/
 
 /*******
@@ -246,7 +246,7 @@ section#writing {
     display: flex;
 }
 
-#writing input#contactNumber, #writing textarea#smsContent {
+#writing input#contactNumber, #writing #smsContent {
     width: 80vw;
     margin: 0 0 20px 10vw;
     border: 0;
@@ -280,7 +280,7 @@ input#sendMessage {
     letter-spacing: 1px;
 }
 
-input#contactNumber:focus, textarea#smsContent:focus {
+input#contactNumber:focus, #smsContent:focus {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
     /*-webkit-tap-highlight-color: transparent;  !* i.e. Nexus5/Chrome and Kindle Fire HD 7'*!*/
 }
@@ -291,9 +291,36 @@ input#contactNumber:focus, textarea#smsContent:focus {
     position: absolute;
     top: 0;
     left: 0;
-     background-color: lightgrey;
+    background-color: lightgrey;
     transition: 1s ease;
 }
+
+#confirmationMessage {
+    margin-left: 10vw;
+}
+
+.negative span {
+    display: inline-block;
+    animation: 1s ease infinite;
+}
+
+@keyframes marionettes0 {
+    0% {  transform: rotate(-30deg);  }
+    50% {  transform: rotate(30deg);  }
+    100% {  transform: rotate(-30deg);  }
+}
+
+@keyframes marionettes1 {
+    0% {  transform: rotate(-10deg);  }
+    40% {  transform: rotate(40deg);  }
+    100% {  transform: rotate(-10deg);  }
+}
+@keyframes marionettes2 {
+    0% {  transform: rotate(30deg);  }
+    60% {  transform: rotate(-20deg);  }
+    100% {  transform: rotate(30deg);  }
+}
+
 
 /*********
 
