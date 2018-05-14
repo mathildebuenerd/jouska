@@ -29,6 +29,37 @@ export class CordovaApp {
             installation.start();
         }
 
+
+
+        let smsData = JSON.parse(localStorage.getItem('smsData'));
+
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const englishSMS = smsData[contact][type][singleSMS].text.en;
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentiment = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
+                        smsData[contact][type][singleSMS].analysis.sentiment = text.sentimentAnalysis(englishSMS, 'en', originalSMS)
+                    }
+                }
+            }
+        }
+
+        console.log(`smsData:`);
+        console.log(smsData);
+        document.querySelector('#addThisToStorage').addEventListener('click', () => {
+            let str = JSON.stringify(smsData);
+            // localStorage.removeItem('allSMS');
+            // localStorage.removeItem('allSMSanalyzed');
+            localStorage.setItem('smsData', str);
+            console.log(localStorage);
+        });
+
+
+
         // detect("Je viens demain").then(lang => {
         //     console.log(`lang: ${lang}`);
         // });
@@ -38,14 +69,20 @@ export class CordovaApp {
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
-        let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
-        let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+        let wordsMom = calculate.getMostUsedWords("positive", "0783094512", "inbox", "fr");
+        let wordsMe = calculate.getMostUsedWords("positive", "0783094512", "sent", "fr");
+        let wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
+        let wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
 
-        console.log(`wordsMe:`);
-        console.log(wordsMe);
-        console.log(`wordsMom:`);
-        console.log(wordsMom);
-
+        // console.log(`wordsMe:`);
+        // console.log(wordsMe);
+        // console.log(`wordsMom:`);
+        // console.log(wordsMom);
+        // console.log(`wordsMeNeg:`);
+        // console.log(wordsMeNeg);
+        // console.log(`wordsMomNeg:`);
+        // console.log(wordsMomNeg);
+        //
 
         // console.group("Résultats des scores");
         console.log('my score:');
