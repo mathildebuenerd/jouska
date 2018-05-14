@@ -33,25 +33,57 @@ export class CordovaApp {
         //     console.log(`lang: ${lang}`);
         // });
 
-        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
-        // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        let momscore = calculate.scoreWithContact('0675611341', 'inbox');
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
+        let smsData = JSON.parse(localStorage.getItem('smsData'));
+
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const englishSMS = smsData[contact][type][singleSMS].text.en;
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+
+        console.log(`smsData:`);
+        console.log(smsData);
+        document.querySelector('#addThisToStorage').addEventListener('click', () => {
+            let str = JSON.stringify(smsData);
+            localStorage.removeItem('allSMS');
+            localStorage.removeItem('allSMSanalyzed');
+            localStorage.setItem('smsData', str);
+            console.log(`localstorage`);
+            console.log(localStorage);
+        });
+
+
+        let test = text.sentimentAnalysis('Salut, tu vas bien ? Ca te plait ?', 'fr');
+        console.log(`test:`);
+        console.log(test);
+
+
         // console.group("Résultats des scores");
-        // console.log('my score:');
-        // console.log(myscore);
-        // console.log('mom score:');
-        // console.log(momscore);
+        console.log('my score:');
+        console.log(myscore);
+        console.log('mom score:');
+        console.log(momscore);
         // console.log('clemence:');
         // console.log(clemence);
         // console.log('samy:');
         // console.log(samy);
         // console.groupEnd();
 
-        let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
-        console.log(`test:`);
-        console.log(test);
+        // let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
+        // console.log(`test:`);
+        // console.log(test);
 
         // console.log(text.sentimentAnalysis())
 

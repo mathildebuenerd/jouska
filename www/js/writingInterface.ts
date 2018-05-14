@@ -116,7 +116,8 @@ export class WritingInterface {
             console.log(`slicedWord:`);
             console.log(slicedWord);
             console.log(`textarea.value: ${textArea.textContent}`);
-            textArea.innerHTML = (textArea.textContent).replace(words[word], slicedWord);
+            const toReplace = new RegExp(`${words[word]}`, 'gi');
+            textArea.innerHTML = (textArea.textContent).replace(toReplace, slicedWord);
         }
 
         const wordsToAnimate = document.querySelectorAll(`.negative`);
@@ -125,15 +126,31 @@ export class WritingInterface {
                 let lettersToAnimate = wordsToAnimate[singleWord].querySelectorAll(`span`);
                 for (const letter in lettersToAnimate) {
                     const aLetter = <HTMLElement>lettersToAnimate[letter];
-                    const randomValue = Math.floor(Math.random()*3);
+                    const randomValue = Math.floor(Math.random()*3);// on a trois animations différentes
                     aLetter.style.animationName = `marionettes${randomValue}`;
                 }
             }
         }
 
+        // pour gérer les balises html dans contenteditable
+        // https://stackoverflow.com/questions/41433796/html-elements-inside-contenteditable
+        // const map = {amp: '&', lt: '<', gt: '>', quot: '"', '#039': "'"}
+        // let html = textArea.innerHTML.replace(/&([^;]+);/g, (m, c) => map[c]);
+        // textArea.innerHTML = html;
+
+        // this.setEndOfContenteditable(textArea); // est sensé ramener le curseur à la fin de la ligne
+
     };
 
-
+    setEndOfContenteditable= (contentEditableElement) => {
+        let range,selection;
+        range = document.createRange();//Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(contentEditableElement);//Select the entire contents of the element with the range
+        range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection();//get the selection object (allows you to change selection)
+        selection.removeAllRanges();//remove any selections already made
+        selection.addRange(range);//make the range you have just created the visible selection
+    };
 
     sendMessage= () => {
         const recipientElement = <HTMLInputElement>document.querySelector('#contactNumber');

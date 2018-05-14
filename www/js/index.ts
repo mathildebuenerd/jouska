@@ -33,25 +33,26 @@ export class CordovaApp {
         //     console.log(`lang: ${lang}`);
         // });
 
-        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
-        // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        let momscore = calculate.scoreWithContact('0675611341', 'inbox');
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
+
         // console.group("Résultats des scores");
-        // console.log('my score:');
-        // console.log(myscore);
-        // console.log('mom score:');
-        // console.log(momscore);
+        console.log('my score:');
+        console.log(myscore);
+        console.log('mom score:');
+        console.log(momscore);
         // console.log('clemence:');
         // console.log(clemence);
         // console.log('samy:');
         // console.log(samy);
         // console.groupEnd();
 
-        let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
-        console.log(`test:`);
-        console.log(test);
+        // let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
+        // console.log(`test:`);
+        // console.log(test);
 
         // console.log(text.sentimentAnalysis())
 

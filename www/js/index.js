@@ -21,9 +21,12 @@ var CordovaApp = (function () {
         if (localStorage.getItem('smsData') === null) {
             installation.start();
         }
-        var test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
-        console.log("test:");
-        console.log(test);
+        var myscore = calculate.scoreWithContact('0675611341', 'sent');
+        var momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        console.log('my score:');
+        console.log(myscore);
+        console.log('mom score:');
+        console.log(momscore);
         writingAssistant.startAssistance();
     };
     return CordovaApp;

@@ -102,7 +102,19 @@ var Installation = (function () {
                         var originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, "en", englishSMS);
+                    }
+                }
+            }
+        }
+        for (var contact in smsData) {
+            for (var type in smsData[contact]) {
+                if (type !== 'name') {
+                    for (var singleSMS in smsData[contact][type]) {
+                        var englishSMS = smsData[contact][type][singleSMS].text.en;
+                        var originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = textAnalysis.sentimentAnalysis(originalSMS, 'fr');
                     }
                 }
             }

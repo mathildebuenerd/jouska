@@ -5,7 +5,7 @@
 export class CalculateScore {
 
 
-    scoreWithContact(contact: string, type: string): object {
+    scoreWithContact=(contact: string, type: string): object => {
 
         const smsData = JSON.parse(localStorage.getItem('smsData'));
         console.log(smsData);
@@ -114,5 +114,18 @@ export class CalculateScore {
 
     }
 
+    compareScores=(contact: string, type: any) => {
+        const userScore: object = this.scoreWithContact(contact, "sent");
+        const contactScore = this.scoreWithContact(contact, "inbox");
+
+        // console.log(userScore);
+        // console.log(co)
+
+        if (type in userScore) {
+            console.log(`userscore:`);
+            console.log(userScore[type]);
+        }
+
+    }
 
 }

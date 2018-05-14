@@ -301,7 +301,7 @@ input#contactNumber:focus, #smsContent:focus {
 
 .negative span {
     display: inline-block;
-    animation: 1s ease infinite;
+    animation: 2s ease infinite;
 }
 
 @keyframes marionettes0 {

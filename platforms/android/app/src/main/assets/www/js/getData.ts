@@ -131,6 +131,8 @@ export class Installation {
     }
 
     sentimentAnalysis() {
+
+        // analyse en anglais
         for (const contact in smsData) {
             for (const type in smsData[contact]) { // type = inbox | sent | name
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
@@ -139,7 +141,21 @@ export class Installation {
                         const originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis = {}; // on initialise
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, englishSMS, 'en');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, "en", englishSMS);
+                    }
+                }
+            }
+        }
+
+        // Analyse en français
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const englishSMS = smsData[contact][type][singleSMS].text.en;
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = textAnalysis.sentimentAnalysis(originalSMS, 'fr');
                     }
                 }
             }
