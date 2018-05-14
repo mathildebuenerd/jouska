@@ -38,6 +38,14 @@ export class CordovaApp {
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
+        let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+
+        console.log(`wordsMe:`);
+        console.log(wordsMe);
+        console.log(`wordsMom:`);
+        console.log(wordsMom);
+
 
         // console.group("Résultats des scores");
         console.log('my score:');

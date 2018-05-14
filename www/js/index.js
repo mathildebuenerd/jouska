@@ -23,6 +23,12 @@ var CordovaApp = (function () {
         }
         var myscore = calculate.scoreWithContact('0675611341', 'sent');
         var momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        var wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        var wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+        console.log("wordsMe:");
+        console.log(wordsMe);
+        console.log("wordsMom:");
+        console.log(wordsMom);
         console.log('my score:');
         console.log(myscore);
         console.log('mom score:');

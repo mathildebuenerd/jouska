@@ -23,32 +23,12 @@ var CordovaApp = (function () {
         }
         var myscore = calculate.scoreWithContact('0675611341', 'sent');
         var momscore = calculate.scoreWithContact('0675611341', 'inbox');
-        var smsData = JSON.parse(localStorage.getItem('smsData'));
-        for (var contact in smsData) {
-            for (var type in smsData[contact]) {
-                if (type !== 'name') {
-                    for (var singleSMS in smsData[contact][type]) {
-                        var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
-                    }
-                }
-            }
-        }
-        console.log("smsData:");
-        console.log(smsData);
-        document.querySelector('#addThisToStorage').addEventListener('click', function () {
-            var str = JSON.stringify(smsData);
-            localStorage.removeItem('allSMS');
-            localStorage.removeItem('allSMSanalyzed');
-            localStorage.setItem('smsData', str);
-            console.log("localstorage");
-            console.log(localStorage);
-        });
-        var test = text.sentimentAnalysis('Salut, tu vas bien ? Ca te plait ?', 'fr');
-        console.log("test:");
-        console.log(test);
+        var wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        var wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+        console.log("wordsMe:");
+        console.log(wordsMe);
+        console.log("wordsMom:");
+        console.log(wordsMom);
         console.log('my score:');
         console.log(myscore);
         console.log('mom score:');

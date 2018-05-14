@@ -85,6 +85,43 @@ var CalculateScore = (function () {
                 console.log(userScore[type]);
             }
         };
+        this.getMostUsedWords = function (valence, contact, type, language) {
+            if (language === void 0) { language = "en"; }
+            var words = [];
+            if (valence !== 'positive' && type !== 'negative') {
+                console.error("The getMostUsedWords() parameter has to be either 'positive' or 'negative");
+            }
+            var smsData = JSON.parse(localStorage.getItem('smsData'));
+            var messages = smsData[contact][type];
+            for (var sms in messages) {
+                var analysis = void 0;
+                if (language === "en") {
+                    analysis = messages[sms].analysis.sentiment;
+                }
+                else if (language === "fr") {
+                    analysis = messages[sms].analysis.sentimentFr;
+                }
+                if (analysis.hasOwnProperty(valence)) {
+                    if (analysis[valence].length > 0) {
+                        for (var i = 0; i < (analysis[valence]).length; i++) {
+                            words.push(analysis[valence][i]);
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < analysis.length; i++) {
+                        if (typeof analysis[i] === "object") {
+                            if (analysis[i][valence].length > 0) {
+                                for (var i_1 = 0; i_1 < (analysis[i_1][valence]).length; i_1++) {
+                                    words.push(analysis[i_1][valence][i_1]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return words;
+        };
     }
     return CalculateScore;
 }());

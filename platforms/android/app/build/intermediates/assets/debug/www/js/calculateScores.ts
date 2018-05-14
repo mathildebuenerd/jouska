@@ -126,6 +126,54 @@ export class CalculateScore {
             console.log(userScore[type]);
         }
 
-    }
+    };
 
+    getMostUsedWords= (valence: string, contact: string, type: string, language: string = "en") => {
+
+        let words = [];
+
+        // language is fr or en, default is en
+        // type is either inbox or sent
+        // contact is the phone number
+        // valence is either 'positive' or 'negative'
+        if (valence !== 'positive' && type !== 'negative') {
+            console.error(`The getMostUsedWords() parameter has to be either 'positive' or 'negative`);
+        }
+
+        const smsData = JSON.parse(localStorage.getItem('smsData'));
+        const messages = smsData[contact][type];
+        for (const sms in messages) {
+            let analysis;
+            if (language === "en") {
+                analysis = messages[sms].analysis.sentiment;
+            } else if (language === "fr") {
+                analysis = messages[sms].analysis.sentimentFr;
+            }
+            // Si la phrase est trop longue, on la découpe en sous-phrases avant de faire l'analyse de sentiment
+            // on peut donc avoir soit un objet, soit un tableau d'objets
+            if (analysis.hasOwnProperty(valence)) {
+                // console.log(`valence / positive words:`);
+                // console.log(analysis[valence]);
+                if (analysis[valence].length > 0) {
+                    for (let i=0; i<(analysis[valence]).length; i++) {
+                        words.push(analysis[valence][i]);
+                    }
+                }
+            } else {
+                for (let i=0; i<analysis.length; i++) {
+                    if (typeof analysis[i] === "object") {
+                        // console.log(`valence, tableau / positive words:`);
+                        // console.log(analysis[i][valence]);
+                        if (analysis[i][valence].length > 0) {
+                            for (let i=0; i<(analysis[i][valence]).length; i++) {
+                                words.push(analysis[i][valence][i]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return words;
+    }
 }

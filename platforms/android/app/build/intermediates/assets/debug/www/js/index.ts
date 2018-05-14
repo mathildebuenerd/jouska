@@ -38,36 +38,13 @@ export class CordovaApp {
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
-        let smsData = JSON.parse(localStorage.getItem('smsData'));
+        let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
 
-        for (const contact in smsData) {
-            for (const type in smsData[contact]) { // type = inbox | sent | name
-                if (type !== 'name') { // on ne boucle que dans inbox et sent
-                    for (const singleSMS in smsData[contact][type]) {
-                        const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        const originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
-                    }
-                }
-            }
-        }
-
-        console.log(`smsData:`);
-        console.log(smsData);
-        document.querySelector('#addThisToStorage').addEventListener('click', () => {
-            let str = JSON.stringify(smsData);
-            localStorage.removeItem('allSMS');
-            localStorage.removeItem('allSMSanalyzed');
-            localStorage.setItem('smsData', str);
-            console.log(`localstorage`);
-            console.log(localStorage);
-        });
-
-
-        let test = text.sentimentAnalysis('Salut, tu vas bien ? Ca te plait ?', 'fr');
-        console.log(`test:`);
-        console.log(test);
+        console.log(`wordsMe:`);
+        console.log(wordsMe);
+        console.log(`wordsMom:`);
+        console.log(wordsMom);
 
 
         // console.group("Résultats des scores");
