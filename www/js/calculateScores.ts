@@ -44,11 +44,11 @@ export class CalculateScore {
                 const analysis = messages[type][sms].analysis;
                 // console.log(`scores.bigfive.openness ${scores.bigfive.openness}`);
                 // console.log(`typeof analysis.bigfive.O ${typeof analysis.bigfive.O}`);
-                scores.bigfive.openness += analysis.bigfive.O;
-                scores.bigfive.conscientiousness += analysis.bigfive.C;
-                scores.bigfive.extraversion += analysis.bigfive.E;
-                scores.bigfive.agreeableness += analysis.bigfive.A;
-                scores.bigfive.neuroticism += analysis.bigfive.N;
+                scores.bigfive.openness += analysis.bigfive.O.score;
+                scores.bigfive.conscientiousness += analysis.bigfive.C.score;
+                scores.bigfive.extraversion += analysis.bigfive.E.score;
+                scores.bigfive.agreeableness += analysis.bigfive.A.score;
+                scores.bigfive.neuroticism += analysis.bigfive.N.score;
 
                 scores.darktriad.machiavellianism += analysis.darktriad.machiavellianism;
                 scores.darktriad.narcissism += analysis.darktriad.narcissism;

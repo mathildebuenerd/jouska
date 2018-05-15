@@ -36,11 +36,11 @@ var CalculateScore = (function () {
             for (var sms in messages[type]) {
                 if (messages[type].hasOwnProperty(sms)) {
                     var analysis = messages[type][sms].analysis;
-                    scores.bigfive.openness += analysis.bigfive.O;
-                    scores.bigfive.conscientiousness += analysis.bigfive.C;
-                    scores.bigfive.extraversion += analysis.bigfive.E;
-                    scores.bigfive.agreeableness += analysis.bigfive.A;
-                    scores.bigfive.neuroticism += analysis.bigfive.N;
+                    scores.bigfive.openness += analysis.bigfive.O.score;
+                    scores.bigfive.conscientiousness += analysis.bigfive.C.score;
+                    scores.bigfive.extraversion += analysis.bigfive.E.score;
+                    scores.bigfive.agreeableness += analysis.bigfive.A.score;
+                    scores.bigfive.neuroticism += analysis.bigfive.N.score;
                     scores.darktriad.machiavellianism += analysis.darktriad.machiavellianism;
                     scores.darktriad.narcissism += analysis.darktriad.narcissism;
                     scores.darktriad.psychopathy += analysis.darktriad.psychopathy;

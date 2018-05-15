@@ -40,12 +40,12 @@ var TextAnalysis = (function () {
             return sentiment(message, language, originalMessage);
         }
     };
-    TextAnalysis.prototype.darktriadAnalysis = function (textMessage, language) {
-        if (language === void 0) { language = 'en'; }
-        return darktriad(textMessage);
+    TextAnalysis.prototype.darktriadAnalysis = function (textMessage, opts) {
+        if (opts === void 0) { opts = { "output": "matches" }; }
+        return darktriad(textMessage, opts);
     };
     TextAnalysis.prototype.personalityAnalysis = function (textMessage, opts) {
-        if (opts === void 0) { opts = {}; }
+        if (opts === void 0) { opts = { "output": "matches" }; }
         return bigfive(textMessage, opts);
     };
     TextAnalysis.prototype.genderPrediction = function (textMessage, language) {

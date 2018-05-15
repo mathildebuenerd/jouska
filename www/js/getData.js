@@ -114,13 +114,37 @@ var Installation = (function () {
         console.groupEnd();
     };
     Installation.prototype.darktriadAnalysis = function () {
+        console.log("L'analyse de la darktriad commence... Elle peut \u00EAtre un peu longue (plus d'une minute)");
         for (var contact in smsData) {
             for (var type in smsData[contact]) {
                 if (type !== 'name') {
                     for (var singleSMS in smsData[contact][type]) {
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        smsData[contact][type][singleSMS].analysis.darktriad = {};
-                        smsData[contact][type][singleSMS].analysis.darktriad = textAnalysis.darktriadAnalysis(englishSMS);
+                        var analysis = smsData[contact][type][singleSMS].analysis;
+                        var darktriad_m = textAnalysis.darktriadAnalysis(englishSMS, { "output": "matches" });
+                        analysis.darktriad = {};
+                        analysis.darktriad.machiavellianism = {};
+                        analysis.darktriad.narcissism = {};
+                        analysis.darktriad.psychopathy = {};
+                        analysis.darktriad.triad = {};
+                        for (var trait in darktriad_m) {
+                            analysis.darktriad[trait].score = 0;
+                            analysis.darktriad[trait].words = {
+                                "positive": [],
+                                "negative": []
+                            };
+                            if (darktriad_m[trait] !== []) {
+                                for (var word in darktriad_m[trait]) {
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3];
+                                    if (darktriad_m[trait][word][3] > 0) {
+                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]);
+                                    }
+                                    else {
+                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -146,10 +170,18 @@ var Installation = (function () {
                         analysis.bigfive.N = {};
                         for (var personalityTrait in bigfive_m) {
                             analysis.bigfive[personalityTrait].score = 0;
-                            analysis.bigfive[personalityTrait].words = [];
+                            analysis.bigfive[personalityTrait].words = {
+                                "positive": [],
+                                "negative": []
+                            };
                             for (var word in bigfive_m[personalityTrait].matches) {
                                 analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3];
-                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]);
+                                if (bigfive_m[personalityTrait].matches[word][3] > 0) {
+                                    analysis.bigfive[personalityTrait].words.positive.push(bigfive_m[personalityTrait].matches[word][0]);
+                                }
+                                else {
+                                    analysis.bigfive[personalityTrait].words.negative.push(bigfive_m[personalityTrait].matches[word][0]);
+                                }
                             }
                         }
                     }

@@ -33,20 +33,20 @@ export class CordovaApp {
 
         let smsData = JSON.parse(localStorage.getItem('smsData'));
 
-        for (const contact in smsData) {
-            for (const type in smsData[contact]) { // type = inbox | sent | name
-                if (type !== 'name') { // on ne boucle que dans inbox et sent
-                    for (const singleSMS in smsData[contact][type]) {
-                        const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        const originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
-                        smsData[contact][type][singleSMS].analysis.sentiment = text.sentimentAnalysis(englishSMS, 'en', originalSMS)
-                    }
-                }
-            }
-        }
+        // for (const contact in smsData) {
+        //     for (const type in smsData[contact]) { // type = inbox | sent | name
+        //         if (type !== 'name') { // on ne boucle que dans inbox et sent
+        //             for (const singleSMS in smsData[contact][type]) {
+        //                 const englishSMS = smsData[contact][type][singleSMS].text.en;
+        //                 const originalSMS = smsData[contact][type][singleSMS].text.original;
+        //                 smsData[contact][type][singleSMS].analysis.sentiment = {};
+        //                 smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+        //                 smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
+        //                 smsData[contact][type][singleSMS].analysis.sentiment = text.sentimentAnalysis(englishSMS, 'en', originalSMS)
+        //             }
+        //         }
+        //     }
+        // }
 
         console.log(`smsData:`);
         console.log(smsData);
@@ -58,34 +58,13 @@ export class CordovaApp {
             console.log(localStorage);
         });
 
+        // let triad_ = text.darktriadAnalysis("What a woman! She's so strange.");
+        // console.log(`triad:`);
+        // console.log(triad_);
 
-        for (const contact in smsData) {
-            for (const type in smsData[contact]) { // type = inbox | sent | name
-                if (type !== 'name') { // on ne boucle que dans inbox et sent
-                    for (const singleSMS in smsData[contact][type]) {
-                        const analysis = smsData[contact][type][singleSMS].analysis;
-                        const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        const bigfive_m = text.personalityAnalysis(englishSMS, {"output":"matches"});
-                        analysis.bigfive = {};
-                        analysis.bigfive.O = {};
-                        analysis.bigfive.C = {};
-                        analysis.bigfive.E = {};
-                        analysis.bigfive.A = {};
-                        analysis.bigfive.N = {};
-                        for (const personalityTrait in bigfive_m) { // personality trait is 0 -C - E - A or N
-                            analysis.bigfive[personalityTrait].score = 0;
-                            analysis.bigfive[personalityTrait].words = [];
-                            for (const word in bigfive_m[personalityTrait].matches) { // un match correspond à un mot repéré
-                                analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3]; // word[3] c'est la valeur du mot
-                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
-        console.log(`smsData après bigfive:`);
+
+        console.log(`smsData après darktriad:`);
         console.log(smsData);
         //
         //
@@ -103,31 +82,31 @@ export class CordovaApp {
         //     console.log(`lang: ${lang}`);
         // });
 
-        let myscore = calculate.scoreWithContact('0675611341', 'sent');
-        let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
-        let wordsMom = calculate.getMostUsedWords("positive", "0783094512", "inbox", "fr");
-        let wordsMe = calculate.getMostUsedWords("positive", "0783094512", "sent", "fr");
-        let wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
-        let wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
-
-        console.log(`wordsMe:`);
-        console.log(wordsMe);
-        console.log(`wordsMom:`);
-        console.log(wordsMom);
-        console.log(`wordsMeNeg:`);
-        console.log(wordsMeNeg);
-        console.log(`wordsMomNeg:`);
-        console.log(wordsMomNeg);
+        // let wordsMom = calculate.getMostUsedWords("positive", "0783094512", "inbox", "fr");
+        // let wordsMe = calculate.getMostUsedWords("positive", "0783094512", "sent", "fr");
+        // let wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
+        // let wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
         //
+        // console.log(`wordsMe:`);
+        // console.log(wordsMe);
+        // console.log(`wordsMom:`);
+        // console.log(wordsMom);
+        // console.log(`wordsMeNeg:`);
+        // console.log(wordsMeNeg);
+        // console.log(`wordsMomNeg:`);
+        // console.log(wordsMomNeg);
 
+        //
         // console.group("Résultats des scores");
-        console.log('my score:');
-        console.log(myscore);
-        console.log('mom score:');
-        console.log(momscore);
+        // console.log('my score:');
+        // console.log(myscore);
+        // console.log('mom score:');
+        // console.log(momscore);
         // console.log('clemence:');
         // console.log(clemence);
         // console.log('samy:');
@@ -140,7 +119,7 @@ export class CordovaApp {
 
         // console.log(text.sentimentAnalysis())
 
-        writingAssistant.startAssistance();
+        // writingAssistant.startAssistance();
 
 
 

@@ -22,20 +22,6 @@ var CordovaApp = (function () {
             installation.start();
         }
         var smsData = JSON.parse(localStorage.getItem('smsData'));
-        for (var contact in smsData) {
-            for (var type in smsData[contact]) {
-                if (type !== 'name') {
-                    for (var singleSMS in smsData[contact][type]) {
-                        var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
-                        smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
-                        smsData[contact][type][singleSMS].analysis.sentiment = text.sentimentAnalysis(englishSMS, 'en', originalSMS);
-                    }
-                }
-            }
-        }
         console.log("smsData:");
         console.log(smsData);
         document.querySelector('#addThisToStorage').addEventListener('click', function () {
@@ -47,48 +33,38 @@ var CordovaApp = (function () {
             for (var type in smsData[contact]) {
                 if (type !== 'name') {
                     for (var singleSMS in smsData[contact][type]) {
-                        var analysis = smsData[contact][type][singleSMS].analysis;
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var bigfive_m = text.personalityAnalysis(englishSMS, { "output": "matches" });
-                        analysis.bigfive = {};
-                        analysis.bigfive.O = {};
-                        analysis.bigfive.C = {};
-                        analysis.bigfive.E = {};
-                        analysis.bigfive.A = {};
-                        analysis.bigfive.N = {};
-                        for (var personalityTrait in bigfive_m) {
-                            analysis.bigfive[personalityTrait].score = 0;
-                            analysis.bigfive[personalityTrait].words = [];
-                            for (var word in bigfive_m[personalityTrait].matches) {
-                                analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3];
-                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]);
+                        var analysis = smsData[contact][type][singleSMS].analysis;
+                        var darktriad_m = text.darktriadAnalysis(englishSMS, { "output": "matches" });
+                        analysis.darktriad = {};
+                        analysis.darktriad.machiavellianism = {};
+                        analysis.darktriad.narcissism = {};
+                        analysis.darktriad.psychopathy = {};
+                        analysis.darktriad.triad = {};
+                        for (var trait in darktriad_m) {
+                            analysis.darktriad[trait].score = 0;
+                            analysis.darktriad[trait].words = {
+                                "positive": [],
+                                "negative": []
+                            };
+                            if (darktriad_m[trait] !== []) {
+                                for (var word in darktriad_m[trait]) {
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3];
+                                    if (darktriad_m[trait][word][3] > 0) {
+                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]);
+                                    }
+                                    else {
+                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        console.log("smsData apr\u00E8s bigfive:");
+        console.log("smsData apr\u00E8s darktriad:");
         console.log(smsData);
-        var myscore = calculate.scoreWithContact('0675611341', 'sent');
-        var momscore = calculate.scoreWithContact('0675611341', 'inbox');
-        var wordsMom = calculate.getMostUsedWords("positive", "0783094512", "inbox", "fr");
-        var wordsMe = calculate.getMostUsedWords("positive", "0783094512", "sent", "fr");
-        var wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
-        var wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
-        console.log("wordsMe:");
-        console.log(wordsMe);
-        console.log("wordsMom:");
-        console.log(wordsMom);
-        console.log("wordsMeNeg:");
-        console.log(wordsMeNeg);
-        console.log("wordsMomNeg:");
-        console.log(wordsMomNeg);
-        console.log('my score:');
-        console.log(myscore);
-        console.log('mom score:');
-        console.log(momscore);
-        writingAssistant.startAssistance();
     };
     return CordovaApp;
 }());

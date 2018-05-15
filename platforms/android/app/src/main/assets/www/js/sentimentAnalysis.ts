@@ -60,11 +60,11 @@ export class TextAnalysis {
 
     }
 
-    public darktriadAnalysis(textMessage: string, language: string = 'en') {
-        return darktriad(textMessage);
+    public darktriadAnalysis(textMessage: string, opts: object = {"output": "matches"}) {
+        return darktriad(textMessage, opts);
     }
 
-    public personalityAnalysis(textMessage: string, opts: object = {}) {
+    public personalityAnalysis(textMessage: string, opts: object = {"output": "matches"}) {
         return bigfive(textMessage, opts);
     }
 

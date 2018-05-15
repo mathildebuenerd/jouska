@@ -155,17 +155,42 @@ export class Installation {
     }
 
     darktriadAnalysis() {
+        console.log(`L'analyse de la darktriad commence... Elle peut être un peu longue (plus d'une minute)`);
         for (const contact in smsData) {
             for (const type in smsData[contact]) { // type = inbox | sent | name
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
                     for (const singleSMS in smsData[contact][type]) {
                         const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        smsData[contact][type][singleSMS].analysis.darktriad = {};
-                        smsData[contact][type][singleSMS].analysis.darktriad = textAnalysis.darktriadAnalysis(englishSMS);
+                        const analysis = smsData[contact][type][singleSMS].analysis;
+                        const darktriad_m = textAnalysis.darktriadAnalysis(englishSMS, {"output": "matches"});
+                        analysis.darktriad = {};
+                        analysis.darktriad.machiavellianism = {};
+                        analysis.darktriad.narcissism = {};
+                        analysis.darktriad.psychopathy = {};
+                        analysis.darktriad.triad = {};
+                        for (const trait in darktriad_m) {// trait is machiavelllianism or narcissism or psychopathy or triad
+                            analysis.darktriad[trait].score = 0;
+                            analysis.darktriad[trait].words = {
+                                "positive": [],
+                                "negative": []
+                            };
+                            if (darktriad_m[trait] !== []) {
+                                for (const word in darktriad_m[trait]) {
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3]; // word[3] c'est la valeur du mot
+                                    if (darktriad_m[trait][word][3] > 0) { // le mot peut soit faire augmenter, soit faire baisser un certain trait de personnalité, il faut donc classifier les mots
+                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]); // word[0] c'est le mot qui a matché
+                                    } else {
+                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]); // word[0] c'est le mot qui a matché
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
         }
+
 
         console.group(`Dark triad`);
         console.log('smsData: ');
@@ -189,10 +214,19 @@ export class Installation {
                         analysis.bigfive.N = {};
                         for (const personalityTrait in bigfive_m) { // personality trait is 0 -C - E - A or N
                             analysis.bigfive[personalityTrait].score = 0;
-                            analysis.bigfive[personalityTrait].words = [];
+                            analysis.bigfive[personalityTrait].words = {
+                                "positive": [],
+                                "negative": []
+                            };
+
                             for (const word in bigfive_m[personalityTrait].matches) { // un match correspond à un mot repéré
                                 analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3]; // word[3] c'est la valeur du mot
-                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
+                                if (bigfive_m[personalityTrait].matches[word][3] > 0) { // le mot peut soit faire augmenter, soit faire baisser un certain trait de personnalité, il faut donc classifier les mots
+                                    analysis.bigfive[personalityTrait].words.positive.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
+                                } else {
+                                    analysis.bigfive[personalityTrait].words.negative.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
+                                }
+
                             }
                         }
                     }
