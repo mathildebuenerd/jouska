@@ -64,8 +64,8 @@ export class TextAnalysis {
         return darktriad(textMessage);
     }
 
-    public personalityAnalysis(textMessage: string, language: string = 'en') {
-        return bigfive(textMessage);
+    public personalityAnalysis(textMessage: string, opts: object = {}) {
+        return bigfive(textMessage, opts);
     }
 
     public genderPrediction(textMessage: string, language: string = 'en') {

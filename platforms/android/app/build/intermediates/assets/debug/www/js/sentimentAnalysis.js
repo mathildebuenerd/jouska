@@ -44,9 +44,9 @@ var TextAnalysis = (function () {
         if (language === void 0) { language = 'en'; }
         return darktriad(textMessage);
     };
-    TextAnalysis.prototype.personalityAnalysis = function (textMessage, language) {
-        if (language === void 0) { language = 'en'; }
-        return bigfive(textMessage);
+    TextAnalysis.prototype.personalityAnalysis = function (textMessage, opts) {
+        if (opts === void 0) { opts = {}; }
+        return bigfive(textMessage, opts);
     };
     TextAnalysis.prototype.genderPrediction = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }

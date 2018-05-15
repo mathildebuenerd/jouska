@@ -139,23 +139,10 @@ export class Installation {
                     for (const singleSMS in smsData[contact][type]) {
                         const englishSMS = smsData[contact][type][singleSMS].text.en;
                         const originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis = {}; // on initialise
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, "en", englishSMS);
-                    }
-                }
-            }
-        }
-
-        // Analyse en français
-        for (const contact in smsData) {
-            for (const type in smsData[contact]) { // type = inbox | sent | name
-                if (type !== 'name') { // on ne boucle que dans inbox et sent
-                    for (const singleSMS in smsData[contact][type]) {
-                        const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        const originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis.sentimentFr = {};
                         smsData[contact][type][singleSMS].analysis.sentimentFr = textAnalysis.sentimentAnalysis(originalSMS, 'fr');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS, 'en', originalSMS)
                     }
                 }
             }
@@ -191,9 +178,23 @@ export class Installation {
             for (const type in smsData[contact]) { // type = inbox | sent | name
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
                     for (const singleSMS in smsData[contact][type]) {
+                        const analysis = smsData[contact][type][singleSMS].analysis;
                         const englishSMS = smsData[contact][type][singleSMS].text.en;
-                        smsData[contact][type][singleSMS].analysis.bigfive = {};
-                        smsData[contact][type][singleSMS].analysis.bigfive = textAnalysis.personalityAnalysis(englishSMS);
+                        const bigfive_m = textAnalysis.personalityAnalysis(englishSMS, {"output":"matches"});
+                        analysis.bigfive = {};
+                        analysis.bigfive.O = {};
+                        analysis.bigfive.C = {};
+                        analysis.bigfive.E = {};
+                        analysis.bigfive.A = {};
+                        analysis.bigfive.N = {};
+                        for (const personalityTrait in bigfive_m) { // personality trait is 0 -C - E - A or N
+                            analysis.bigfive[personalityTrait].score = 0;
+                            analysis.bigfive[personalityTrait].words = [];
+                            for (const word in bigfive_m[personalityTrait].matches) { // un match correspond à un mot repéré
+                                analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3]; // word[3] c'est la valeur du mot
+                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
+                            }
+                        }
                     }
                 }
             }

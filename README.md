@@ -17,6 +17,11 @@ Then, several text analysis are done :
 - Dark Triad with [darktriad](https://www.npmjs.com/package/darktriad) ([P. Hughes](https://www.phugh.es/))
 - Big Five personality traits with [bigfive](https://www.npmjs.com/package/bigfive) ([P. Hughes](https://www.phugh.es/))
 
+## Scientific papers
+- Preotiuc-Pietro D. and al., [Studying the Dark Triad of Personality through Twitter Behavior](http://wwbp.org/papers/darktriad16cikm.pdf)
+- Park G. and al., [Living in the Past, Present, and Future: Measuring Temporal Orientation With Language](https://static1.squarespace.com/static/53d29678e4b04e06965e9423/t/59398fb65016e1df4890b9e6/1496944566862/temporalPark2016.pdf)
+- Park G, and al., [Automatic Personality Assessment Through Social Media Language](https://static1.squarespace.com/static/53d29678e4b04e06965e9423/t/54bd3fd2e4b0bd77452d4116/1421688786115/2014_automaticPersonalityAssessment.pdf)
+
 ## Context
 Quantified Talk is a master's project made at HEAD - Geneva, in the Media Design master.
 

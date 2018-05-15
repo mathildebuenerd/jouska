@@ -100,21 +100,10 @@ var Installation = (function () {
                     for (var singleSMS in smsData[contact][type]) {
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
                         var originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis = {};
                         smsData[contact][type][singleSMS].analysis.sentiment = {};
-                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(originalSMS, "en", englishSMS);
-                    }
-                }
-            }
-        }
-        for (var contact in smsData) {
-            for (var type in smsData[contact]) {
-                if (type !== 'name') {
-                    for (var singleSMS in smsData[contact][type]) {
-                        var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var originalSMS = smsData[contact][type][singleSMS].text.original;
                         smsData[contact][type][singleSMS].analysis.sentimentFr = {};
                         smsData[contact][type][singleSMS].analysis.sentimentFr = textAnalysis.sentimentAnalysis(originalSMS, 'fr');
+                        smsData[contact][type][singleSMS].analysis.sentiment = textAnalysis.sentimentAnalysis(englishSMS, 'en', originalSMS);
                     }
                 }
             }
@@ -146,9 +135,23 @@ var Installation = (function () {
             for (var type in smsData[contact]) {
                 if (type !== 'name') {
                     for (var singleSMS in smsData[contact][type]) {
+                        var analysis = smsData[contact][type][singleSMS].analysis;
                         var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        smsData[contact][type][singleSMS].analysis.bigfive = {};
-                        smsData[contact][type][singleSMS].analysis.bigfive = textAnalysis.personalityAnalysis(englishSMS);
+                        var bigfive_m = textAnalysis.personalityAnalysis(englishSMS, { "output": "matches" });
+                        analysis.bigfive = {};
+                        analysis.bigfive.O = {};
+                        analysis.bigfive.C = {};
+                        analysis.bigfive.E = {};
+                        analysis.bigfive.A = {};
+                        analysis.bigfive.N = {};
+                        for (var personalityTrait in bigfive_m) {
+                            analysis.bigfive[personalityTrait].score = 0;
+                            analysis.bigfive[personalityTrait].words = [];
+                            for (var word in bigfive_m[personalityTrait].matches) {
+                                analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3];
+                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]);
+                            }
+                        }
                     }
                 }
             }

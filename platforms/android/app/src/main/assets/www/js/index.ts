@@ -59,6 +59,45 @@ export class CordovaApp {
         });
 
 
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const analysis = smsData[contact][type][singleSMS].analysis;
+                        const englishSMS = smsData[contact][type][singleSMS].text.en;
+                        const bigfive_m = text.personalityAnalysis(englishSMS, {"output":"matches"});
+                        analysis.bigfive = {};
+                        analysis.bigfive.O = {};
+                        analysis.bigfive.C = {};
+                        analysis.bigfive.E = {};
+                        analysis.bigfive.A = {};
+                        analysis.bigfive.N = {};
+                        for (const personalityTrait in bigfive_m) { // personality trait is 0 -C - E - A or N
+                            analysis.bigfive[personalityTrait].score = 0;
+                            analysis.bigfive[personalityTrait].words = [];
+                            for (const word in bigfive_m[personalityTrait].matches) { // un match correspond à un mot repéré
+                                analysis.bigfive[personalityTrait].score += bigfive_m[personalityTrait].matches[word][3]; // word[3] c'est la valeur du mot
+                                analysis.bigfive[personalityTrait].words.push(bigfive_m[personalityTrait].matches[word][0]); // word[0] c'est le mot qui a matché
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        console.log(`smsData après bigfive:`);
+        console.log(smsData);
+        //
+        //
+        // let bigfive_m = text.personalityAnalysis('I am always so tired...', {"output": "matches"});
+        // console.log(`big five matched:`);
+        // console.log(bigfive_m);
+        //
+        // let bigfive_ = text.personalityAnalysis("I am always so tired...");
+        // console.log(`big five:`);
+        // console.log(bigfive_);
+
+
 
         // detect("Je viens demain").then(lang => {
         //     console.log(`lang: ${lang}`);
@@ -74,14 +113,14 @@ export class CordovaApp {
         let wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
         let wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
 
-        // console.log(`wordsMe:`);
-        // console.log(wordsMe);
-        // console.log(`wordsMom:`);
-        // console.log(wordsMom);
-        // console.log(`wordsMeNeg:`);
-        // console.log(wordsMeNeg);
-        // console.log(`wordsMomNeg:`);
-        // console.log(wordsMomNeg);
+        console.log(`wordsMe:`);
+        console.log(wordsMe);
+        console.log(`wordsMom:`);
+        console.log(wordsMom);
+        console.log(`wordsMeNeg:`);
+        console.log(wordsMeNeg);
+        console.log(`wordsMomNeg:`);
+        console.log(wordsMomNeg);
         //
 
         // console.group("Résultats des scores");
