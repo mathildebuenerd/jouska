@@ -9,6 +9,8 @@ import set = Reflect.set;
 import * as translate from "./../../hooks/translate";
 import * as keys from './apiKeys';
 import {TextAnalysis} from "./sentimentAnalysis";
+import {SMSManager} from "./manageSMS";
+const sms = new SMSManager();
 const text = new TextAnalysis();
 const Keys = new keys.Keys();
 translate.key = Keys.API_KEY;
@@ -58,23 +60,25 @@ export class CordovaApp {
             console.log(localStorage);
         });
 
-        // let triad_ = text.darktriadAnalysis("What a woman! She's so strange.");
-        // console.log(`triad:`);
-        // console.log(triad_);
+        let scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        let scorePerDate = calculate.scorePerTime(smsData, "day");
+        let scorePerMonth = calculate.scorePerTime(smsData, "month");
+        let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
+        let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
+
+        console.log(`scorePerDay:`);
+        console.log(scorePerDay);
+        console.log(`scorePerDate:`);
+        console.log(scorePerDate);
+        console.log(`scorePerMonth:`);
+        console.log(scorePerMonth);
+        console.log(`scorePerMinutes:`);
+        console.log(scorePerMinutes);
+        console.log(`scorePerSeconds:`);
+        console.log(scorePerSeconds);
 
 
 
-        console.log(`smsData après darktriad:`);
-        console.log(smsData);
-        //
-        //
-        // let bigfive_m = text.personalityAnalysis('I am always so tired...', {"output": "matches"});
-        // console.log(`big five matched:`);
-        // console.log(bigfive_m);
-        //
-        // let bigfive_ = text.personalityAnalysis("I am always so tired...");
-        // console.log(`big five:`);
-        // console.log(bigfive_);
 
 
 
@@ -82,15 +86,30 @@ export class CordovaApp {
         //     console.log(`lang: ${lang}`);
         // });
 
+        // let contactScores = {};
+        //
+        // for (const contact in smsData) {
+        //     contactScores[smsData[contact].name] = {
+        //         "me": {},
+        //         "you": {}
+        //     };
+        //     contactScores[smsData[contact].name].me = calculate.scoreWithContact(contact, "sent");
+        //     contactScores[smsData[contact].name].you = calculate.scoreWithContact(contact, "inbox");
+        // }
+        //
+        // console.log(`contactScores:`);
+        // console.log(contactScores);
+
+
         // let myscore = calculate.scoreWithContact('0675611341', 'sent');
         // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
-        // let wordsMom = calculate.getMostUsedWords("positive", "0783094512", "inbox", "fr");
-        // let wordsMe = calculate.getMostUsedWords("positive", "0783094512", "sent", "fr");
-        // let wordsMomNeg = calculate.getMostUsedWords("negative", "0783094512", "inbox", "fr");
-        // let wordsMeNeg = calculate.getMostUsedWords("negative", "0783094512", "sent", "fr");
+        // let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        // let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+        // let wordsMomNeg = calculate.getMostUsedWords("negative", "0675611341", "inbox", "fr");
+        // let wordsMeNeg = calculate.getMostUsedWords("negative", "0675611341", "sent", "fr");
         //
         // console.log(`wordsMe:`);
         // console.log(wordsMe);

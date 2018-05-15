@@ -155,6 +155,7 @@ export class Installation {
     }
 
     darktriadAnalysis() {
+        console.log(`L'analyse de la darktriad commence... Elle peut être un peu longue (plus d'une minute)`);
         for (const contact in smsData) {
             for (const type in smsData[contact]) { // type = inbox | sent | name
                 if (type !== 'name') { // on ne boucle que dans inbox et sent
@@ -173,12 +174,14 @@ export class Installation {
                                 "positive": [],
                                 "negative": []
                             };
-                            for (const word in darktriad_m[trait]) {
-                                analysis.darktriad[trait].score += darktriad_m[trait].matches[word][3]; // word[3] c'est la valeur du mot
-                                if (darktriad_m[trait].matches[word][3] > 0) { // le mot peut soit faire augmenter, soit faire baisser un certain trait de personnalité, il faut donc classifier les mots
-                                    analysis.darktriad[trait].words.positive.push(darktriad_m[trait].matches[word][0]); // word[0] c'est le mot qui a matché
-                                } else {
-                                    analysis.darktriad[trait].words.negative.push(darktriad_m[trait].matches[word][0]); // word[0] c'est le mot qui a matché
+                            if (darktriad_m[trait] !== []) {
+                                for (const word in darktriad_m[trait]) {
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3]; // word[3] c'est la valeur du mot
+                                    if (darktriad_m[trait][word][3] > 0) { // le mot peut soit faire augmenter, soit faire baisser un certain trait de personnalité, il faut donc classifier les mots
+                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]); // word[0] c'est le mot qui a matché
+                                    } else {
+                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]); // word[0] c'est le mot qui a matché
+                                    }
                                 }
                             }
 
@@ -187,6 +190,7 @@ export class Installation {
                 }
             }
         }
+
 
         console.group(`Dark triad`);
         console.log('smsData: ');

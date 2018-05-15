@@ -9,6 +9,8 @@ var writingAssistant = new writingInterface.WritingInterface();
 var translate = require("./../../hooks/translate");
 var keys = require("./apiKeys");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
+var manageSMS_1 = require("./manageSMS");
+var sms = new manageSMS_1.SMSManager();
 var text = new sentimentAnalysis_1.TextAnalysis();
 var Keys = new keys.Keys();
 translate.key = Keys.API_KEY;
@@ -29,42 +31,21 @@ var CordovaApp = (function () {
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
-        for (var contact in smsData) {
-            for (var type in smsData[contact]) {
-                if (type !== 'name') {
-                    for (var singleSMS in smsData[contact][type]) {
-                        var englishSMS = smsData[contact][type][singleSMS].text.en;
-                        var analysis = smsData[contact][type][singleSMS].analysis;
-                        var darktriad_m = text.darktriadAnalysis(englishSMS, { "output": "matches" });
-                        analysis.darktriad = {};
-                        analysis.darktriad.machiavellianism = {};
-                        analysis.darktriad.narcissism = {};
-                        analysis.darktriad.psychopathy = {};
-                        analysis.darktriad.triad = {};
-                        for (var trait in darktriad_m) {
-                            analysis.darktriad[trait].score = 0;
-                            analysis.darktriad[trait].words = {
-                                "positive": [],
-                                "negative": []
-                            };
-                            if (darktriad_m[trait] !== []) {
-                                for (var word in darktriad_m[trait]) {
-                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3];
-                                    if (darktriad_m[trait][word][3] > 0) {
-                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]);
-                                    }
-                                    else {
-                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        console.log("smsData apr\u00E8s darktriad:");
-        console.log(smsData);
+        var scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        var scorePerDate = calculate.scorePerTime(smsData, "day");
+        var scorePerMonth = calculate.scorePerTime(smsData, "month");
+        var scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
+        var scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
+        console.log("scorePerDay:");
+        console.log(scorePerDay);
+        console.log("scorePerDate:");
+        console.log(scorePerDate);
+        console.log("scorePerMonth:");
+        console.log(scorePerMonth);
+        console.log("scorePerMinutes:");
+        console.log(scorePerMinutes);
+        console.log("scorePerSeconds:");
+        console.log(scorePerSeconds);
     };
     return CordovaApp;
 }());

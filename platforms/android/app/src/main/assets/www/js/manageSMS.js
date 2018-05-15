@@ -5,8 +5,9 @@ var SMSManager = (function () {
     function SMSManager() {
     }
     SMSManager.convertUnixDate = function (unixTimeStamp) {
-        var date = new Date(unixTimeStamp * 1000);
+        var date = new Date(unixTimeStamp);
         return {
+            "weekday": date.getDay(),
             'day': date.getDate(),
             'month': date.getMonth(),
             'year': date.getFullYear(),
@@ -96,6 +97,8 @@ var SMSManager = (function () {
                 var address = SMSManager.normalizeAddress(data[key].address);
                 var myid = data[key]._id;
                 if (address.length > 7 && address.match("[0-9]+")) {
+                    console.log("date:");
+                    console.log(data[key].date);
                     var date = SMSManager.convertUnixDate(data[key].date);
                     if (address in contacts) {
                         contacts[address][type][myid] = {

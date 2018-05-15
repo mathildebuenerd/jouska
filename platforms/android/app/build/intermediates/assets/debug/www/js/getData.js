@@ -114,6 +114,7 @@ var Installation = (function () {
         console.groupEnd();
     };
     Installation.prototype.darktriadAnalysis = function () {
+        console.log("L'analyse de la darktriad commence... Elle peut \u00EAtre un peu longue (plus d'une minute)");
         for (var contact in smsData) {
             for (var type in smsData[contact]) {
                 if (type !== 'name') {
@@ -132,13 +133,15 @@ var Installation = (function () {
                                 "positive": [],
                                 "negative": []
                             };
-                            for (var word in darktriad_m[trait]) {
-                                analysis.darktriad[trait].score += darktriad_m[trait].matches[word][3];
-                                if (darktriad_m[trait].matches[word][3] > 0) {
-                                    analysis.darktriad[trait].words.positive.push(darktriad_m[trait].matches[word][0]);
-                                }
-                                else {
-                                    analysis.darktriad[trait].words.negative.push(darktriad_m[trait].matches[word][0]);
+                            if (darktriad_m[trait] !== []) {
+                                for (var word in darktriad_m[trait]) {
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3];
+                                    if (darktriad_m[trait][word][3] > 0) {
+                                        analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]);
+                                    }
+                                    else {
+                                        analysis.darktriad[trait].words.negative.push(darktriad_m[trait][word][0]);
+                                    }
                                 }
                             }
                         }

@@ -50,10 +50,10 @@ export class CalculateScore {
                 scores.bigfive.agreeableness += analysis.bigfive.A.score;
                 scores.bigfive.neuroticism += analysis.bigfive.N.score;
 
-                scores.darktriad.machiavellianism += analysis.darktriad.machiavellianism;
-                scores.darktriad.narcissism += analysis.darktriad.narcissism;
-                scores.darktriad.psychopathy += analysis.darktriad.psychopathy;
-                scores.darktriad.triad += analysis.darktriad.triad;
+                scores.darktriad.machiavellianism += analysis.darktriad.machiavellianism.score;
+                scores.darktriad.narcissism += analysis.darktriad.narcissism.score;
+                scores.darktriad.psychopathy += analysis.darktriad.psychopathy.score;
+                scores.darktriad.triad += analysis.darktriad.triad.score;
 
                 scores.gender += analysis.gender.GENDER;
 
@@ -74,8 +74,6 @@ export class CalculateScore {
                         }
                     }
                 }
-
-
             }
         }
 
@@ -112,7 +110,7 @@ export class CalculateScore {
         return scores;
 
 
-    }
+    };
 
     compareScores=(contact: string, type: any) => {
         const userScore: object = this.scoreWithContact(contact, "sent");
@@ -176,5 +174,87 @@ export class CalculateScore {
         }
 
 
+    }
+
+    scorePerTime= (smsData: object, timePeriod: string) => {
+
+        console.warn(`--------------- TIMEPERIOD: ${timePeriod}`);
+
+        const periods = {
+            "weekday": {
+                "start": 0,
+                "end": 6
+            },
+            "day": {
+                "start": 1,
+                "end": 31
+            },
+            "month": {
+                "start": 0,
+                "end": 11
+            },
+            "year": {
+                "start": 2012,
+                "end": 2018
+            },
+            "hour": {
+                "start": 0,
+                "end": 23
+            },
+            "minutes": {
+                "start": 0,
+                "end": 59
+            },
+            "seconds": {
+                "start": 0,
+                "end": 59
+            },
+        };
+
+        let scorePerTimePeriod = {};
+        for (let i=periods[timePeriod].start; i<=periods[timePeriod].end; i++) {
+            scorePerTimePeriod[i] = {
+                "score": 0,
+                "totalMessage": 0
+            };
+        }
+
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) {
+                if (type !== "name") {
+                    for (const message in smsData[contact][type]) {
+                        const singleMessage = smsData[contact][type][message];
+                        const unit = singleMessage.date[timePeriod]; // unit c'est l'heure de 0 à 23, le jour de 0 à 30 etc../
+                        if (singleMessage.analysis.sentimentFr.hasOwnProperty("comparative")) {
+                            // console.log(`comparative score ${singleMessage.analysis.sentimentFr.comparative}`);
+                            // console.log(`score per time period unit`);
+                            // console.log(scorePerTimePeriod);
+                            // console.log(scorePerTimePeriod[unit]);
+                            scorePerTimePeriod[unit].score += singleMessage.analysis.sentimentFr.comparative;
+                            scorePerTimePeriod[unit].totalMessage++;
+                            // console.log(`score per hour: ${scorePerTimePeriod[unit].score}`);
+                        } else {
+                            for (let i=0; i<(singleMessage.analysis.sentimentFr).length; i++) {
+                                if (typeof singleMessage.analysis.sentimentFr[i] === "object") {
+                                    // console.log(`timePeriod: ${timePeriod}, unit: ${unit}`);
+                                    // console.log(`scorePerTimePeriod[unit]`);
+                                    // console.log(scorePerTimePeriod[unit]);
+                                    scorePerTimePeriod[unit].score += singleMessage.analysis.sentimentFr[i].comparative;
+                                    scorePerTimePeriod[unit].totalMessage++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (const unit in scorePerTimePeriod) {
+            // console.log(`scorePerHour[hour].score: ${scorePerHour[hour].score}`);
+            // console.log(`scorePerHour[hour].totalMessages: ${scorePerHour[hour].totalMessage}`);
+            scorePerTimePeriod[unit].score = (scorePerTimePeriod[unit].score)/(scorePerTimePeriod[unit].totalMessage);
+        }
+
+        return scorePerTimePeriod;
     }
 }

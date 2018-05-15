@@ -8,8 +8,9 @@ declare const navigator: any;
 export class SMSManager {
 
     public static convertUnixDate(unixTimeStamp: number): object {
-        let date = new Date(unixTimeStamp*1000); // comme javascript fonctionne en millisecondes, on multiple par 1000 les secondes unix
+        let date = new Date(unixTimeStamp);
         return {
+            "weekday": date.getDay(),
             'day': date.getDate(),
             'month': date.getMonth(),
             'year': date.getFullYear(),
@@ -138,6 +139,8 @@ export class SMSManager {
                     // let type = filters.box;
                     // on checke si le numéro de téléphone est standard pour éviter pubs et numéros spéciaux : constitué de chiffres et de + seulement et au moins 7 chiffres
                     if (address.length > 7 && address.match("[0-9]+")) {
+                        console.log(`date:`);
+                        console.log(data[key].date);
                         const date = SMSManager.convertUnixDate(data[key].date); // on converti le format de date de listSMS
                         // let language = SMSManager.detectLanguage(data[key].body);
 
