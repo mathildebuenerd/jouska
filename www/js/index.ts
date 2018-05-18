@@ -4,6 +4,8 @@ import * as score from "./calculateScores";
 const calculate = new score.CalculateScore();
 import * as writingInterface from "./writingInterface";
 const writingAssistant = new writingInterface.WritingInterface();
+import * as discussionThread from "./discussionThread";
+const thread = new discussionThread.DiscussionThread();
 import set = Reflect.set;
 
 import * as translate from "./../../hooks/translate";
@@ -55,6 +57,8 @@ export class CordovaApp {
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
+
+        thread.showContactThread("0675611341");
 
         // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
         // let scorePerDate = calculate.scorePerTime(smsData, "day");

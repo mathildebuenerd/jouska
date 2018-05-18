@@ -6,6 +6,8 @@ var score = require("./calculateScores");
 var calculate = new score.CalculateScore();
 var writingInterface = require("./writingInterface");
 var writingAssistant = new writingInterface.WritingInterface();
+var discussionThread = require("./discussionThread");
+var thread = new discussionThread.DiscussionThread();
 var translate = require("./../../hooks/translate");
 var keys = require("./apiKeys");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
@@ -31,6 +33,7 @@ var CordovaApp = (function () {
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
+        thread.showContactThread("0675611341");
     };
     return CordovaApp;
 }());

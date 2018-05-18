@@ -331,3 +331,40 @@ input#contactNumber:focus, #smsContent:focus {
 .stats {
     display: none;
 }
+
+
+/****************
+
+    Messages interface
+
+ **********/
+
+/***
+    Discussion thread
+ ***/
+
+#discussion-thread {
+    background-color: #eee;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+}
+
+.singleSMS {
+    padding: 15px;
+    margin: 5px;
+    width: auto;
+}
+
+.textSMS {
+    margin: 0;
+}
+
+.singleSMS.inbox {
+    background-color: white;
+}
+
+.singleSMS.sent {
+    background-color: #222;
+    align-self: flex-end;
+}

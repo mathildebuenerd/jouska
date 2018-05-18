@@ -149,7 +149,8 @@ export class SMSManager {
                                 "text": {
                                     "original": data[key].body
                                 },
-                                "date": date
+                                "date": date,
+                                "type": type
                             };
                         } else { // si le numéro n'est pas dans la liste, on le crée
                             contacts[address] = {}; // on doit initialiser la nouvelle adresse
@@ -158,7 +159,8 @@ export class SMSManager {
                                 "text": {
                                     "original": data[key].body
                                 },
-                                "date": date
+                                "date": date,
+                                "type": type
                             };
                         }
                     } // if address est correct
@@ -198,7 +200,10 @@ export class SMSManager {
 
     public displaySMS() {
 
+
     }
+
+
 
 }
 

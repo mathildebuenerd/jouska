@@ -4,6 +4,8 @@ import * as score from "./calculateScores";
 const calculate = new score.CalculateScore();
 import * as writingInterface from "./writingInterface";
 const writingAssistant = new writingInterface.WritingInterface();
+import * as discussionThread from "./discussionThread";
+const thread = new discussionThread.DiscussionThread();
 import set = Reflect.set;
 
 import * as translate from "./../../hooks/translate";
@@ -39,12 +41,8 @@ export class CordovaApp {
         //     for (const type in smsData[contact]) { // type = inbox | sent | name
         //         if (type !== 'name') { // on ne boucle que dans inbox et sent
         //             for (const singleSMS in smsData[contact][type]) {
-        //                 const englishSMS = smsData[contact][type][singleSMS].text.en;
-        //                 const originalSMS = smsData[contact][type][singleSMS].text.original;
-        //                 smsData[contact][type][singleSMS].analysis.sentiment = {};
-        //                 smsData[contact][type][singleSMS].analysis.sentimentFr = {};
-        //                 smsData[contact][type][singleSMS].analysis.sentimentFr = text.sentimentAnalysis(originalSMS, 'fr');
-        //                 smsData[contact][type][singleSMS].analysis.sentiment = text.sentimentAnalysis(englishSMS, 'en', originalSMS)
+        //                 smsData[contact][type][singleSMS].type = "";
+        //                 smsData[contact][type][singleSMS].type = type;
         //             }
         //         }
         //     }
@@ -60,22 +58,24 @@ export class CordovaApp {
             console.log(localStorage);
         });
 
-        let scorePerDay = calculate.scorePerTime(smsData, "weekday");
-        let scorePerDate = calculate.scorePerTime(smsData, "day");
-        let scorePerMonth = calculate.scorePerTime(smsData, "month");
-        let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
-        let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
+        thread.showContactThread("0675611341");
 
-        console.log(`scorePerDay:`);
-        console.log(scorePerDay);
-        console.log(`scorePerDate:`);
-        console.log(scorePerDate);
-        console.log(`scorePerMonth:`);
-        console.log(scorePerMonth);
-        console.log(`scorePerMinutes:`);
-        console.log(scorePerMinutes);
-        console.log(`scorePerSeconds:`);
-        console.log(scorePerSeconds);
+        // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        // let scorePerDate = calculate.scorePerTime(smsData, "day");
+        // let scorePerMonth = calculate.scorePerTime(smsData, "month");
+        // let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
+        // let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
+        //
+        // console.log(`scorePerDay:`);
+        // console.log(scorePerDay);
+        // console.log(`scorePerDate:`);
+        // console.log(scorePerDate);
+        // console.log(`scorePerMonth:`);
+        // console.log(scorePerMonth);
+        // console.log(`scorePerMinutes:`);
+        // console.log(scorePerMinutes);
+        // console.log(`scorePerSeconds:`);
+        // console.log(scorePerSeconds);
 
 
 
