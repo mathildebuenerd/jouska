@@ -105,7 +105,8 @@ var SMSManager = (function () {
                             "text": {
                                 "original": data[key].body
                             },
-                            "date": date
+                            "date": date,
+                            "type": type
                         };
                     }
                     else {
@@ -115,7 +116,8 @@ var SMSManager = (function () {
                             "text": {
                                 "original": data[key].body
                             },
-                            "date": date
+                            "date": date,
+                            "type": type
                         };
                     }
                 }
