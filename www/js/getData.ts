@@ -28,6 +28,7 @@ export class Installation {
         const temporalOrientationButton = install.querySelector("#analyzeTemporalOrientation");
         const getContactNamesButton = install.querySelector("#getContactNames");
         const addToLocalStorageButton = install.querySelector('#addToLocalStorage');
+        const mergeInboxAndSentMessagesButton = install.querySelector("#mergeInboxAndSentMessages");
         const getCurrentDateButton = install.querySelector("#getCurrentDate");
 
 
@@ -62,6 +63,9 @@ export class Installation {
         // -------- Add to localStorage ----------
         // Add to localStorage
         addToLocalStorageButton.addEventListener('click', this.addToLocalStorage);
+
+        // -------- We create another "database" for the messages in order to manipulate it more easily in the discussion thread
+        mergeInboxAndSentMessagesButton.addEventListener('click', this.mergeInboxAndSentMessages);
 
         // -------- Get meta data from the installation ----------
         // Get current date/hour
@@ -301,6 +305,41 @@ export class Installation {
         const today = new Date(); // on récupère la date d'installation
         console.log(typeof today);
         localStorage.setItem('installation', JSON.stringify(today));
+    }
+
+    mergeInboxAndSentMessages = (): void => {
+
+        const smsData = JSON.parse(localStorage.getItem('smsData'));
+
+        const messages = {};
+
+        for (const contact in smsData) {
+            messages[contact] = {};
+            let mergedMessages = {};
+            for (const type in smsData[contact]) {
+                if (type !== "name") {
+                    for (const id in smsData[contact][type]) {
+                        let tempSMS = smsData[contact][type][id];
+                        tempSMS.name = "";
+                        if (type === "inbox") {
+                            tempSMS.name = smsData[contact]["name"];
+                        } else {
+                            tempSMS.name = "me";
+                        }
+                        mergedMessages[id] = tempSMS;
+                    }
+                }
+
+            }
+            messages[contact] = mergedMessages;
+        }
+
+        console.log("messages");
+        console.log(messages);
+        localStorage.setItem("smsList", JSON.stringify(messages));
+        console.log(`localstorage:`);
+        console.log(localStorage);
+
     }
 
 }

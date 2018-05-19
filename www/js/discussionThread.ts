@@ -6,24 +6,22 @@ export class DiscussionThread {
 
     showContactThread= (contact: string) => {
 
-        const smsData = JSON.parse(localStorage.getItem('smsData'));
+        console.log(`showDiscussionThread`);
 
+        const smsList = JSON.parse(localStorage.getItem('smsList'));
 
-        // Create a list where we are going to put the HTMLElements of the messages from that contact
-        let messagesList = [];
+        console.log(`smsList:`);
+        console.log(smsList);
+
         const thread = document.querySelector("#discussion-thread");
 
-        for (const type in smsData[contact]) {
-            if (type !== "name") {
-                for (const smsId in smsData[contact][type]) {
-                    const sms = smsData[contact][type][smsId];
-                    let bubble = this.createMessageBubble(sms, smsId);
-                    console.log(`bubble:`);
-                    console.log(bubble);
-                    thread.appendChild(bubble);
-                }
+            for (const smsId in smsList[contact]) {
+                const sms = smsList[contact][smsId];
+                let bubble = this.createMessageBubble(sms, smsId);
+                console.log(`bubble:`);
+                console.log(bubble);
+                thread.appendChild(bubble);
             }
-        }
 
         console.log(`j'ai fini d'ajouter mes bulles à mon thread`);
 
@@ -46,7 +44,10 @@ export class DiscussionThread {
 
         return tag;
 
-    }
+    };
+
+
+
 
 
 }

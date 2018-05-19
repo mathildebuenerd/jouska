@@ -12,6 +12,35 @@ var textAnalysis = new sentimentAnalysis_1.TextAnalysis();
 var smsData = {};
 var Installation = (function () {
     function Installation() {
+        this.mergeInboxAndSentMessages = function () {
+            var smsData = JSON.parse(localStorage.getItem('smsData'));
+            var messages = {};
+            for (var contact in smsData) {
+                messages[contact] = {};
+                var mergedMessages = {};
+                for (var type in smsData[contact]) {
+                    if (type !== "name") {
+                        for (var id in smsData[contact][type]) {
+                            var tempSMS = smsData[contact][type][id];
+                            tempSMS.name = "";
+                            if (type === "inbox") {
+                                tempSMS.name = smsData[contact]["name"];
+                            }
+                            else {
+                                tempSMS.name = "me";
+                            }
+                            mergedMessages[id] = tempSMS;
+                        }
+                    }
+                }
+                messages[contact] = mergedMessages;
+            }
+            console.log("messages");
+            console.log(messages);
+            localStorage.setItem("smsList", JSON.stringify(messages));
+            console.log("localstorage:");
+            console.log(localStorage);
+        };
     }
     Installation.prototype.start = function () {
         var install = document.querySelector("#installTheApp");
@@ -26,6 +55,7 @@ var Installation = (function () {
         var temporalOrientationButton = install.querySelector("#analyzeTemporalOrientation");
         var getContactNamesButton = install.querySelector("#getContactNames");
         var addToLocalStorageButton = install.querySelector('#addToLocalStorage');
+        var mergeInboxAndSentMessagesButton = install.querySelector("#mergeInboxAndSentMessages");
         var getCurrentDateButton = install.querySelector("#getCurrentDate");
         getReceivedMessagesButton.addEventListener('click', this.getReceivedMessages);
         getSentMessagesButton.addEventListener('click', this.getSentMessages);
@@ -37,6 +67,7 @@ var Installation = (function () {
         temporalOrientationButton.addEventListener('click', this.temporalOrientationAnalysis);
         getContactNamesButton.addEventListener('click', this.getContactNames);
         addToLocalStorageButton.addEventListener('click', this.addToLocalStorage);
+        mergeInboxAndSentMessagesButton.addEventListener('click', this.mergeInboxAndSentMessages);
         getCurrentDateButton.addEventListener('click', this.getCurrentDate);
     };
     Installation.prototype.getReceivedMessages = function () {

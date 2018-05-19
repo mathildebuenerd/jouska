@@ -356,7 +356,7 @@ input#contactNumber:focus, #smsContent:focus {
     width: auto;
 }
 
-.textSMS {
+.smsText {
     margin: 0;
 }
 
@@ -365,6 +365,7 @@ input#contactNumber:focus, #smsContent:focus {
 }
 
 .singleSMS.sent {
+    color: white;
     background-color: #222;
     align-self: flex-end;
 }

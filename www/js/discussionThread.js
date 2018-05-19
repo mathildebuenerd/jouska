@@ -4,19 +4,17 @@ var DiscussionThread = (function () {
     function DiscussionThread() {
         var _this = this;
         this.showContactThread = function (contact) {
-            var smsData = JSON.parse(localStorage.getItem('smsData'));
-            var messagesList = [];
+            console.log("showDiscussionThread");
+            var smsList = JSON.parse(localStorage.getItem('smsList'));
+            console.log("smsList:");
+            console.log(smsList);
             var thread = document.querySelector("#discussion-thread");
-            for (var type in smsData[contact]) {
-                if (type !== "name") {
-                    for (var smsId in smsData[contact][type]) {
-                        var sms = smsData[contact][type][smsId];
-                        var bubble = _this.createMessageBubble(sms, smsId);
-                        console.log("bubble:");
-                        console.log(bubble);
-                        thread.appendChild(bubble);
-                    }
-                }
+            for (var smsId in smsList[contact]) {
+                var sms = smsList[contact][smsId];
+                var bubble = _this.createMessageBubble(sms, smsId);
+                console.log("bubble:");
+                console.log(bubble);
+                thread.appendChild(bubble);
             }
             console.log("j'ai fini d'ajouter mes bulles \u00E0 mon thread");
         };
