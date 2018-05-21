@@ -30,44 +30,54 @@ var DiscussionThread = (function () {
             tag.appendChild(text);
             return tag;
         };
-        this.createTags = function (sms, analysis) {
+        this.createTags = function (sms, analyses) {
             var tag = sms;
-            var sentiment = analysis["sentimentFr"];
+            var analysis = ["sentimentFr", "selfishness"];
             var valence = ["positive", "negative"];
-            if (Array.isArray(sentiment)) {
-                for (var i = 0; i < sentiment.length; i++) {
-                    for (var v = 0; v < valence.length; v++) {
-                        if (sentiment[i][valence[v]].length > 0) {
-                            for (var j = 0; j < sentiment[i][valence[v]].length; j++) {
-                                if ((tag.outerHTML).indexOf(sentiment[i][valence[v]][j]) !== -1) {
-                                    var wordWithTag = "<span class=\"" + valence[v] + "Word\">" + sentiment[i][valence[v]][j] + "</span>";
-                                    var newTag = (tag.outerHTML).replace(sentiment[i][valence[v]][j], wordWithTag);
-                                    tag.innerHTML = newTag;
+            for (var _i = 0, analysis_1 = analysis; _i < analysis_1.length; _i++) {
+                var a = analysis_1[_i];
+                if (Array.isArray(analyses[a])) {
+                    for (var i = 0; i < analyses[a].length; i++) {
+                        for (var v = 0; v < valence.length; v++) {
+                            if (analyses[a][i][valence[v]].length > 0) {
+                                for (var j = 0; j < analyses[a][i][valence[v]].length; j++) {
+                                    tag = _this.addClassToWord(analyses[a][i][valence[v]][j], tag, a, valence[v]);
                                 }
                             }
                         }
                     }
                 }
-            }
-            else {
-                for (var v = 0; v < valence.length; v++) {
-                    if (sentiment[valence[v]].length > 0) {
-                        for (var i = 0; i < sentiment[valence[v]].length; i++) {
-                            if ((tag.outerHTML).indexOf(sentiment[valence[v]][i]) !== -1) {
-                                var wordWithTag = "<span class=\"" + valence[v] + "Word\">" + sentiment.positive[i] + "</span>";
-                                var newTag = (tag.outerHTML).replace(sentiment[valence[v]][i], wordWithTag);
-                                tag.innerHTML = newTag;
+                else {
+                    for (var v = 0; v < valence.length; v++) {
+                        if (analyses[a][valence[v]].length > 0) {
+                            for (var i = 0; i < analyses[a][valence[v]].length; i++) {
+                                tag = _this.addClassToWord(analyses[a][valence[v]][i], tag, a, valence[v]);
                             }
                         }
                     }
                 }
             }
-            console.log("my tag is:");
-            console.log(tag);
-            console.log("I return:");
             while (tag.firstChild.nodeName.toLowerCase() !== "p") {
                 tag = tag.firstChild;
             }
+            console.log("je renvoie");
+            console.log(tag);
+            return tag;
+        };
+        this.addClassToWord = function (wordToFind, tag, analysis, valence) {
+            var elmtClass = "";
+            if (analysis == "sentimentFr") {
+                elmtClass = "sentiment-" + valence;
+            }
+            else if (analysis == "selfishness") {
+                elmtClass = "selfish-" + valence;
+            }
+            if ((tag.outerHTML).indexOf(wordToFind) === -1) {
+                wordToFind = wordToFind.charAt(0).toUpperCase() + wordToFind.slice(1);
+            }
+            var wordWithTag = "<span class=\"" + elmtClass + "\">" + wordToFind + "</span>";
+            var newTag = (tag.outerHTML).replace(wordToFind, wordWithTag);
+            tag.innerHTML = newTag;
             return tag;
         };
     }

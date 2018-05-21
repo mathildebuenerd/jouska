@@ -48,6 +48,8 @@ export class CordovaApp {
         //     }
         // }
 
+        // installation.mergeInboxAndSentMessages();
+
         console.log(`smsData:`);
         console.log(smsData);
         document.querySelector('#addThisToStorage').addEventListener('click', () => {
