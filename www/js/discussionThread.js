@@ -16,6 +16,7 @@ var DiscussionThread = (function () {
                 console.log(bubble);
                 thread.appendChild(bubble);
             }
+            window.scrollTo(0, document.body.clientHeight);
             console.log("j'ai fini d'ajouter mes bulles \u00E0 mon thread");
         };
         this.createMessageBubble = function (sms, id) {

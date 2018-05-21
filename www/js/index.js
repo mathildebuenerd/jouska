@@ -33,7 +33,8 @@ var CordovaApp = (function () {
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
-        thread.showContactThread("0675611341");
+        console.log("smsdata after slefish");
+        console.log(smsData);
     };
     return CordovaApp;
 }());

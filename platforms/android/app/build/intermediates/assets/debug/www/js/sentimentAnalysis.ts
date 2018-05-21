@@ -7,6 +7,7 @@ import * as darktriad from "./../../hooks/darktriad";
 import * as bigfive from "./../../hooks/bigfive";
 import * as predictgender from "./../../hooks/predictgender";
 import * as prospectimo from "./../../hooks/prospectimo";
+import * as selfishness from "./../../hooks/node-sentiment-selfishness";
 
 export class TextAnalysis {
 
@@ -74,6 +75,10 @@ export class TextAnalysis {
 
     public temporalOrientationPrediction(textMessage: string, language: string = 'en') {
         return prospectimo(textMessage);
+    }
+
+    public selfishnessAnalysis(textMessage: string, language: string = 'fr'): object {
+        return selfishness(textMessage, language); // pour l'instant on le fait juste en français
     }
 
 }

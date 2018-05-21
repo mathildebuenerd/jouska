@@ -58,7 +58,22 @@ export class CordovaApp {
             console.log(localStorage);
         });
 
-        thread.showContactThread("0675611341");
+        // for (const contact in smsData) {
+        //     for (const type in smsData[contact]) { // type = inbox | sent | name
+        //         if (type !== 'name') { // on ne boucle que dans inbox et sent
+        //             for (const singleSMS in smsData[contact][type]) {
+        //                 const originalSMS = smsData[contact][type][singleSMS].text.original;
+        //                 smsData[contact][type][singleSMS].analysis.selfishness = {};
+        //                 smsData[contact][type][singleSMS].analysis.selfishness = text.selfishnessAnalysis(originalSMS, 'fr');
+        //             }
+        //         }
+        //     }
+        // }
+
+        console.log(`smsdata after slefish`);
+        console.log(smsData);
+
+        // thread.showContactThread("0675611341");
 
         // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
         // let scorePerDate = calculate.scorePerTime(smsData, "day");

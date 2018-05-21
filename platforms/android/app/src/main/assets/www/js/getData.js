@@ -53,6 +53,7 @@ var Installation = (function () {
         var bigfiveAnalysisButton = install.querySelector("#analyzePersonality");
         var genderPredictionButton = install.querySelector("#analyzeGender");
         var temporalOrientationButton = install.querySelector("#analyzeTemporalOrientation");
+        var selfishnessButton = install.querySelector("#analyzeSelfishness");
         var getContactNamesButton = install.querySelector("#getContactNames");
         var addToLocalStorageButton = install.querySelector('#addToLocalStorage');
         var mergeInboxAndSentMessagesButton = install.querySelector("#mergeInboxAndSentMessages");
@@ -65,6 +66,7 @@ var Installation = (function () {
         bigfiveAnalysisButton.addEventListener('click', this.bigfiveAnalysis);
         genderPredictionButton.addEventListener('click', this.genderAnalysis);
         temporalOrientationButton.addEventListener('click', this.temporalOrientationAnalysis);
+        selfishnessButton.addEventListener('click', this.selfishnessAnalysis);
         getContactNamesButton.addEventListener('click', this.getContactNames);
         addToLocalStorageButton.addEventListener('click', this.addToLocalStorage);
         mergeInboxAndSentMessagesButton.addEventListener('click', this.mergeInboxAndSentMessages);
@@ -254,6 +256,23 @@ var Installation = (function () {
             }
         }
         console.group("Temporal Orientation");
+        console.log('smsData: ');
+        console.log(smsData);
+        console.groupEnd();
+    };
+    Installation.prototype.selfishnessAnalysis = function () {
+        for (var contact in smsData) {
+            for (var type in smsData[contact]) {
+                if (type !== 'name') {
+                    for (var singleSMS in smsData[contact][type]) {
+                        var originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.selfishness = {};
+                        smsData[contact][type][singleSMS].analysis.selfishness = textAnalysis.selfishnessAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+        console.group("Sentiment analysis");
         console.log('smsData: ');
         console.log(smsData);
         console.groupEnd();

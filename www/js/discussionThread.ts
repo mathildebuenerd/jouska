@@ -15,13 +15,19 @@ export class DiscussionThread {
 
         const thread = document.querySelector("#discussion-thread");
 
-            for (const smsId in smsList[contact]) {
-                const sms = smsList[contact][smsId];
-                let bubble = this.createMessageBubble(sms, smsId);
-                console.log(`bubble:`);
-                console.log(bubble);
-                thread.appendChild(bubble);
-            }
+        // on récupère les messages
+        for (const smsId in smsList[contact]) {
+            const sms = smsList[contact][smsId];
+            let bubble = this.createMessageBubble(sms, smsId);
+            console.log(`bubble:`);
+            console.log(bubble);
+            thread.appendChild(bubble);
+        }
+
+        // on positionne le scroll tout en bas du fil de discussion
+        window.scrollTo(0, document.body.clientHeight);
+
+
 
         console.log(`j'ai fini d'ajouter mes bulles à mon thread`);
 
@@ -45,6 +51,8 @@ export class DiscussionThread {
         return tag;
 
     };
+
+
 
 
 

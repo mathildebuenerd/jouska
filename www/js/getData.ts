@@ -26,6 +26,7 @@ export class Installation {
         const bigfiveAnalysisButton = install.querySelector("#analyzePersonality");
         const genderPredictionButton = install.querySelector("#analyzeGender");
         const temporalOrientationButton = install.querySelector("#analyzeTemporalOrientation");
+        const selfishnessButton = install.querySelector("#analyzeSelfishness");
         const getContactNamesButton = install.querySelector("#getContactNames");
         const addToLocalStorageButton = install.querySelector('#addToLocalStorage');
         const mergeInboxAndSentMessagesButton = install.querySelector("#mergeInboxAndSentMessages");
@@ -55,6 +56,8 @@ export class Installation {
         genderPredictionButton.addEventListener('click', this.genderAnalysis);
         // Temporal orientation
         temporalOrientationButton.addEventListener('click', this.temporalOrientationAnalysis);
+        // Selfishness analysis
+        selfishnessButton.addEventListener('click', this.selfishnessAnalysis);
 
         // -------- Get contact names ----------
         // Get contact names
@@ -277,6 +280,27 @@ export class Installation {
         console.log('smsData: ');
         console.log(smsData);
         console.groupEnd();
+    }
+
+    selfishnessAnalysis() {
+
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.selfishness = {};
+                        smsData[contact][type][singleSMS].analysis.selfishness = textAnalysis.selfishnessAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+
+        console.group(`Sentiment analysis`);
+        console.log('smsData: ');
+        console.log(smsData);
+        console.groupEnd();
+
     }
 
     getContactNames() {

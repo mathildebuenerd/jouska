@@ -5,6 +5,7 @@ var darktriad = require("./../../hooks/darktriad");
 var bigfive = require("./../../hooks/bigfive");
 var predictgender = require("./../../hooks/predictgender");
 var prospectimo = require("./../../hooks/prospectimo");
+var selfishness = require("./../../hooks/node-sentiment-selfishness");
 var TextAnalysis = (function () {
     function TextAnalysis() {
     }
@@ -55,6 +56,10 @@ var TextAnalysis = (function () {
     TextAnalysis.prototype.temporalOrientationPrediction = function (textMessage, language) {
         if (language === void 0) { language = 'en'; }
         return prospectimo(textMessage);
+    };
+    TextAnalysis.prototype.selfishnessAnalysis = function (textMessage, language) {
+        if (language === void 0) { language = 'fr'; }
+        return selfishness(textMessage, language);
     };
     return TextAnalysis;
 }());
