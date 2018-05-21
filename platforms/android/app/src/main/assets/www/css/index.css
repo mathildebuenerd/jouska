@@ -370,3 +370,23 @@ input#contactNumber:focus, #smsContent:focus {
     background-color: #222;
     align-self: flex-end;
 }
+
+.negativeWord {
+    padding-bottom: 2px;
+    border-bottom: 2px solid red;
+}
+
+.positiveWord {
+    padding-bottom: 4px;
+    border-bottom: 2px solid blue;
+}
+
+.selfishWord {
+    padding-top: 2px;
+    border-top: 2px solid #FD6E88;
+}
+
+.nonSelfishWord {
+    padding-top: 4px;
+    border-top: 2px solid greenyellow;
+}

@@ -70,10 +70,7 @@ export class CordovaApp {
         //     }
         // }
 
-        console.log(`smsdata after slefish`);
-        console.log(smsData);
-
-        // thread.showContactThread("0675611341");
+        thread.showContactThread("0675611341");
 
         // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
         // let scorePerDate = calculate.scorePerTime(smsData, "day");

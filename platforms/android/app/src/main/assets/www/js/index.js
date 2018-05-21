@@ -33,19 +33,7 @@ var CordovaApp = (function () {
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
-        for (var contact in smsData) {
-            for (var type in smsData[contact]) {
-                if (type !== 'name') {
-                    for (var singleSMS in smsData[contact][type]) {
-                        var originalSMS = smsData[contact][type][singleSMS].text.original;
-                        smsData[contact][type][singleSMS].analysis.selfishness = {};
-                        smsData[contact][type][singleSMS].analysis.selfishness = text.selfishnessAnalysis(originalSMS, 'fr');
-                    }
-                }
-            }
-        }
-        console.log("smsdata after slefish");
-        console.log(smsData);
+        thread.showContactThread("0675611341");
     };
     return CordovaApp;
 }());
