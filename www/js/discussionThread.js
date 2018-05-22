@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var text = require("./writingInterface");
+var Text = new text.WritingInterface();
 var DiscussionThread = (function () {
     function DiscussionThread() {
         var _this = this;
@@ -21,8 +23,8 @@ var DiscussionThread = (function () {
         };
         this.createMessageBubble = function (sms, id) {
             var tag = document.createElement("div");
-            tag.classList.add("singleSMS");
             tag.classList.add(sms["type"]);
+            tag.classList.add("singleSMS");
             tag.id = id;
             var text = document.createElement("p");
             text.textContent = sms["text"]["original"];
@@ -57,6 +59,9 @@ var DiscussionThread = (function () {
                     }
                 }
             }
+            console.log("tag");
+            console.log(tag);
+            console.log(tag.firstChild);
             while (tag.firstChild.nodeName.toLowerCase() !== "p") {
                 tag = tag.firstChild;
             }
@@ -75,9 +80,15 @@ var DiscussionThread = (function () {
             if ((tag.outerHTML).indexOf(wordToFind) === -1) {
                 wordToFind = wordToFind.charAt(0).toUpperCase() + wordToFind.slice(1);
             }
-            var wordWithTag = "<span class=\"" + elmtClass + "\">" + wordToFind + "</span>";
-            var newTag = (tag.outerHTML).replace(wordToFind, wordWithTag);
-            tag.innerHTML = newTag;
+            var wordWithTag = Text.sliceWord(wordToFind, elmtClass);
+            console.log("wordwithtag: ");
+            console.log(wordWithTag);
+            console.log("word to find: " + wordToFind);
+            console.log("avant c'\u00E9tait: <span class=\"" + elmtClass + "\">" + wordToFind + "</span>");
+            if (wordToFind !== "t") {
+                var newTag = (tag.outerHTML).replace(wordToFind, wordWithTag);
+                tag.innerHTML = newTag;
+            }
             return tag;
         };
     }

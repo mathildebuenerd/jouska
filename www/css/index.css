@@ -367,26 +367,137 @@ input#contactNumber:focus, #smsContent:focus {
 
 .singleSMS.sent {
     color: white;
-    background-color: #222;
+    background-color: #4343ff;
     align-self: flex-end;
 }
 
 .sentiment-negative {
     /*padding-bottom: 2px;*/
-    border-bottom: 2px solid red;
+    /*border-bottom: 2px solid red;*/
 }
 
 .sentiment-positive {
     /*padding-bottom: 4px;*/
-    border-bottom: 2px solid blue;
+    /*border-bottom: 2px solid blue;*/
 }
 
 .selfish-negative {
     padding-bottom: 2px;
-    border-bottom: 2px solid #FD6E88;
+    /*border-bottom: 2px solid yellow;*/
 }
 
 .selfish-positive {
     padding-bottom: 2px;
-    border-bottom: 2px solid greenyellow;
+    /*border-bottom: 2px solid greenyellow;*/
+}
+
+.selfish-positive span:nth-child(1) {animation: translate 1s infinite 0s; display: inline-flex;}
+.selfish-positive span:nth-child(2) {animation: translate 1s infinite 0.2s; display: inline-flex;}
+.selfish-positive span:nth-child(3) {animation: translate 1s infinite 0.4s; display: inline-flex;}
+.selfish-positive span:nth-child(4) {animation: translate 1s infinite 0.6s; display: inline-flex;}
+.selfish-positive span:nth-child(5) {animation: translate 1s infinite 0.8s; display: inline-flex;}
+.selfish-positive span:nth-child(6) {animation: translate 1s infinite 0s; display: inline-flex;}
+.selfish-positive span:nth-child(7) {animation: translate 1s infinite 0.2s; display: inline-flex;}
+.selfish-positive span:nth-child(8) {animation: translate 1s infinite 0.4s; display: inline-flex;}
+.selfish-positive span:nth-child(9) {animation: translate 1s infinite 0.6s; display: inline-flex;}
+.selfish-positive span:nth-child(10) {animation: translate 1s infinite 0.8s; display: inline-flex;}
+
+.selfish-negative span:nth-child(1) {animation: translateBottom 1s infinite 0s; display: inline-flex;}
+.selfish-negative span:nth-child(2) {animation: translateBottom 1s infinite 0.2s; display: inline-flex;}
+.selfish-negative span:nth-child(3) {animation: translateBottom 1s infinite 0.4s; display: inline-flex;}
+.selfish-negative span:nth-child(4) {animation: translateBottom 1s infinite 0.6s; display: inline-flex;}
+.selfish-negative span:nth-child(5) {animation: translateBottom 1s infinite 0.8s; display: inline-flex;}
+.selfish-negative span:nth-child(6) {animation: translateBottom 1s infinite 0s; display: inline-flex;}
+.selfish-negative span:nth-child(7) {animation: translateBottom 1s infinite 0.2s; display: inline-flex;}
+.selfish-negative span:nth-child(8) {animation: translateBottom 1s infinite 0.4s; display: inline-flex;}
+.selfish-negative span:nth-child(9) {animation: translateBottom 1s infinite 0.6s; display: inline-flex;}
+.selfish-negative span:nth-child(10) {animation: translateBottom 1s infinite 0.8s; display: inline-flex;}
+
+.sentiment-positive span:nth-child(1) {animation: animOpacity 1s infinite 0s}
+.sentiment-positive span:nth-child(2) {animation: animOpacity 1s infinite 0.2s}
+.sentiment-positive span:nth-child(3) {animation: animOpacity 1s infinite 0.4s}
+.sentiment-positive span:nth-child(4) {animation: animOpacity 1s infinite 0.6s}
+.sentiment-positive span:nth-child(5) {animation: animOpacity 1s infinite 0.8s}
+.sentiment-positive span:nth-child(6) {animation: animOpacity 1s infinite 0s}
+.sentiment-positive span:nth-child(7) {animation: animOpacity 1s infinite 0.2s}
+.sentiment-positive span:nth-child(8) {animation: animOpacity 1s infinite 0.4s}
+.sentiment-positive span:nth-child(9) {animation: animOpacity 1s infinite 0.6s}
+.sentiment-positive span:nth-child(10) {animation: animOpacity 1s infinite 0.8s}
+
+.sentiment-negative span:nth-child(1) {animation: rotate 1s infinite 0s; display: inline-flex;}
+.sentiment-negative span:nth-child(2) {animation: rotate 1s infinite 0.2s; display: inline-flex;}
+.sentiment-negative span:nth-child(3) {animation: rotate 1s infinite 0.4s; display: inline-flex;}
+.sentiment-negative span:nth-child(4) {animation: rotate 1s infinite 0.6s; display: inline-flex;}
+.sentiment-negative span:nth-child(5) {animation: rotate 1s infinite 0.8s; display: inline-flex;}
+.sentiment-negative span:nth-child(6) {animation: rotate 1s infinite 0s; display: inline-flex;}
+.sentiment-negative span:nth-child(7) {animation: rotate 1s infinite 0.2s; display: inline-flex;}
+.sentiment-negative span:nth-child(8) {animation: rotate 1s infinite 0.4s; display: inline-flex;}
+.sentiment-negative span:nth-child(9) {animation: rotate 1s infinite 0.6s; display: inline-flex;}
+.sentiment-negative span:nth-child(10) {animation: rotate 1s infinite 0.8s; display: inline-flex;}
+
+
+
+
+
+
+@keyframes translate {
+    0% {transform: translateY(0)}
+    50% {transform: translateY(-8px)}
+    100% {transform: translateY(0)}
+}
+
+@keyframes translateBottom {
+    0% {transform: translateY(0)}
+    50% {transform: translateY(8px)}
+    100% {transform: translateY(0)}
+}
+
+@keyframes animOpacity {
+    0% {opacity: 0}
+    50% {opacity: 1}
+    100% {opacity: 0}
+}
+
+@keyframes rotate {
+    0% {transform: rotate(20deg)}
+    50% {transform: rotate(-30deg)}
+    100% {transform: rotate(20deg)}
+}
+
+@keyframes colorChanger {
+    0% {color:blue}
+    50% {color:red}
+    100% {color:blue}
+}
+
+@keyframes colorChanger2 {
+    0% {color:lawngreen}
+    50% {color:fuchsia}
+    100% {color:lawngreen}
+}
+
+@keyframes move {
+    0% {transform: translate(-50px, 50px)}
+    50%{transform: translate(20px, -10px)}
+    100% {transform: translate(-50px, 50px)}
+}
+
+@keyframes move2 {
+    0% {transform: translate(-10px, 20px)}
+    33%{transform: translate(30px, -5px)}
+    66%{transform: translate(0px, -40px)}
+    100% {transform: translate(-10px, 20px)}
+}
+
+@keyframes move3 {
+    0% {transform: translate(10px, -20px)}
+    33%{transform: translate(-10px, -35px)}
+    66%{transform: translate(30px, -5px)}
+    100% {transform: translate(10px, -20px)}
+}
+
+@keyframes move4 {
+    0% {transform: translate(30px, -30px)}
+    50%{transform: translate(0px, 20px)}
+    100% {transform: translate(30px, -30px)}
 }

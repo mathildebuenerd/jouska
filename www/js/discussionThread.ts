@@ -2,6 +2,9 @@
  * Created by mathi on 18/05/2018.
  */
 
+import * as text from './writingInterface';
+const Text = new text.WritingInterface();
+
 export class DiscussionThread {
 
     showContactThread= (contact: string) => {
@@ -42,8 +45,8 @@ export class DiscussionThread {
         // console.log(sms);
         // Create the tag
         let tag = document.createElement("div");
-        tag.classList.add("singleSMS");
         tag.classList.add(sms["type"]);
+        tag.classList.add("singleSMS");
         tag.id = id;
         let text = document.createElement("p");
         text.textContent = sms["text"]["original"];
@@ -101,9 +104,15 @@ export class DiscussionThread {
 
         // le process peut créer des div dans des divs
         // on fait une boucle pour être sûr de récupérer le bon élément
-        while (tag.firstChild.nodeName.toLowerCase() !== "p") {
-            tag = <HTMLElement> tag.firstChild;
-        }
+
+        console.log(`tag`);
+        console.log(tag);
+        console.log(tag.firstChild);
+            while (tag.firstChild.nodeName.toLowerCase() !== "p") {
+                tag = <HTMLElement> tag.firstChild;
+            }
+
+
         console.log(`je renvoie`);
         console.log(tag);
         return <HTMLElement> tag;
@@ -127,9 +136,21 @@ export class DiscussionThread {
             // on passe donc la première lettre en majuscule
             wordToFind = wordToFind.charAt(0).toUpperCase() + wordToFind.slice(1);
         }
-        let wordWithTag = `<span class="${elmtClass}">${wordToFind}</span>`;
-        let newTag = (tag.outerHTML).replace(wordToFind, wordWithTag);
-        tag.innerHTML = newTag;
+
+
+        // let wordWithTag = `<span class="${elmtClass}">${wordToFind}</span>`;
+        let wordWithTag = Text.sliceWord(wordToFind, elmtClass);
+        console.log(`wordwithtag: `);
+        console.log(wordWithTag);
+        console.log(`word to find: ${wordToFind}`);
+        console.log(`avant c'était: <span class="${elmtClass}">${wordToFind}</span>`);
+        // on fait une excpetion car il y a un bug
+        // à cause de outerHTML ça remplace le premier t trouvé, c'est à dire celui de la class="sent" de la balise
+        if (wordToFind !== "t") {
+            let newTag = (tag.outerHTML).replace(wordToFind, wordWithTag);
+            tag.innerHTML = newTag;
+        }
+
 
         return tag;
     }

@@ -103,16 +103,22 @@ export class WritingInterface {
         }
     };
 
+    sliceWord(word: string, elmtClass: string): string {
+
+        let tag = `<span class="${elmtClass}">`;
+        for (let letter = 0; letter<word.length; letter++) {
+            tag += `<span>${word[letter]}</span>`; // on ajoute chaque lettre entourée d'un span, comme ça on pourra les animer séparement
+        }
+        tag += `</span>`;
+        return tag;
+    }
+
     animateNegativeWords= (words: string[]) => {
         console.log(`words:`);
         console.log(words);
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         for (const word in words) {
-            let slicedWord = `<span class="negative">`;
-            for (let letter = 0; letter < words[word].length; letter++) {
-                slicedWord += `<span>${words[word][letter]}</span>`; // on ajoute chaque lettre entourée d'un span, comme ça on pourra les animer séparement
-            }
-            slicedWord += `</span>`;
+            let slicedWord = this.sliceWord(words[word], "negative");
             console.log(`slicedWord:`);
             console.log(slicedWord);
             console.log(`textarea.value: ${textArea.textContent}`);
