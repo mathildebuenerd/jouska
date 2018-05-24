@@ -32,7 +32,8 @@ export class DiscussionThread {
         // on positionne le scroll tout en bas du fil de discussion
         window.scrollTo(0, document.body.clientHeight);
 
-
+        // on ajoute les listeners nécessaires pour changer l'interface (sur le menus par ex)
+        this.addListeners();
 
         console.log(`j'ai fini d'ajouter mes bulles à mon thread`);
 
@@ -153,9 +154,20 @@ export class DiscussionThread {
 
 
         return tag;
+    };
+
+    addListeners = () => {
+        // Menu avec les options
+        const iconSettingsNav = document.querySelector(`#top-icon-nav-settings`);
+        iconSettingsNav.addEventListener('click', this.toggleSettingsNav);
+    };
+
+    toggleSettingsNav = () => {
+        const settingsNav = document.querySelector(`nav#options-visualisation`);
+        const iconSettingsNav = document.querySelector(`#top-icon-nav-settings`);
+        settingsNav.classList.toggle("active");
+        iconSettingsNav.classList.toggle("active");
     }
-
-
 
 
 

@@ -19,6 +19,7 @@ var DiscussionThread = (function () {
                 thread.appendChild(bubbleAnalyzed);
             }
             window.scrollTo(0, document.body.clientHeight);
+            _this.addListeners();
             console.log("j'ai fini d'ajouter mes bulles \u00E0 mon thread");
         };
         this.createMessageBubble = function (sms, id) {
@@ -90,6 +91,16 @@ var DiscussionThread = (function () {
                 tag.innerHTML = newTag;
             }
             return tag;
+        };
+        this.addListeners = function () {
+            var iconSettingsNav = document.querySelector("#top-icon-nav-settings");
+            iconSettingsNav.addEventListener('click', _this.toggleSettingsNav);
+        };
+        this.toggleSettingsNav = function () {
+            var settingsNav = document.querySelector("nav#options-visualisation");
+            var iconSettingsNav = document.querySelector("#top-icon-nav-settings");
+            settingsNav.classList.toggle("active");
+            iconSettingsNav.classList.toggle("active");
         };
     }
     return DiscussionThread;
