@@ -141,7 +141,7 @@ module.exports = function (sPhrase, sLangCode, originalPhrase, mCallback) {
                 continue;
             }
             // It's an emoji
-            iCurrentScore = Number(oDictionary['emoji'][sToken]);
+            // iCurrentScore = Number(oDictionary['emoji'][sToken]);
         } else {
             // It's a word
             iCurrentScore = Number(oDictionary[sLangCode][sToken]);
@@ -160,9 +160,35 @@ module.exports = function (sPhrase, sLangCode, originalPhrase, mCallback) {
     // Plutot que de multiplier par -1 s'il y a une négation, on enlève -3, ça évite qu'il y ai des scores trop bas dans des propositions où il n'y a qu'une négation et plusieurs mots positifs
     iGlobalScore = iGlobalScore + (bNegation === true ? -3 : 0);
 
-    getSmileys(originalPhrase);
+    emojis(originalPhrase);
+    textEmojis(originalPhrase);
 
-function getSmileys(sentence) {
+    function emojis(sentence) {
+
+        // for each emoji
+        for (const emoji in oDictionary['emoji']) {
+            let hasEmoji = sentence.indexOf(emoji);
+
+            // while the emoji is found in the sentence
+            while (hasEmoji !== -1) {
+
+                let emojiScore = oDictionary['emoji'][emoji];
+                iGlobalScore += Number(emojiScore); // add the score to the global score
+
+                // add the emoji into the positive/negative arrays
+                if (emojiScore > 0) {
+                    aPositive.push(String(emoji));
+                } else {
+                    aNegative.push(String(emoji));
+                }
+
+                // we continue the while loop, from the index after the first found emoji
+                hasEmoji = sentence.indexOf(emoji, hasEmoji + 1 );
+            }
+        }
+    }
+
+function textEmojis(sentence) {
 
     let inlineSmileys = new RegExp(/(<[\/\\]?3|[()/|*$][-^]?[:;=]|x[d()]|\^[a-z._-]{0,1}\^['"]{0,1}|[:;=B8][\-^]?[3DOPp@$*\\)(\/|])(?=\s|[!.?]|$)/, 'gim'); // detect smileys like :) ;) :p :/ =/ :-) :( :D xD :-) ^^
 

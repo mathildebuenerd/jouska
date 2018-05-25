@@ -50,8 +50,8 @@ export class CordovaApp {
 
         // installation.mergeInboxAndSentMessages();
 
-        console.log(`smsData:`);
-        console.log(smsData);
+        // console.log(`smsData:`);
+        // console.log(smsData);
         document.querySelector('#addThisToStorage').addEventListener('click', () => {
             let str = JSON.stringify(smsData);
             // localStorage.removeItem('allSMS');
@@ -72,16 +72,20 @@ export class CordovaApp {
         //     }
         // }
 
-        thread.showContactThread("0675611341");
 
-        // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        text.updateSentimentAnalysis();
+
+
+        // thread.showContactThread("0675611341");
+
+        let scorePerDay = calculate.scorePerTime(smsData, "weekday");
         // let scorePerDate = calculate.scorePerTime(smsData, "day");
         // let scorePerMonth = calculate.scorePerTime(smsData, "month");
         // let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
         // let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
         //
-        // console.log(`scorePerDay:`);
-        // console.log(scorePerDay);
+        console.log(`scorePerDay:`);
+        console.log(scorePerDay);
         // console.log(`scorePerDate:`);
         // console.log(scorePerDate);
         // console.log(`scorePerMonth:`);
@@ -90,6 +94,14 @@ export class CordovaApp {
         // console.log(scorePerMinutes);
         // console.log(`scorePerSeconds:`);
         // console.log(scorePerSeconds);
+
+        let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        console.log('my score:');
+        console.log(myscore);
+
+        let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        console.log(`wordsMom:`);
+        console.log(wordsMom);
 
 
 
@@ -115,20 +127,17 @@ export class CordovaApp {
         // console.log(contactScores);
 
 
-        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
         // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
         // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
         // let samy = calculate.scoreWithContact('0638768915', 'inbox');
 
-        // let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
         // let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
         // let wordsMomNeg = calculate.getMostUsedWords("negative", "0675611341", "inbox", "fr");
         // let wordsMeNeg = calculate.getMostUsedWords("negative", "0675611341", "sent", "fr");
         //
         // console.log(`wordsMe:`);
         // console.log(wordsMe);
-        // console.log(`wordsMom:`);
-        // console.log(wordsMom);
+
         // console.log(`wordsMeNeg:`);
         // console.log(wordsMeNeg);
         // console.log(`wordsMomNeg:`);
@@ -136,8 +145,7 @@ export class CordovaApp {
 
         //
         // console.group("Résultats des scores");
-        // console.log('my score:');
-        // console.log(myscore);
+
         // console.log('mom score:');
         // console.log(momscore);
         // console.log('clemence:');

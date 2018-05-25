@@ -26,14 +26,21 @@ var CordovaApp = (function () {
             installation.start();
         }
         var smsData = JSON.parse(localStorage.getItem('smsData'));
-        console.log("smsData:");
-        console.log(smsData);
         document.querySelector('#addThisToStorage').addEventListener('click', function () {
             var str = JSON.stringify(smsData);
             localStorage.setItem('smsData', str);
             console.log(localStorage);
         });
-        thread.showContactThread("0675611341");
+        text.updateSentimentAnalysis();
+        var scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        console.log("scorePerDay:");
+        console.log(scorePerDay);
+        var myscore = calculate.scoreWithContact('0675611341', 'sent');
+        console.log('my score:');
+        console.log(myscore);
+        var wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        console.log("wordsMom:");
+        console.log(wordsMom);
     };
     return CordovaApp;
 }());

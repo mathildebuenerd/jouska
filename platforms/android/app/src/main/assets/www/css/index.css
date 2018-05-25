@@ -244,7 +244,8 @@ nav ul li.nav-element {
 
 section#writing {
     padding-top: 50px;
-    display: flex;
+    /*display: flex;*/
+    display: none;
 }
 
 #writing input#contactNumber, #writing #smsContent {
@@ -330,7 +331,7 @@ input#contactNumber:focus, #smsContent:focus {
  *********/
 
 .stats {
-    display: none;
+    /*display: none;*/
 }
 
 
@@ -415,6 +416,10 @@ nav#options-visualisation.active {
 .item-list-analysis a img.icon {
     width: 15px;
     margin-right: 8px;
+}
+
+#messages {
+    display: none;
 }
 
 

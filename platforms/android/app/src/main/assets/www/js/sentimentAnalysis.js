@@ -26,6 +26,22 @@ var TextAnalysis = (function () {
             return sentence;
         }
     };
+    TextAnalysis.prototype.updateSentimentAnalysis = function () {
+        var smsData = JSON.parse(localStorage.getItem('smsData'));
+        for (var contact in smsData) {
+            for (var type in smsData[contact]) {
+                if (type !== 'name') {
+                    for (var singleSMS in smsData[contact][type]) {
+                        var originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = this.sentimentAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+        console.log("anlayse que je refais:");
+        console.log(smsData);
+    };
     TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language, originalMessage) {
         if (language === void 0) { language = 'en'; }
         if (originalMessage === void 0) { originalMessage = textMessage; }

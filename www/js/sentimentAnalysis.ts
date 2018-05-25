@@ -45,6 +45,23 @@ export class TextAnalysis {
 
     }
 
+    public updateSentimentAnalysis() {
+        let smsData = JSON.parse(localStorage.getItem('smsData'));
+        for (const contact in smsData) {
+            for (const type in smsData[contact]) { // type = inbox | sent | name
+                if (type !== 'name') { // on ne boucle que dans inbox et sent
+                    for (const singleSMS in smsData[contact][type]) {
+                        const originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = this.sentimentAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+        console.log("anlayse que je refais:");
+        console.log(smsData);
+    }
+
     public sentimentAnalysis(textMessage: string, language: string = 'en', originalMessage: string = textMessage): object {
 
         const message = TextAnalysis.extractClauses(textMessage);

@@ -174,7 +174,7 @@ export class CalculateScore {
         }
 
 
-    }
+    };
 
     scorePerTime= (smsData: object, timePeriod: string) => {
 
