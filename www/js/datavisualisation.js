@@ -1,71 +1,82 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var manageSMS_1 = require("./manageSMS");
+var scores = require("./calculateScores");
+var Score = new scores.CalculateScore();
+var sms = require("./manageSMS");
+var Sms = new sms.SMSManager();
+require("./../../hooks/p5");
 var Datavisualisation = (function () {
-    function Datavisualisation(data, type) {
-        this.data = data;
-        this.type = type;
+    function Datavisualisation() {
+        var _this = this;
+        this.bigFiveGraph = function (contact, type) {
+            var data = Score.scoreWithContact(contact, type);
+            var dataUser = Score.scoreWithContact(contact, "sent");
+            console.log("data: ");
+            console.log(data);
+            var bigFiveTag = document.createElement("div");
+            bigFiveTag.textContent = "\n        Openess: " + data["bigfive"]["openness"] + ", \n        Conscious: " + data["bigfive"]["conscientiousness"];
+            var mult = 300;
+            var rO = (data["bigfive"]["openness"]) * mult;
+            var rC = (data["bigfive"]["conscientiousness"]) * mult;
+            new p5(function (monSketch) {
+                var x = 100;
+                var y = 100;
+                monSketch.setup = function () {
+                    monSketch.createCanvas(700, 410);
+                };
+                monSketch.draw = function () {
+                    monSketch.background(0);
+                    monSketch.fill(255);
+                    monSketch.rect(x, y, 50, 50);
+                };
+            });
+            _this.userStats.appendChild(bigFiveTag);
+        };
+        this.userStats = document.querySelector("#userStats");
+        this.contactStats = document.querySelector("#contactStats");
     }
+    Datavisualisation.prototype.testp5 = function () {
+        new p5(function (monSketch) {
+            var x = 100;
+            var y = 100;
+            monSketch.setup = function () {
+                monSketch.createCanvas(700, 410);
+            };
+            monSketch.draw = function () {
+                monSketch.background(0);
+                monSketch.fill(255);
+                monSketch.rect(x, y, 50, 50);
+            };
+        });
+    };
     Datavisualisation.prototype.calculateUserScore = function () {
     };
     Datavisualisation.prototype.calculateUserScoreWithContact = function (contact) {
     };
-    Datavisualisation.prototype.calculateScorePerDay = function () {
+    Datavisualisation.prototype.perDay = function () {
     };
     Datavisualisation.prototype.calculateScorePerWeek = function () {
     };
-    Datavisualisation.prototype.getMostPositiveMessage = function () {
-    };
-    Datavisualisation.prototype.getMostNegativeMessage = function () {
-    };
-    Datavisualisation.prototype.simpleContactComparison = function () {
-        var sms = new manageSMS_1.SMSManager();
-        console.log("data reçue :");
-        console.log(this.data);
-        var data = this.data;
-        classifyContacts().then(function (contactList) {
-            console.log('contactList:');
-            console.log(contactList);
-            localStorage.setItem("contactList", JSON.stringify(contactList));
-        });
-        function getScoresPerContact() {
+    Datavisualisation.prototype.getWords = function (valence, phonenumber, type, lang) {
+        if (valence === void 0) { valence = ("positive" || "negative"); }
+        if (type === void 0) { type = ("inbox" || "sent"); }
+        if (lang === void 0) { lang = "fr"; }
+        var words = Score.getMostUsedWords(valence, phonenumber, type, lang);
+        console.log("words");
+        console.table(words);
+        var title = document.createElement("h2");
+        var contactName = Sms.getContactName(phonenumber);
+        title.textContent = "Words " + valence + " from " + contactName;
+        var wordList = document.createElement("ul");
+        wordList.classList.add(valence + "-wordList", "wordList");
+        for (var _i = 0, words_1 = words; _i < words_1.length; _i++) {
+            var word = words_1[_i];
+            var wordTag = document.createElement("li");
+            wordTag.textContent = word;
+            wordList.appendChild(wordTag);
         }
-        function classifyContacts() {
-            return new Promise(function (resolve, reject) {
-                var contactScores = {};
-                for (var contact in data) {
-                    var sentimentScore = 0;
-                    var numberOfSMS = 0;
-                    for (var smsId in data[contact]) {
-                        var sentiment = data[contact][smsId].analysis.sentiment;
-                        if (sentiment) {
-                            sentimentScore += sentiment.score;
-                            numberOfSMS++;
-                        }
-                    }
-                    contactScores[contact] = {
-                        sentimentScore: sentimentScore,
-                        numberOfSMS: numberOfSMS,
-                        relativeScore: sentimentScore / numberOfSMS
-                    };
-                    console.group("Score de " + contactScores[contact].contactName);
-                    console.log("score total: " + sentimentScore);
-                    console.log("scrore relatif: " + sentimentScore / numberOfSMS);
-                    console.groupEnd();
-                }
-                resolve(contactScores);
-            }).then(function (contactScores) {
-                var _loop_1 = function (contact) {
-                    var contactName = sms.findContactsName(contact).then(function (contactName) {
-                        contactScores[contact].contactName = contactName;
-                    });
-                };
-                for (var contact in contactScores) {
-                    _loop_1(contact);
-                }
-                return contactScores;
-            });
-        }
+        this.userStats.appendChild(title);
+        this.userStats.appendChild(wordList);
     };
     return Datavisualisation;
 }());

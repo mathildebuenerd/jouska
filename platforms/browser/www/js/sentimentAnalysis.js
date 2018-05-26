@@ -1,34 +1,83 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var sentiment = require("./../../hooks/sentiment-multilang");
+var sentiment = require("./../../hooks/node-sentiment");
 var darktriad = require("./../../hooks/darktriad");
-var translate = require("./../../hooks/translate");
-translate.key = "AIzaSyBYwKXPMsTG4zJpXt9-p2_NwDGR-A0NP9U";
-translate.from = "fr";
-var SentimentAnalysis = (function () {
-    function SentimentAnalysis(language) {
-        this.language = language;
+var bigfive = require("./../../hooks/bigfive");
+var predictgender = require("./../../hooks/predictgender");
+var prospectimo = require("./../../hooks/prospectimo");
+var selfishness = require("./../../hooks/node-sentiment-selfishness");
+var TextAnalysis = (function () {
+    function TextAnalysis() {
     }
-    SentimentAnalysis.prototype.translate = function (sentence) {
-        return translate(sentence);
-    };
-    SentimentAnalysis.prototype.analyze = function (sentence, language) {
-        if (language === 'en') {
-            var sentimentanalysis = sentiment(sentence, 'en');
-            var testTriad = darktriad(sentence);
-            return {
-                sentiment: sentimentanalysis,
-                triad: testTriad
-            };
+    TextAnalysis.extractClauses = function (sentence) {
+        var sentenceToSlice = sentence;
+        var separators = new RegExp(/[.?!,]\s| et | and /, 'gim');
+        var array;
+        var subSentences = [];
+        while ((array = separators.exec(sentenceToSlice)) !== null) {
+            var subSentence = sentenceToSlice.slice(0, array.index);
+            subSentences.push(subSentence);
+            sentenceToSlice = sentenceToSlice.replace(subSentence, '');
         }
-        else if (language === 'fr') {
-            var sentimentfrench = sentiment(sentence, 'fr');
-            return {
-                sentiment: sentimentfrench
-            };
+        if (subSentences.length > 1) {
+            return subSentences;
+        }
+        else {
+            return sentence;
         }
     };
-    return SentimentAnalysis;
+    TextAnalysis.prototype.updateSentimentAnalysis = function () {
+        var smsData = JSON.parse(localStorage.getItem('smsData'));
+        for (var contact in smsData) {
+            for (var type in smsData[contact]) {
+                if (type !== 'name') {
+                    for (var singleSMS in smsData[contact][type]) {
+                        var originalSMS = smsData[contact][type][singleSMS].text.original;
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = {};
+                        smsData[contact][type][singleSMS].analysis.sentimentFr = this.sentimentAnalysis(originalSMS, 'fr');
+                    }
+                }
+            }
+        }
+        console.log("anlayse que je refais:");
+        console.log(smsData);
+    };
+    TextAnalysis.prototype.sentimentAnalysis = function (textMessage, language, originalMessage) {
+        if (language === void 0) { language = 'en'; }
+        if (originalMessage === void 0) { originalMessage = textMessage; }
+        var message = TextAnalysis.extractClauses(textMessage);
+        if (Array.isArray(message)) {
+            var analysis = [];
+            for (var clause in message) {
+                analysis.push(sentiment(message[clause], language, originalMessage));
+            }
+            return analysis;
+        }
+        else {
+            return sentiment(message, language, originalMessage);
+        }
+    };
+    TextAnalysis.prototype.darktriadAnalysis = function (textMessage, opts) {
+        if (opts === void 0) { opts = { "output": "matches" }; }
+        return darktriad(textMessage, opts);
+    };
+    TextAnalysis.prototype.personalityAnalysis = function (textMessage, opts) {
+        if (opts === void 0) { opts = { "output": "matches" }; }
+        return bigfive(textMessage, opts);
+    };
+    TextAnalysis.prototype.genderPrediction = function (textMessage, language) {
+        if (language === void 0) { language = 'en'; }
+        return predictgender(textMessage);
+    };
+    TextAnalysis.prototype.temporalOrientationPrediction = function (textMessage, language) {
+        if (language === void 0) { language = 'en'; }
+        return prospectimo(textMessage);
+    };
+    TextAnalysis.prototype.selfishnessAnalysis = function (textMessage, language) {
+        if (language === void 0) { language = 'fr'; }
+        return selfishness(textMessage, language);
+    };
+    return TextAnalysis;
 }());
-exports.SentimentAnalysis = SentimentAnalysis;
+exports.TextAnalysis = TextAnalysis;
 //# sourceMappingURL=sentimentAnalysis.js.map

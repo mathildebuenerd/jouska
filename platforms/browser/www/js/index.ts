@@ -1,10 +1,27 @@
-import {SMSManager} from "./manageSMS";
-import {SentimentAnalysis} from "./sentimentAnalysis";
-import {Datavisualisation} from "./datavisualisation";
+import * as getData from "./getData";
+const installation = new getData.Installation();
+import * as score from "./calculateScores";
+const calculate = new score.CalculateScore();
+import * as writingInterface from "./writingInterface";
+const writingAssistant = new writingInterface.WritingInterface();
+import * as discussionThread from "./discussionThread";
+const thread = new discussionThread.DiscussionThread();
 import set = Reflect.set;
-import * as translate from "./../../hooks/translate";
-import "./visualEffects";
 
+import * as translate from "./../../hooks/translate";
+import * as keys from './apiKeys';
+import {TextAnalysis} from "./sentimentAnalysis";
+import {SMSManager} from "./manageSMS";
+const sms = new SMSManager();
+const text = new TextAnalysis();
+import * as dataV from "./datavisualisation";
+const DataVis = new dataV.Datavisualisation();
+const Keys = new keys.Keys();
+translate.key = Keys.API_KEY;
+translate.from ='fr';
+
+
+import "./../../hooks/p5";
 
 export class CordovaApp {
     constructor() {
@@ -13,135 +30,157 @@ export class CordovaApp {
 
     onDeviceReady() {
 
-        console.log(localStorage);
-        let sms = new SMSManager({
-            box : 'sent', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-            // following 4 filters should NOT be used together, they are OR relationship
-            //  read : 0, // 0 for unread SMS, 1 for SMS already read
-            //_id : 1234, //  specify the msg id
-            //address : '// +8613601234567',  sender's phone number
-            // body : 'This is a test SMS', // content to match
+        // DataVis.testp5();
 
-            // following 2 filters can be used to list page up/down
-            //   indexFrom : 0, // start from index 0
-            maxCount : 2000, // count of SMS to return each time
+        new p5( function(monSketch) {
+
+            let x = 100;
+            let y = 100;
+
+            monSketch.setup = function() {
+                monSketch.createCanvas(700, 410);
+            };
+
+            monSketch.draw = function() {
+                monSketch.background(0);
+                monSketch.fill(255);
+                monSketch.rect(x,y,50,50);
+            };
         });
 
-        let analysis = new SentimentAnalysis('en');
-        let allSMS;
-        let userData;
+        // localStorage.removeItem('smsData');
 
-
-        // si l'usager n'a jamais utilisé l'appli, on initialise son profil
-
-        // console.log(localStorage.getItem());
-        // if (localStorage.getItem("userData") === undefined) {
-        userData = {
-            firstUsage: true,
-            lastSynchro: '',
-            smsLoaded: false,
-            smsTranslated: false,
-            smsAnalyzed: {
-                darktriad: false,
-                sentiment: false
-            }
-        };
-        localStorage.setItem('userData', JSON.stringify(userData));
-        // console.log('Nouvel usager');
-        // console.log(userData);
-        // } else {
-        //     let userDataString = localStorage.getItem('userData');
-        //     userData = JSON.parse(userDataString);
-        //     console.log("Pas nouvel usager");
-        //     console.log(userData);
+        // s'il n'y a pas de smsData, ça veut dire qu'on a pas encore installé l'application
+        // if (localStorage.getItem('smsData') === null) {
+        //     installation.start();
         // }
 
-        document.querySelector('#loadSMS').addEventListener('click', () => {
-            sms.getAllSMS().then( allSMS => {
-                console.group("getAllSMS");
-                console.log('je suis dans then getAllSMS');
-                console.log('typeof allSMS : ' + typeof allSMS);
-                console.log(allSMS);
-                console.groupEnd();
-
-                document.querySelector('#translateSMS').addEventListener('click', () => {
-                    console.group("translate");
-                    console.log(allSMS);
-                    for (const contact in allSMS) {
-                        console.log(allSMS[contact]);
-                        for (const smsID in allSMS[contact]) {
-                            console.log(allSMS[contact][smsID].body.fr);
-                            translate(allSMS[contact][smsID].body.fr, {to: 'en'}).then(translatedText => {
-                                let text = translatedText;
-                                if (translatedText.indexOf('&#39;') !== -1) {
-                                    text = translatedText.replace('&#39;', "'"); // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
-                                }
-                                allSMS[contact][smsID].body.en = text;
-                            });
-                            // allTranslatedSMS[contact][smsID].body.en = "test";
-                        }
-                    }
-                    console.log('Mes traductions :');
-                    console.log(allSMS);
-                    console.groupEnd();
-
-                    document.querySelector('#addToStorage').addEventListener('click', () => {
-                        console.log('Storage');
-                        localStorage.removeItem('allSMS');
-                        localStorage.setItem("allSMS", JSON.stringify(allSMS)); // On ne peut stocker que des string dans le local storage, il faut donc strigifier
-                        let storageSMS = localStorage.getItem("allSMS");
-                        console.log("Mon local storage :");
-                        console.log(JSON.parse(storageSMS));
-                        console.groupEnd();
-                    });
 
 
-                });
+        // let smsData = JSON.parse(localStorage.getItem('smsData'));
 
-
-            }).catch(
-                error => console.error("la promesse concernant getAllSMS a échoué")
-            );
-        });
+        // DataVis.getWords("positive", "0675611341", "inbox", "fr");
+        // DataVis.getWords("negative", "0675611341", "inbox", "fr");
+        // DataVis.getWords("positive", "0783094512", "inbox", "fr");
+        // DataVis.getWords("negative", "0783094512", "inbox", "fr");
+        //------------------------------------------------------------------------
+        // DataVis.bigFiveGraph("0675611341", "inbox");
 
 
 
-        // analyse les phrases qui se trouvent dans l'objet allSMS
-        // La majorité des librairies d'analyse de sentiments sont en anglais, c'est pourquoi on utilise la traduction anglais pour faire cette analyse
-        document.querySelector('#analyzeSMS').addEventListener('click', () => {
-            const allSMS = JSON.parse(localStorage.getItem('allSMS'));
-            console.group("Analyze SMS");
-            console.log(allSMS);
 
-            for (const contact in allSMS) {
-                for (const smsId in allSMS[contact]) {
-                    const englishSentence = allSMS[contact][smsId].body.en;
-                    allSMS[contact][smsId].analysis = analysis.analyze(englishSentence, 'en');
-                }
-            }
 
-            console.log('allSMS + analyse');
-            console.log(allSMS);
-            console.groupEnd();
+        // for (const contact in smsData) {
+        //     for (const type in smsData[contact]) { // type = inbox | sent | name
+        //         if (type !== 'name') { // on ne boucle que dans inbox et sent
+        //             for (const singleSMS in smsData[contact][type]) {
+        //                 smsData[contact][type][singleSMS].type = "";
+        //                 smsData[contact][type][singleSMS].type = type;
+        //             }
+        //         }
+        //     }
+        // }
 
-            document.querySelector('#addAnalyzeToStorage').addEventListener('click', () => {
-                localStorage.setItem('allSMSanalyzed', JSON.stringify(allSMS));
-                console.log("l'analyse est bien ajoutée au stockage!!");
-            });
 
-        });
+        // document.querySelector('#addThisToStorage').addEventListener('click', () => {
+        //     let str = JSON.stringify(smsData);
+        //     // localStorage.removeItem('allSMS');
+        //     // localStorage.removeItem('allSMSanalyzed');
+        //     localStorage.setItem('smsData', str);
+        //     console.log(localStorage);
+        // });
 
-        document.querySelector("#startVisualisation").addEventListener('click', () => {
-            console.group("Start visualisation selector");
-            const stringyfiedSMSData = localStorage.getItem('allSMSanalyzed');
-            const SMSdata = JSON.parse(stringyfiedSMSData);
-            console.log("SMSdata:");
-            console.log(SMSdata);
-            let visualisationSMS = new Datavisualisation(SMSdata, 'sms');
-            visualisationSMS.simpleContactComparison();
-            console.groupEnd();
-        });
 
+
+
+        //text.updateSentimentAnalysis();
+
+
+        // thread.showContactThread("0675611341");
+
+        // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        // let scorePerDate = calculate.scorePerTime(smsData, "day");
+        // let scorePerMonth = calculate.scorePerTime(smsData, "month");
+        // let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
+        // let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
+        //
+        // console.log(`scorePerDay:`);
+        // console.log(scorePerDay);
+        // console.log(`scorePerDate:`);
+        // console.log(scorePerDate);
+        // console.log(`scorePerMonth:`);
+        // console.log(scorePerMonth);
+        // console.log(`scorePerMinutes:`);
+        // console.log(scorePerMinutes);
+        // console.log(`scorePerSeconds:`);
+        // console.log(scorePerSeconds);
+
+        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        // console.log('my score:');
+        // console.log(myscore);
+        //
+        // let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        // console.log(`wordsMom:`);
+        // console.log(wordsMom);
+
+
+
+
+
+
+        // detect("Je viens demain").then(lang => {
+        //     console.log(`lang: ${lang}`);
+        // });
+
+        // let contactScores = {};
+        //
+        // for (const contact in smsData) {
+        //     contactScores[smsData[contact].name] = {
+        //         "me": {},
+        //         "you": {}
+        //     };
+        //     contactScores[smsData[contact].name].me = calculate.scoreWithContact(contact, "sent");
+        //     contactScores[smsData[contact].name].you = calculate.scoreWithContact(contact, "inbox");
+        // }
+        //
+        // console.log(`contactScores:`);
+        // console.log(contactScores);
+
+
+        // let momscore = calculate.scoreWithContact('0675611341', 'inbox');
+        // let clemence = calculate.scoreWithContact('0783094512', 'inbox');
+        // let samy = calculate.scoreWithContact('0638768915', 'inbox');
+
+        // let wordsMe = calculate.getMostUsedWords("positive", "0675611341", "sent", "fr");
+        // let wordsMomNeg = calculate.getMostUsedWords("negative", "0675611341", "inbox", "fr");
+        // let wordsMeNeg = calculate.getMostUsedWords("negative", "0675611341", "sent", "fr");
+        //
+        // console.log(`wordsMe:`);
+        // console.log(wordsMe);
+
+        // console.log(`wordsMeNeg:`);
+        // console.log(wordsMeNeg);
+        // console.log(`wordsMomNeg:`);
+        // console.log(wordsMomNeg);
+
+        //
+        // console.group("Résultats des scores");
+
+        // console.log('mom score:');
+        // console.log(momscore);
+        // console.log('clemence:');
+        // console.log(clemence);
+        // console.log('samy:');
+        // console.log(samy);
+        // console.groupEnd();
+
+        // let test = text.sentimentAnalysis("The team has just finished. So we can meet now?", "en");
+        // console.log(`test:`);
+        // console.log(test);
+
+        // console.log(text.sentimentAnalysis())
+
+        // writingAssistant.startAssistance();
 
 
 

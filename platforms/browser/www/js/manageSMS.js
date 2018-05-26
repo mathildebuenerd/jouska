@@ -1,26 +1,86 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var translate = require("./../../hooks/translate");
+var LanguageDetect = require("./../../hooks/languagedetect");
 var SMSManager = (function () {
-    function SMSManager(filter) {
-        this.filters = filter;
+    function SMSManager() {
     }
     SMSManager.convertUnixDate = function (unixTimeStamp) {
-        var date = new Date(unixTimeStamp * 1000);
+        var date = new Date(unixTimeStamp);
         return {
+            "weekday": date.getDay(),
             'day': date.getDate(),
             'month': date.getMonth(),
-            'year': date.getUTCFullYear(),
+            'year': date.getFullYear(),
             'hour': date.getHours(),
             'minutes': date.getMinutes(),
             'seconds': date.getSeconds()
         };
     };
-    SMSManager.prototype.getAllSMS = function () {
-        var _this = this;
+    SMSManager.normalizeAddress = function (address) {
+        var normalizedAddress = address.replace(' ', '');
+        var plusSign = new RegExp(/\+/);
+        var doubleZero = new RegExp(/^0{2}/);
+        if (plusSign.exec(address) !== null) {
+            var identifiant = new RegExp(/\+[0-9]{2}/);
+            normalizedAddress = normalizedAddress.replace(identifiant, '0');
+        }
+        else if (doubleZero.exec(address) !== null) {
+            var identifiant = new RegExp(/^0{2}[0-9]{2}/);
+            normalizedAddress = normalizedAddress.replace(identifiant, '0');
+        }
+        return normalizedAddress;
+    };
+    SMSManager.prototype.detectLanguage = function (sms) {
+        var i = 0;
+        var languageDetector = new LanguageDetect();
+        var lang = languageDetector.detect(sms)[i][0];
+        console.log("lang " + lang);
+        if (lang !== undefined) {
+            while (lang === ('latvian' || 'pidgin' || 'latin' || 'estonian' || 'turkish')) {
+                console.group('Detect language');
+                console.log("while lang: " + lang);
+                console.log("while i: " + i);
+                i++;
+                lang = languageDetector.detect(sms)[i][0];
+                console.log("while lang after: " + lang);
+                console.log("while i after: " + i);
+                console.groupEnd();
+            }
+            return [languageDetector.detect(sms)[i][0], languageDetector.detect(sms)[i][1]];
+        }
+        else {
+            return [];
+        }
+    };
+    SMSManager.prototype.findContactsName = function (smsData) {
+        return new Promise(function (resolve, reject) {
+            navigator.contactsPhoneNumbers.list(function (phoneContacts) {
+                for (var phonenumber in smsData) {
+                    var numberToFind = phonenumber.replace(/^0/, '');
+                    for (var singleContact in phoneContacts) {
+                        var contactNumbers = phoneContacts[singleContact].phoneNumbers;
+                        for (var numbers in contactNumbers) {
+                            var espace = new RegExp(' ', 'g');
+                            var singleNumber = (contactNumbers[numbers].normalizedNumber).replace(espace, '');
+                            if (singleNumber.match(numberToFind) !== null) {
+                                smsData[phonenumber].name = {};
+                                smsData[phonenumber].name = phoneContacts[singleContact].displayName;
+                                break;
+                            }
+                        }
+                    }
+                }
+                resolve(smsData);
+            }, function (error) {
+                console.error(error);
+                reject(error);
+            });
+        });
+    };
+    SMSManager.prototype.getAllSMS = function (filters) {
         return new Promise(function (resolve, reject) {
             if (SMS) {
-                SMS.listSMS(_this.filters, function (data) {
+                SMS.listSMS(filters, function (data) {
                     resolve(data);
                 }, function (err) {
                     console.log('error list sms: ' + err);
@@ -32,27 +92,32 @@ var SMSManager = (function () {
             }
         }).then(function (data) {
             var contacts = {};
-            for (var key in data) {
-                var address = data[key].address;
+            for (var key_1 in data) {
+                var type = filters.box;
+                var address = SMSManager.normalizeAddress(data[key_1].address);
+                var myid = data[key_1]._id;
                 if (address.length > 7 && address.match("[0-9]+")) {
-                    var date = SMSManager.convertUnixDate(data[key].date);
-                    var myid = data[key]._id;
+                    console.log("date:");
+                    console.log(data[key_1].date);
+                    var date = SMSManager.convertUnixDate(data[key_1].date);
                     if (address in contacts) {
-                        contacts[address][myid] = {
-                            "body": {
-                                "fr": data[key].body
+                        contacts[address][type][myid] = {
+                            "text": {
+                                "original": data[key_1].body
                             },
-                            "date": date
+                            "date": date,
+                            "type": type
                         };
                     }
                     else {
-                        contacts[address] = {
-                            "0000": {
-                                "body": {
-                                    "fr": data[key].body
-                                },
-                                "date": date
-                            }
+                        contacts[address] = {};
+                        contacts[address][type] = {};
+                        contacts[address][type][myid] = {
+                            "text": {
+                                "original": data[key_1].body
+                            },
+                            "date": date,
+                            "type": type
                         };
                     }
                 }
@@ -60,27 +125,9 @@ var SMSManager = (function () {
             return contacts;
         });
     };
-    SMSManager.prototype.translateSMS = function (allSMS) {
-        return new Promise(function (resolve, reject) {
-            var counter = 0;
-            for (var key in allSMS) {
-                if (allSMS.hasOwnProperty(key)) {
-                    if (counter < 20) {
-                        for (var subkey in allSMS[key]) {
-                            console.trace();
-                            var englishSentence = translate(allSMS[key][subkey].body.fr);
-                            allSMS[key][subkey].body.en = englishSentence;
-                            console.log(englishSentence);
-                            counter++;
-                        }
-                    }
-                }
-            }
-            console.log('translate: je vais résoudre la promesse');
-            resolve(allSMS);
-        });
-    };
-    SMSManager.prototype.displaySMS = function () {
+    SMSManager.prototype.getContactName = function (phonenumber) {
+        var smsData = JSON.parse(localStorage.getItem("smsData"));
+        return smsData[phonenumber].name;
     };
     return SMSManager;
 }());

@@ -1,11 +1,1 @@
-{
-  "background_color": "#FFF",
-  "display": "standalone",
-  "name": "Quantified Talk",
-  "short_name": "Quantified Talk",
-  "version": "com.quantifiedtalk.test",
-  "description": "Quantify what you say, improve your relationships.",
-  "author": "Math",
-  "icons": [],
-  "start_url": "index.html"
-}
+{"background_color":"#FFF","display":"standalone","name":"Quantified Talk","short_name":"Quantified Talk","version":"com.quantifiedtalk.test","description":"Quantify what you say, improve your relationships.","author":"Math","icons":[],"start_url":"index.html","gcm_sender_id":"996231231186"}

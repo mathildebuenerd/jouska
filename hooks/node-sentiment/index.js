@@ -187,82 +187,81 @@ module.exports = function (sPhrase, sLangCode, originalPhrase, mCallback) {
             }
         }
     }
+    function textEmojis(sentence) {
 
-function textEmojis(sentence) {
+        let inlineSmileys = new RegExp(/(<[\/\\]?3|[()/|*$][-^]?[:;=]|x[d()]|\^[a-z._-]{0,1}\^['"]{0,1}|[:;=B8][\-^]?[3DOPp@$*\\)(\/|])(?=\s|[!.?]|$)/, 'gim'); // detect smileys like :) ;) :p :/ =/ :-) :( :D xD :-) ^^
 
-    let inlineSmileys = new RegExp(/(<[\/\\]?3|[()/|*$][-^]?[:;=]|x[d()]|\^[a-z._-]{0,1}\^['"]{0,1}|[:;=B8][\-^]?[3DOPp@$*\\)(\/|])(?=\s|[!.?]|$)/, 'gim'); // detect smileys like :) ;) :p :/ =/ :-) :( :D xD :-) ^^
+        const smileyValues = {
+            ":)": 4,
+            ";)": 4,
+            ":(": -4,
+            "x)": 4,
+            ":p": 3,
+            ":o": -1,
+            ":3": -2,
+            ":|": -2,
+            ":/": -2,
+            ":\\": -2,
+            ":$": -1,
+            ":*": 3,
+            ":@": -2,
+            ":-)": 4,
+            ";-)": 4,
+            ":-(": -4,
+            ":-p": 3,
+            ":-o": -1,
+            ":-3": -2,
+            ":-|": -2,
+            ":-/": -2,
+            ":-\\": -2,
+            ":-$": -1,
+            ":-*": 3,
+            ":-@": -1,
+            "(:": 4,
+            "):": -4,
+            "(x": 4,
+            "$:": -2,
+            "*:": 3,
+            "/:": -2,
+            "\\:": -2,
+            "(-:": 4,
+            ")-:": -4,
+            "$-:": -3,
+            "*-:": 3,
+            "/-:": -2,
+            "\\-:": -2,
+            "=)": 3,
+            "=(": -3,
+            "(=": 3,
+            ")=": -3,
+            "=p": 2,
+            "<3": 3,
+            "</3": -3,
+            "<\\3": -3,
+            "^^": 2,
+            "^.^": 2,
+            "^o^": 4,
+            "^-^": 2,
+            "^_^": 2,
+            '^^"': -2,
+            "^^'": -2,
+            "xd": 3
+        };
 
-    const smileyValues = {
-        ":)": 4,
-        ";)": 4,
-        ":(": -4,
-        "x)": 4,
-        ":p": 3,
-        ":o": -1,
-        ":3": -2,
-        ":|": -2,
-        ":/": -2,
-        ":\\": -2,
-        ":$": -1,
-        ":*": 3,
-        ":@": -2,
-        ":-)": 4,
-        ";-)": 4,
-        ":-(": -4,
-        ":-p": 3,
-        ":-o": -1,
-        ":-3": -2,
-        ":-|": -2,
-        ":-/": -2,
-        ":-\\": -2,
-        ":-$": -1,
-        ":-*": 3,
-        ":-@": -1,
-        "(:": 4,
-        "):": -4,
-        "(x": 4,
-        "$:": -2,
-        "*:": 3,
-        "/:": -2,
-        "\\:": -2,
-        "(-:": 4,
-        ")-:": -4,
-        "$-:": -3,
-        "*-:": 3,
-        "/-:": -2,
-        "\\-:": -2,
-        "=)": 3,
-        "=(": -3,
-        "(=": 3,
-        ")=": -3,
-        "=p": 2,
-        "<3": 3,
-        "</3": -3,
-        "<\\3": -3,
-        "^^": 2,
-        "^.^": 2,
-        "^o^": 4,
-        "^-^": 2,
-        "^_^": 2,
-        '^^"': -2,
-        "^^'": -2,
-        "xd": 3
-    };
+        let smileyArray;
+        while ((smileyArray = inlineSmileys.exec(sentence.toLocaleLowerCase())) !== null) { // convert to lowercase for smileys like :s :S
 
-    let smileyArray;
-    while ((smileyArray = inlineSmileys.exec(sentence.toLocaleLowerCase())) !== null) { // convert to lowercase for smileys like :s :S
+            const smileyScore = smileyValues[smileyArray[0]]; // get the smiley score
+            iGlobalScore += Number(smileyScore); // add the score to the global score
 
-        const smileyScore = smileyValues[smileyArray[0]]; // get the smiley score
-        iGlobalScore += Number(smileyScore); // add the score to the global score
-
-        // add the smiley into the positive/negative arrays
-        if (smileyScore > 0) {
-            aPositive.push(String(smileyArray[0]));
-        } else {
-            aNegative.push(String(smileyArray[0]));
+            // add the smiley into the positive/negative arrays
+            if (smileyScore > 0) {
+                aPositive.push(String(smileyArray[0]));
+            } else {
+                aNegative.push(String(smileyArray[0]));
+            }
         }
     }
-}
 
     // Handle optional async interface
     var oResult = {

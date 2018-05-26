@@ -198,9 +198,10 @@ export class SMSManager {
     //         });
     // }
 
-    public displaySMS() {
-
-
+    // trouve le nom d'un contact à partir de son numéro de téléphone
+    public getContactName(phonenumber: string): string {
+        const smsData = JSON.parse(localStorage.getItem("smsData"));
+        return smsData[phonenumber].name;
     }
 
 

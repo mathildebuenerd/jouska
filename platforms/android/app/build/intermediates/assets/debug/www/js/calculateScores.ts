@@ -147,8 +147,6 @@ export class CalculateScore {
                 // Si la phrase est trop longue, on la découpe en sous-phrases avant de faire l'analyse de sentiment
                 // on peut donc avoir soit un objet, soit un tableau d'objets
                 if (analysis.hasOwnProperty(valence)) {
-                    // console.log(`valence / positive words:`);
-                    // console.log(analysis[valence]);
                     if (analysis[valence].length > 0) {
                         for (let i=0; i<(analysis[valence]).length; i++) {
                             words.push(analysis[valence][i]);

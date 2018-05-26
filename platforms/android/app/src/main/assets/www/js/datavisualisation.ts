@@ -1,13 +1,41 @@
 import {SMSManager} from "./manageSMS";
+import * as scores from "./calculateScores";
+const Score = new scores.CalculateScore();
+
+import * as sms from "./manageSMS";
+const Sms = new sms.SMSManager();
+
+import "./../../hooks/p5";
+
+
+
 
 export class Datavisualisation {
 
-    data: object;
-    type: string;
+    userStats: HTMLElement;
+    contactStats: HTMLElement;
 
-    constructor(data: object, type: string) {
-        this.data = data;
-        this.type = type;
+    constructor() {
+        this.userStats = document.querySelector("#userStats");
+        this.contactStats = document.querySelector("#contactStats");
+    }
+
+    testp5() {
+        new p5( function(monSketch) {
+
+            let x = 100;
+            let y = 100;
+
+            monSketch.setup = function() {
+                monSketch.createCanvas(700, 410);
+            };
+
+            monSketch.draw = function() {
+                monSketch.background(0);
+                monSketch.fill(255);
+                monSketch.rect(x,y,50,50);
+            };
+        });
     }
 
     public calculateUserScore() {
@@ -18,7 +46,7 @@ export class Datavisualisation {
 
     }
 
-    public calculateScorePerDay() {
+    public perDay() {
 
     }
 
@@ -26,85 +54,78 @@ export class Datavisualisation {
 
     }
 
-    public getMostPositiveMessage() {
 
-    }
+    bigFiveGraph = (contact: string, type: string) => {
+        let data = Score.scoreWithContact(contact, type);
+        let dataUser = Score.scoreWithContact(contact, "sent");
+        console.log(`data: `);
+        console.log(data);
 
-    public getMostNegativeMessage() {
+        let bigFiveTag = document.createElement("div");
+        bigFiveTag.textContent = `
+        Openess: ${data["bigfive"]["openness"]}, 
+        Conscious: ${data["bigfive"]["conscientiousness"]}`;
+        const mult = 300;
+        const rO = (data["bigfive"]["openness"])*mult;
+        const rC = (data["bigfive"]["conscientiousness"])*mult;
 
-    }
+        new p5( function(monSketch) {
 
-    // on ne peut utiliser cette fonction que si le type est "SMS"
-    public simpleContactComparison() {
+            var x = 100;
+            var y = 100;
 
-        let sms = new SMSManager(); // cet objet ne sert à rien, juste à utiliser la fonction findContactname
-        // console.group("Simple contact comparison");
-        console.log("data reçue :");
-        console.log(this.data);
+            monSketch.setup = function() {
+                monSketch.createCanvas(700, 410);
+            };
 
-        const data = this.data;
-        classifyContacts().then(contactList => {
-            console.log('contactList:');
-            console.log(contactList);
-            localStorage.setItem("contactList", JSON.stringify(contactList));
+            monSketch.draw = function() {
+                monSketch.background(0);
+                monSketch.fill(255);
+                monSketch.rect(x,y,50,50);
+            };
         });
 
-        function getScoresPerContact() {
+        // fill("blue");
+        // ellipse(20,20,rO,rO);
+        // fill("red");
+        // ellipse(50,20,rC, rC);
 
+
+
+
+        this.userStats.appendChild(bigFiveTag);
+
+
+    };
+
+
+    public getWords(valence: string = ("positive" || "negative"), phonenumber: string, type: string = ("inbox" || "sent"), lang: string = "fr") {
+
+        let words = Score.getMostUsedWords(valence, phonenumber, type, lang);
+        console.log("words");
+        console.table(words);
+
+        let title = document.createElement("h2");
+        let contactName = Sms.getContactName(phonenumber);
+        title.textContent = `Words ${valence} from ${contactName}`;
+
+        // we create a ul li that will store all words
+        let wordList = document.createElement("ul");
+        wordList.classList.add(`${valence}-wordList`, `wordList`);
+
+        // we loop through the array that stores the words
+        for (const word of words) {
+            let wordTag = document.createElement("li");
+            wordTag.textContent = word;
+            wordList.appendChild(wordTag);
         }
 
+        this.userStats.appendChild(title);
+        this.userStats.appendChild(wordList);
 
-        function classifyContacts(): Promise<object> {
-
-            return new Promise(
-                (resolve, reject) => {
-                    let contactScores = {};
-
-                    for (const contact in data) {
-                        let sentimentScore = 0;
-                        let numberOfSMS = 0;
-
-                        for (const smsId in data[contact]) {
-                            const sentiment = data[contact][smsId].analysis.sentiment;
-                            if (sentiment) {
-                                sentimentScore += sentiment.score;
-                                numberOfSMS++;
-                            }
-                        }
-
-                        contactScores[contact] = {
-                            sentimentScore: sentimentScore,
-                            numberOfSMS: numberOfSMS,
-                            relativeScore: sentimentScore/numberOfSMS
-                        };
-
-                        console.group("Score de " + contactScores[contact].contactName);
-                        console.log("score total: " + sentimentScore);
-                        console.log("scrore relatif: " + sentimentScore/numberOfSMS);
-                        console.groupEnd();
-                    }
-
-                    resolve(contactScores);
-
-                    // console.log("contactScores: ");
-                    // console.log(contactScores);
-                }
-            ).then(
-                contactScores => {
-                    for (const contact in contactScores) {
-                        const contactName = sms.findContactsName(contact).then(contactName => {
-                            contactScores[contact].contactName = contactName;
-                        });
-                    }
-                    return contactScores;
-                }
-            );
-
-        }
-
-
-
-        // console.groupEnd();
     }
 
 }
+
+
+

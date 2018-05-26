@@ -14,28 +14,61 @@ import {TextAnalysis} from "./sentimentAnalysis";
 import {SMSManager} from "./manageSMS";
 const sms = new SMSManager();
 const text = new TextAnalysis();
+import * as dataV from "./datavisualisation";
+const DataVis = new dataV.Datavisualisation();
 const Keys = new keys.Keys();
 translate.key = Keys.API_KEY;
 translate.from ='fr';
 
+
+// import "./../../hooks/p5";
+
 export class CordovaApp {
     constructor() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
-
     }
 
     onDeviceReady() {
 
+        DataVis.testp5();
+
+        // new p5( function(monSketch) {
+        //
+        //     let x = 100;
+        //     let y = 100;
+        //
+        //     monSketch.setup = function() {
+        //         monSketch.createCanvas(700, 410);
+        //     };
+        //
+        //     monSketch.draw = function() {
+        //         monSketch.background(0);
+        //         monSketch.fill(255);
+        //         monSketch.rect(x,y,50,50);
+        //     };
+        // });
+
         // localStorage.removeItem('smsData');
 
         // s'il n'y a pas de smsData, ça veut dire qu'on a pas encore installé l'application
-        if (localStorage.getItem('smsData') === null) {
-            installation.start();
-        }
+        // if (localStorage.getItem('smsData') === null) {
+        //     installation.start();
+        // }
 
 
 
-        let smsData = JSON.parse(localStorage.getItem('smsData'));
+        // let smsData = JSON.parse(localStorage.getItem('smsData'));
+
+        // DataVis.getWords("positive", "0675611341", "inbox", "fr");
+        // DataVis.getWords("negative", "0675611341", "inbox", "fr");
+        // DataVis.getWords("positive", "0783094512", "inbox", "fr");
+        // DataVis.getWords("negative", "0783094512", "inbox", "fr");
+        //------------------------------------------------------------------------
+        // DataVis.bigFiveGraph("0675611341", "inbox");
+
+
+
+
 
         // for (const contact in smsData) {
         //     for (const type in smsData[contact]) { // type = inbox | sent | name
@@ -48,44 +81,31 @@ export class CordovaApp {
         //     }
         // }
 
-        // installation.mergeInboxAndSentMessages();
 
-        // console.log(`smsData:`);
-        // console.log(smsData);
-        document.querySelector('#addThisToStorage').addEventListener('click', () => {
-            let str = JSON.stringify(smsData);
-            // localStorage.removeItem('allSMS');
-            // localStorage.removeItem('allSMSanalyzed');
-            localStorage.setItem('smsData', str);
-            console.log(localStorage);
-        });
-
-        // for (const contact in smsData) {
-        //     for (const type in smsData[contact]) { // type = inbox | sent | name
-        //         if (type !== 'name') { // on ne boucle que dans inbox et sent
-        //             for (const singleSMS in smsData[contact][type]) {
-        //                 const originalSMS = smsData[contact][type][singleSMS].text.original;
-        //                 smsData[contact][type][singleSMS].analysis.selfishness = {};
-        //                 smsData[contact][type][singleSMS].analysis.selfishness = text.selfishnessAnalysis(originalSMS, 'fr');
-        //             }
-        //         }
-        //     }
-        // }
+        // document.querySelector('#addThisToStorage').addEventListener('click', () => {
+        //     let str = JSON.stringify(smsData);
+        //     // localStorage.removeItem('allSMS');
+        //     // localStorage.removeItem('allSMSanalyzed');
+        //     localStorage.setItem('smsData', str);
+        //     console.log(localStorage);
+        // });
 
 
-        text.updateSentimentAnalysis();
+
+
+        //text.updateSentimentAnalysis();
 
 
         // thread.showContactThread("0675611341");
 
-        let scorePerDay = calculate.scorePerTime(smsData, "weekday");
+        // let scorePerDay = calculate.scorePerTime(smsData, "weekday");
         // let scorePerDate = calculate.scorePerTime(smsData, "day");
         // let scorePerMonth = calculate.scorePerTime(smsData, "month");
         // let scorePerMinutes = calculate.scorePerTime(smsData, "minutes");
         // let scorePerSeconds = calculate.scorePerTime(smsData, "seconds");
         //
-        console.log(`scorePerDay:`);
-        console.log(scorePerDay);
+        // console.log(`scorePerDay:`);
+        // console.log(scorePerDay);
         // console.log(`scorePerDate:`);
         // console.log(scorePerDate);
         // console.log(`scorePerMonth:`);
@@ -95,13 +115,13 @@ export class CordovaApp {
         // console.log(`scorePerSeconds:`);
         // console.log(scorePerSeconds);
 
-        let myscore = calculate.scoreWithContact('0675611341', 'sent');
-        console.log('my score:');
-        console.log(myscore);
-
-        let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
-        console.log(`wordsMom:`);
-        console.log(wordsMom);
+        // let myscore = calculate.scoreWithContact('0675611341', 'sent');
+        // console.log('my score:');
+        // console.log(myscore);
+        //
+        // let wordsMom = calculate.getMostUsedWords("positive", "0675611341", "inbox", "fr");
+        // console.log(`wordsMom:`);
+        // console.log(wordsMom);
 
 
 

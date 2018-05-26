@@ -191,6 +191,26 @@ nav ul li.nav-element {
     border-bottom:  4px solid blue;
 }
 
+#userStats, #contactsStats {
+    position: absolute;
+    top: 50px; /* on décale par rapport au menu qui fait 50px*/
+    padding-bottom: 50px;
+}
+
+
+/*********
+    WordLists
+ *********/
+
+ul.wordList li {
+    list-style-type: none;
+    padding: 5px;
+    border: 1px solid blue;
+    display: inline-flex;
+    margin: 10px;
+    color: blue;
+    border-radius: 20px;
+}
 
 
 
