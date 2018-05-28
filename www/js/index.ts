@@ -7,6 +7,8 @@ const writingAssistant = new writingInterface.WritingInterface();
 import * as discussionThread from "./discussionThread";
 const thread = new discussionThread.DiscussionThread();
 import set = Reflect.set;
+import * as interfaceComponents from "./interfaceComponents";
+const Component = new interfaceComponents.InterfaceComponents();
 
 import * as translate from "./../../hooks/translate";
 import * as keys from './apiKeys';
@@ -29,8 +31,6 @@ export class CordovaApp {
     }
 
     onDeviceReady() {
-
-        DataVis.testp5();
 
         // new p5( function(monSketch) {
         //
@@ -64,7 +64,11 @@ export class CordovaApp {
         // DataVis.getWords("positive", "0783094512", "inbox", "fr");
         // DataVis.getWords("negative", "0783094512", "inbox", "fr");
         //------------------------------------------------------------------------
-        // DataVis.bigFiveGraph("0675611341", "inbox");
+        Component.addTag("h3", "#userStats", "Personnalité de Maman", "stats-title");
+        Component.addTag("p", "#userStats", "En rose tes propres valeurs");
+        DataVis.bigFiveGraph("0675611341", "inbox");
+        Component.addTag("h3", "#userStats", "Personnalité de Clémence", "stats-title");
+        DataVis.bigFiveGraph("0783094512", "inbox");
 
 
 

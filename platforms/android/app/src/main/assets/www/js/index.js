@@ -8,6 +8,8 @@ var writingInterface = require("./writingInterface");
 var writingAssistant = new writingInterface.WritingInterface();
 var discussionThread = require("./discussionThread");
 var thread = new discussionThread.DiscussionThread();
+var interfaceComponents = require("./interfaceComponents");
+var Component = new interfaceComponents.InterfaceComponents();
 var translate = require("./../../hooks/translate");
 var keys = require("./apiKeys");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
@@ -24,7 +26,11 @@ var CordovaApp = (function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     }
     CordovaApp.prototype.onDeviceReady = function () {
-        DataVis.testp5();
+        Component.addTag("h3", "#userStats", "Personnalité de Maman", "stats-title");
+        Component.addTag("p", "#userStats", "En rose tes propres valeurs");
+        DataVis.bigFiveGraph("0675611341", "inbox");
+        Component.addTag("h3", "#userStats", "Personnalité de Clémence", "stats-title");
+        DataVis.bigFiveGraph("0783094512", "inbox");
     };
     return CordovaApp;
 }());

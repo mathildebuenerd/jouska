@@ -100,6 +100,12 @@ export class CalculateScore {
         scores.temporalOrientation.present = (scores.temporalOrientation.present)/totalMessages;
         scores.temporalOrientation.future = (scores.temporalOrientation.future)/totalMessages;
 
+        scores.bigfive.openness = (scores.bigfive.openness)/totalMessages;
+        scores.bigfive.conscientiousness = (scores.bigfive.conscientiousness)/totalMessages;
+        scores.bigfive.extraversion = (scores.bigfive.extraversion)/totalMessages;
+        scores.bigfive.agreeableness = (scores.bigfive.agreeableness)/totalMessages;
+        scores.bigfive.neuroticism = (scores.bigfive.neuroticism)/totalMessages;
+
         scores.totalMessages = totalMessages;
 
         // console.log(`scores finaux: `);
