@@ -321,13 +321,33 @@ input#contactNumber:focus, #smsContent:focus {
 }
 
 #feedback {
-    height: 100vh;
-    width: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100px;
+    width: 100vw;
     position: absolute;
     top: 0;
     left: 0;
-    background-color: lightgrey;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid lightgrey;
+}
+
+.gauges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauges .fill {
+    height: 30px;
+    width: 30px;
     transition: 1s ease;
+}
+
+#write {
+    margin-top: 70px;
 }
 
 #confirmationMessage {

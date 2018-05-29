@@ -13,9 +13,31 @@ declare const SMS: any;
 
 export class WritingInterface {
 
+    colors: object;
+
+    constructor() {
+        this.colors = {
+            "a5f31b": 8,
+            "a4ed2b": 7,
+            "a2e739": 6,
+            "a1dc52": 5,
+            "a1d16b": 4,
+            "a1c087": 3,
+            "a1b595": 2,
+            "a1a69f": 1,
+            "a39ba1": 0,
+            "ae849b": -1,
+            "b57794": -2,
+            "c26185": -3,
+            "cf4c74": -4,
+            "db3863": -5,
+            "e82551": -6,
+            "f21542": -7,
+            "fb0736": -8
+        };
+    }
+
     startAssistance= () => {
-
-
 
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         textArea.addEventListener('keyup', this.analyzeText); // keypress ne fontionne pas avec le clavier android, il faut utiliser keyup
@@ -24,8 +46,8 @@ export class WritingInterface {
         sendButton.addEventListener('click', this.sendMessage);
     };
 
-    public changeSidebarColor= (color: string) => {
-        let sidebar = <HTMLElement>document.querySelector('#feedback');
+    public changeSidebarColor= (barSelector: string, color: string) => {
+        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} .fill`);
         sidebar.style.backgroundColor = '#' + color;
     };
 
@@ -38,72 +60,60 @@ export class WritingInterface {
         return Object.keys(object).find(key => object[key] === value);
     };
 
-    public analyzeText=() => {
-        const language = 'fr';
-        const textArea = <HTMLElement>document.querySelector('#smsContent');
+    getSentence= (): string => {
+
+        const textArea = <HTMLElement>document.querySelector('#smsContent'); // c'est pas un textArea mais un bloc avec contenteditable
         const text = textArea.textContent;
-        console.log(`text: ${text}`);
         const allWordsExceptLast = new RegExp(/.+/, 'gim'); // récupère tous les mots
-        const sentence = text.match(allWordsExceptLast); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
+        const sentence = text.match(allWordsExceptLast);
         const letters = new RegExp(/\S/, 'gi');
 
-        if (letters.test(sentence[0])) { // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
-            console.log(`Sentence existe, voici son analyse:`);
-
-            // let analysis = {};
-            let score = 0;
-            let colors = {
-                "a5f31b": 8,
-                "a4ed2b": 7,
-                "a2e739": 6,
-                "a1dc52": 5,
-                "a1d16b": 4,
-                "a1c087": 3,
-                "a1b595": 2,
-                "a1a69f": 1,
-                "a39ba1": 0,
-                "ae849b": -1,
-                "b57794": -2,
-                "c26185": -3,
-                "cf4c74": -4,
-                "db3863": -5,
-                "e82551": -6,
-                "f21542": -7,
-                "fb0736": -8
-            };
-            const analysis = textAnalysis.sentimentAnalysis(sentence[0], language);
-            console.log(`analysis:`);
-            console.dir(analysis);
-
-            if (analysis['score'] !== undefined) {
-                console.log(`analysis['score'] existe`);
-                console.dir(analysis['score']);
-                score += analysis['score'];
-            } else {
-                console.log(`analysis['score'] n'existe pas`);
-                for (const object in analysis) {
-                    console.dir(analysis[object]['score']);
-                    score += analysis[object]['score'];
-                }
-            }
-            console.log(`colors: ${colors}`);
-            console.log(`score: ${score}`);
-            let color = this.getColor(colors, score);
-            this.changeSidebarColor(color);
-            console.log(`score: ${score}`);
-
-            if (analysis["negative"].length > 0) {
-                console.log(`analysis.negative length > 0`);
-                this.animateNegativeWords(analysis["negative"]);
-            }
-
-
-            // const languages = sms.detectLanguage(String(sentence));
-            // console.log(`languages: `);
-            // console.log(languages);
+        // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
+        if (letters.test(sentence[0])) {
+            return sentence[0]; // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
         } else {
             console.warn(`sentence n'existe pas, elle est égale à ${sentence} et est de type ${typeof sentence}`);
         }
+    };
+
+    showFeedback= (analysis: object, type: string) => {
+
+        let score = 0;
+
+        if (analysis['score'] !== undefined) {
+            score += analysis['score'];
+        } else {
+            for (const object in analysis) {
+                console.log(`score ${type}: ${analysis[object]['score']}`);
+                score += analysis[object]['score'];
+            }
+        }
+
+        let color = this.getColor(this.colors, score);
+        this.changeSidebarColor(type, color);
+
+        // if (analysis["negative"].length > 0) {
+        //     // this.animateNegativeWords(analysis["negative"]);
+        // }
+    };
+
+    public analyzeText=() => {
+
+        const language = 'fr';
+        let sentence = this.getSentence();
+
+        // sentence peut être undefined s'il y a trop peu de lettres
+        if (sentence !== undefined) {
+            const polarity = textAnalysis.sentimentAnalysis(sentence, language);
+            this.showFeedback(polarity, "polarity");
+            const selfish = textAnalysis.selfishnessAnalysis(sentence, language);
+            this.showFeedback(selfish, "selfishness");
+        }
+        // this.analyzeSelfishness();
+        // this.analyzeDarktriad();
+        // this.analyzePersonality();
+
+
     };
 
     sliceWord(word: string, elmtClass: string): string {

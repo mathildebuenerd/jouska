@@ -13,8 +13,8 @@ var WritingInterface = (function () {
             var sendButton = document.querySelector('#sendMessage');
             sendButton.addEventListener('click', _this.sendMessage);
         };
-        this.changeSidebarColor = function (color) {
-            var sidebar = document.querySelector('#feedback');
+        this.changeSidebarColor = function (barSelector, color) {
+            var sidebar = document.querySelector("#" + barSelector + " .fill");
             sidebar.style.backgroundColor = '#' + color;
         };
         this.getColor = function (object, value) {
@@ -26,63 +26,41 @@ var WritingInterface = (function () {
             }
             return Object.keys(object).find(function (key) { return object[key] === value; });
         };
-        this.analyzeText = function () {
-            var language = 'fr';
+        this.getSentence = function () {
             var textArea = document.querySelector('#smsContent');
             var text = textArea.textContent;
-            console.log("text: " + text);
             var allWordsExceptLast = new RegExp(/.+/, 'gim');
             var sentence = text.match(allWordsExceptLast);
             var letters = new RegExp(/\S/, 'gi');
             if (letters.test(sentence[0])) {
-                console.log("Sentence existe, voici son analyse:");
-                var score = 0;
-                var colors = {
-                    "a5f31b": 8,
-                    "a4ed2b": 7,
-                    "a2e739": 6,
-                    "a1dc52": 5,
-                    "a1d16b": 4,
-                    "a1c087": 3,
-                    "a1b595": 2,
-                    "a1a69f": 1,
-                    "a39ba1": 0,
-                    "ae849b": -1,
-                    "b57794": -2,
-                    "c26185": -3,
-                    "cf4c74": -4,
-                    "db3863": -5,
-                    "e82551": -6,
-                    "f21542": -7,
-                    "fb0736": -8
-                };
-                var analysis = textAnalysis.sentimentAnalysis(sentence[0], language);
-                console.log("analysis:");
-                console.dir(analysis);
-                if (analysis['score'] !== undefined) {
-                    console.log("analysis['score'] existe");
-                    console.dir(analysis['score']);
-                    score += analysis['score'];
-                }
-                else {
-                    console.log("analysis['score'] n'existe pas");
-                    for (var object in analysis) {
-                        console.dir(analysis[object]['score']);
-                        score += analysis[object]['score'];
-                    }
-                }
-                console.log("colors: " + colors);
-                console.log("score: " + score);
-                var color_1 = _this.getColor(colors, score);
-                _this.changeSidebarColor(color_1);
-                console.log("score: " + score);
-                if (analysis["negative"].length > 0) {
-                    console.log("analysis.negative length > 0");
-                    _this.animateNegativeWords(analysis["negative"]);
-                }
+                return sentence[0];
             }
             else {
                 console.warn("sentence n'existe pas, elle est \u00E9gale \u00E0 " + sentence + " et est de type " + typeof sentence);
+            }
+        };
+        this.showFeedback = function (analysis, type) {
+            var score = 0;
+            if (analysis['score'] !== undefined) {
+                score += analysis['score'];
+            }
+            else {
+                for (var object in analysis) {
+                    console.log("score " + type + ": " + analysis[object]['score']);
+                    score += analysis[object]['score'];
+                }
+            }
+            var color = _this.getColor(_this.colors, score);
+            _this.changeSidebarColor(type, color);
+        };
+        this.analyzeText = function () {
+            var language = 'fr';
+            var sentence = _this.getSentence();
+            if (sentence !== undefined) {
+                var polarity = textAnalysis.selfishnessAnalysis(sentence, language);
+                _this.showFeedback(polarity, "polarity");
+                var selfish = textAnalysis.selfishnessAnalysis(sentence, language);
+                _this.showFeedback(selfish, "selfishness");
             }
         };
         this.animateNegativeWords = function (words) {
@@ -133,6 +111,25 @@ var WritingInterface = (function () {
                 confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...";
                 throw err;
             });
+        };
+        this.colors = {
+            "a5f31b": 8,
+            "a4ed2b": 7,
+            "a2e739": 6,
+            "a1dc52": 5,
+            "a1d16b": 4,
+            "a1c087": 3,
+            "a1b595": 2,
+            "a1a69f": 1,
+            "a39ba1": 0,
+            "ae849b": -1,
+            "b57794": -2,
+            "c26185": -3,
+            "cf4c74": -4,
+            "db3863": -5,
+            "e82551": -6,
+            "f21542": -7,
+            "fb0736": -8
         };
     }
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
