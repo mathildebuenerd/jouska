@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue May 29 17:41:34 CEST 2018
+#Tue May 29 20:11:14 CEST 2018
 122.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\assets\\debug\\www\\plugins\\cordova-plugin-file\\www\\LocalFileSystem.js
 60.set=ASSET
 129.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\res\\debug\\resources-debug.ap_\\res\\drawable-xhdpi-v4\\notification_bg_normal_pressed.9.png

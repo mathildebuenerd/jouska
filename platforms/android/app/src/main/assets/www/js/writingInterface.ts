@@ -7,6 +7,8 @@ const sms = new _SMS.SMSManager();
 import {TextAnalysis} from "./sentimentAnalysis";
 const textAnalysis: TextAnalysis = new TextAnalysis();
 // import * as {SMSMa} from "./manageSMS";
+import * as getData from "./getData"; // on récupère la fonction translate qu'on utilise lors de l'installation de l'app
+const ManageData = new getData.Installation();
 
 declare const SMS: any;
 
@@ -14,6 +16,7 @@ declare const SMS: any;
 export class WritingInterface {
 
     colors: object;
+    tempSentences: Array<string>;
 
     constructor() {
         this.colors = {
@@ -35,6 +38,7 @@ export class WritingInterface {
             "f21542": -7,
             "fb0736": -8
         };
+        this.tempSentences = ["", ""]; // on utilise cette variable pour optimiser l'usage de le fonction de traduction. On stocke la dernière phrase traduite dedans, et on checke ensuite chaque fois qu'une touche est pressée pour comparer et voir s'il y a un mot supplémentaire
     }
 
     startAssistance= () => {
@@ -64,8 +68,8 @@ export class WritingInterface {
 
         const textArea = <HTMLElement>document.querySelector('#smsContent'); // c'est pas un textArea mais un bloc avec contenteditable
         const text = textArea.textContent;
-        const allWordsExceptLast = new RegExp(/.+/, 'gim'); // récupère tous les mots
-        const sentence = text.match(allWordsExceptLast);
+        const allWords = new RegExp(/.+/, 'gim'); // récupère tous les mots
+        const sentence = text.match(allWords);
         const letters = new RegExp(/\S/, 'gi');
 
         // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
@@ -102,13 +106,50 @@ export class WritingInterface {
         const language = 'fr';
         let sentence = this.getSentence();
 
-        // sentence peut être undefined s'il y a trop peu de lettres
+
         if (sentence !== undefined) {
-            const polarity = textAnalysis.selfishnessAnalysis(sentence, language);
+            // Analyses en français
+            // sentence peut être undefined s'il y a trop peu de lettres
+            const polarity = textAnalysis.sentimentAnalysis(sentence, language);
             this.showFeedback(polarity, "polarity");
             const selfish = textAnalysis.selfishnessAnalysis(sentence, language);
             this.showFeedback(selfish, "selfishness");
+
+            // Analyses en anglais
+            // Pour ces analyses, on traduit en anglais avant d'analyser
+            // D'abord on récupère uniquement les mots entiers
+            const ignoreLastWord = new RegExp(/.+[ !?,.:"]/, 'gim');
+            // const test = sentence.split(" ");
+            // console.log(`test: `, test);
+            const allWordsExceptLast = sentence.match(ignoreLastWord); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
+            // console.log(`allwordsexc`, allWordsExceptLast);
+            const wordsToAnalyze = String(allWordsExceptLast);
+
+            this.tempSentences[1] = wordsToAnalyze;
+
+            // Si ces deux valeurs sont différentes, c'est qu'il y a un mot de plus ou de moins
+            if (this.tempSentences[1] !== this.tempSentences[0]) {
+                console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
+                this.tempSentences[0] = wordsToAnalyze;
+                let promise = textAnalysis.translateToEnglish(wordsToAnalyze);
+                console.log(`promise:`, promise);
+                promise.then((englishSentence) => {
+                    console.log(`english sentence: ${englishSentence}`);
+                    const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                    console.log(`darktriad:`, darktriad);
+                }).catch( (err) => console.log(err));
+            } else {
+                console.log(`c'est pareil!`);
+            }
+
+
+
         }
+
+
+
+
+
         // this.analyzeSelfishness();
         // this.analyzeDarktriad();
         // this.analyzePersonality();

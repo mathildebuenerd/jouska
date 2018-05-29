@@ -284,6 +284,8 @@ section#writing {
 #writing input#contactNumber, #writing #smsContent {
     width: 80vw;
     margin: 0 0 20px 10vw;
+    padding: 15px 5px;
+    box-sizing: border-box;
     border: 0;
     border-bottom: 1px solid lightgrey;
     font-size: 1.1em;
@@ -332,6 +334,19 @@ input#contactNumber:focus, #smsContent:focus {
     justify-content: space-around;
     align-items: center;
     border-bottom: 1px solid lightgrey;
+}
+
+#rec { /*le petit rond qui montre qu'on est en train d'analyser*/
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 30px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% {background-color: rgb(255,0,0)}
+    50% {background-color: rgb(255,255,255)}
 }
 
 .gauges {

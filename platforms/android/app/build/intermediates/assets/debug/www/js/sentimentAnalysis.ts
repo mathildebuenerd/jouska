@@ -8,6 +8,7 @@ import * as bigfive from "./../../hooks/bigfive";
 import * as predictgender from "./../../hooks/predictgender";
 import * as prospectimo from "./../../hooks/prospectimo";
 import * as selfishness from "./../../hooks/node-sentiment-selfishness";
+import * as gtranslate from "./../../hooks/translate";
 
 export class TextAnalysis {
 
@@ -98,4 +99,21 @@ export class TextAnalysis {
         return selfishness(textMessage, language); // pour l'instant on le fait juste en français
     }
 
+    translateToEnglish=(sentence: string): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            let text = "";
+            gtranslate(sentence, {to: 'en'})
+                .then(translatedText => {
+                    // console.log(`translatedText: ${translatedText}`);
+                    text = translatedText;
+                    if (translatedText.indexOf('&#39;') !== -1) { // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
+                        text = translatedText.replace('&#39;', "'");
+                    }
+                    console.log(`text: ${text}`);
+                    resolve(text);
+                }).catch(error => reject(error));
+            // return text;
+        });
+
+    }
 }

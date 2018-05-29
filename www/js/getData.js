@@ -2,11 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var manageSMS_1 = require("./manageSMS");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
-var translate = require("./../../hooks/translate");
+var gtranslate = require("./../../hooks/translate");
 var keys = require("./apiKeys");
 var Keys = new keys.Keys();
-translate.key = Keys.API_KEY;
-translate.from = 'fr';
+gtranslate.key = Keys.API_KEY;
+gtranslate.from = 'fr';
 var sms = new manageSMS_1.SMSManager();
 var textAnalysis = new sentimentAnalysis_1.TextAnalysis();
 var smsData = {};
@@ -104,7 +104,7 @@ var Installation = (function () {
             var _loop_2 = function (type) {
                 var _loop_3 = function (smsID) {
                     console.log(smsData[contact][type][smsID].text.original);
-                    translate(smsData[contact][type][smsID].text.original, { to: 'en' }).then(function (translatedText) {
+                    gtranslate(smsData[contact][type][smsID].text.original, { to: 'en' }).then(function (translatedText) {
                         var text = translatedText;
                         if (translatedText.indexOf('&#39;') !== -1) {
                             text = translatedText.replace('&#39;', "'");

@@ -6,8 +6,23 @@ var bigfive = require("./../../hooks/bigfive");
 var predictgender = require("./../../hooks/predictgender");
 var prospectimo = require("./../../hooks/prospectimo");
 var selfishness = require("./../../hooks/node-sentiment-selfishness");
+var gtranslate = require("./../../hooks/translate");
 var TextAnalysis = (function () {
     function TextAnalysis() {
+        this.translateToEnglish = function (sentence) {
+            return new Promise(function (resolve, reject) {
+                var text = "";
+                gtranslate(sentence, { to: 'en' })
+                    .then(function (translatedText) {
+                    text = translatedText;
+                    if (translatedText.indexOf('&#39;') !== -1) {
+                        text = translatedText.replace('&#39;', "'");
+                    }
+                    console.log("text: " + text);
+                    resolve(text);
+                }).catch(function (error) { return reject(error); });
+            });
+        };
     }
     TextAnalysis.extractClauses = function (sentence) {
         var sentenceToSlice = sentence;

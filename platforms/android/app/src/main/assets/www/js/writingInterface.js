@@ -4,6 +4,8 @@ var _SMS = require("./manageSMS");
 var sms = new _SMS.SMSManager();
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
 var textAnalysis = new sentimentAnalysis_1.TextAnalysis();
+var getData = require("./getData");
+var ManageData = new getData.Installation();
 var WritingInterface = (function () {
     function WritingInterface() {
         var _this = this;
@@ -29,8 +31,8 @@ var WritingInterface = (function () {
         this.getSentence = function () {
             var textArea = document.querySelector('#smsContent');
             var text = textArea.textContent;
-            var allWordsExceptLast = new RegExp(/.+/, 'gim');
-            var sentence = text.match(allWordsExceptLast);
+            var allWords = new RegExp(/.+/, 'gim');
+            var sentence = text.match(allWords);
             var letters = new RegExp(/\S/, 'gi');
             if (letters.test(sentence[0])) {
                 return sentence[0];
@@ -57,10 +59,28 @@ var WritingInterface = (function () {
             var language = 'fr';
             var sentence = _this.getSentence();
             if (sentence !== undefined) {
-                var polarity = textAnalysis.selfishnessAnalysis(sentence, language);
+                var polarity = textAnalysis.sentimentAnalysis(sentence, language);
                 _this.showFeedback(polarity, "polarity");
                 var selfish = textAnalysis.selfishnessAnalysis(sentence, language);
                 _this.showFeedback(selfish, "selfishness");
+                var ignoreLastWord = new RegExp(/.+[ !?,.:"]/, 'gim');
+                var allWordsExceptLast = sentence.match(ignoreLastWord);
+                var wordsToAnalyze = String(allWordsExceptLast);
+                _this.tempSentences[1] = wordsToAnalyze;
+                if (_this.tempSentences[1] !== _this.tempSentences[0]) {
+                    console.log("c'est different", _this.tempSentences[1], _this.tempSentences[0]);
+                    _this.tempSentences[0] = wordsToAnalyze;
+                    var promise = textAnalysis.translateToEnglish(wordsToAnalyze);
+                    console.log("promise:", promise);
+                    promise.then(function (englishSentence) {
+                        console.log("english sentence: " + englishSentence);
+                        var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                        console.log("darktriad:", darktriad);
+                    }).catch(function (err) { return console.log(err); });
+                }
+                else {
+                    console.log("c'est pareil!");
+                }
             }
         };
         this.animateNegativeWords = function (words) {
@@ -131,6 +151,7 @@ var WritingInterface = (function () {
             "f21542": -7,
             "fb0736": -8
         };
+        this.tempSentences = ["", ""];
     }
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
         var tag = "<span class=\"" + elmtClass + "\">";
