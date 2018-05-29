@@ -64,11 +64,11 @@ export class CordovaApp {
         // DataVis.getWords("positive", "0783094512", "inbox", "fr");
         // DataVis.getWords("negative", "0783094512", "inbox", "fr");
         //------------------------------------------------------------------------
-        Component.addTag("h3", "#userStats", "Personnalité de Maman", "stats-title");
-        Component.addTag("p", "#userStats", "En rose tes propres valeurs");
-        DataVis.bigFiveGraph("0675611341", "inbox");
-        Component.addTag("h3", "#userStats", "Personnalité de Clémence", "stats-title");
-        DataVis.bigFiveGraph("0783094512", "inbox");
+        // Component.addTag("h3", "#userStats", "Personnalité de Maman", "stats-title");
+        // Component.addTag("p", "#userStats", "En rose tes propres valeurs");
+        // DataVis.bigFiveGraph("0675611341", "inbox");
+        // Component.addTag("h3", "#userStats", "Personnalité de Clémence", "stats-title");
+        // DataVis.bigFiveGraph("0783094512", "inbox");
 
 
 
@@ -184,7 +184,12 @@ export class CordovaApp {
 
         // console.log(text.sentimentAnalysis())
 
-        // writingAssistant.startAssistance();
+        writingAssistant.startAssistance();
+
+        const writingMenu = <HTMLElement> document.querySelector(".nav-link.write");
+        writingMenu.addEventListener("click", () => {
+            // writingAssistant.startAssistance();
+        });
 
 
 

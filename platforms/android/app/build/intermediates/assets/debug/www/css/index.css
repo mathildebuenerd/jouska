@@ -163,6 +163,20 @@ nav ul li.nav-element {
 }
 
 
+/************
+
+    SECTIONS
+
+ ****/
+
+section.hidden {
+    display: none;
+}
+
+section.visible {
+
+}
+
 /********
 
     Stats nav
@@ -265,7 +279,6 @@ ul.wordList li {
 section#writing {
     padding-top: 50px;
     /*display: flex;*/
-    display: none;
 }
 
 #writing input#contactNumber, #writing #smsContent {
@@ -350,9 +363,7 @@ input#contactNumber:focus, #smsContent:focus {
 
  *********/
 
-.stats {
-    /*display: none;*/
-}
+
 
 
 /****************
@@ -438,9 +449,7 @@ nav#options-visualisation.active {
     margin-right: 8px;
 }
 
-#messages {
-    display: none;
-}
+
 
 
 

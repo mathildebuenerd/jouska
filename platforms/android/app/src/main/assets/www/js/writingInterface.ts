@@ -14,6 +14,9 @@ declare const SMS: any;
 export class WritingInterface {
 
     startAssistance= () => {
+
+
+
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         textArea.addEventListener('keyup', this.analyzeText); // keypress ne fontionne pas avec le clavier android, il faut utiliser keyup
 

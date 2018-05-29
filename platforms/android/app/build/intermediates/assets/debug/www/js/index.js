@@ -26,11 +26,10 @@ var CordovaApp = (function () {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     }
     CordovaApp.prototype.onDeviceReady = function () {
-        Component.addTag("h3", "#userStats", "Personnalité de Maman", "stats-title");
-        Component.addTag("p", "#userStats", "En rose tes propres valeurs");
-        DataVis.bigFiveGraph("0675611341", "inbox");
-        Component.addTag("h3", "#userStats", "Personnalité de Clémence", "stats-title");
-        DataVis.bigFiveGraph("0783094512", "inbox");
+        writingAssistant.startAssistance();
+        var writingMenu = document.querySelector(".nav-link.write");
+        writingMenu.addEventListener("click", function () {
+        });
     };
     return CordovaApp;
 }());

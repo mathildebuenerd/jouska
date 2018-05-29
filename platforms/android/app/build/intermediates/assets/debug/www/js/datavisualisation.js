@@ -4,7 +4,7 @@ var scores = require("./calculateScores");
 var Score = new scores.CalculateScore();
 var sms = require("./manageSMS");
 var Sms = new sms.SMSManager();
-require("./../../hooks/p5");
+require("p5");
 var Datavisualisation = (function () {
     function Datavisualisation() {
         var _this = this;

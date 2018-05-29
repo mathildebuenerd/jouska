@@ -5,8 +5,7 @@ const Score = new scores.CalculateScore();
 import * as sms from "./manageSMS";
 const Sms = new sms.SMSManager();
 
-import "./../../hooks/p5";
-
+import "p5";
 
 
 
