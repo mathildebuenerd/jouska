@@ -94,7 +94,28 @@ var WritingInterface = (function () {
             }
         };
         this.interpretDarktriad = function (triad) {
-            var analyses = _this.triadAnalyses;
+            var analyses = {
+                "triad": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "narcissism": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "machiavellianism": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "psychopathy": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+            };
             for (var trait in triad) {
                 if (triad[trait] !== []) {
                     for (var word in triad[trait]) {
@@ -184,28 +205,6 @@ var WritingInterface = (function () {
             "fb0736": -8
         };
         this.tempSentences = ["", ""];
-        this.triadAnalyses = {
-            "triad": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "narcissism": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "machiavellianism": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "psychopathy": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-        };
     }
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
         var tag = "<span class=\"" + elmtClass + "\">";

@@ -17,7 +17,6 @@ export class WritingInterface {
 
     colors: object;
     tempSentences: Array<string>;
-    triadAnalyses: object;
 
     constructor() {
         this.colors = {
@@ -40,28 +39,6 @@ export class WritingInterface {
             "fb0736": -8
         };
         this.tempSentences = ["", ""]; // on utilise cette variable pour optimiser l'usage de le fonction de traduction. On stocke la dernière phrase traduite dedans, et on checke ensuite chaque fois qu'une touche est pressée pour comparer et voir s'il y a un mot supplémentaire
-        this.triadAnalyses = {
-            "triad": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "narcissism": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "machiavellianism": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-            "psychopathy": {
-                "score": 0,
-                "negativeWords": [],
-                "positiveWords": []
-            },
-        };
     }
 
     startAssistance= () => {
@@ -183,7 +160,28 @@ export class WritingInterface {
     interpretDarktriad = (triad: object): object => {
 
         // console.log("triad", triad);
-        let analyses = this.triadAnalyses;
+        let analyses = {
+            "triad": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "narcissism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "machiavellianism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "psychopathy": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+        };
 
         for (const trait in triad) {
             // on vérifie que le tableau contient bien quelque chose
