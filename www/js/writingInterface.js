@@ -43,14 +43,19 @@ var WritingInterface = (function () {
         };
         this.showFeedback = function (analysis, type) {
             var score = 0;
-            if (analysis['score'] !== undefined) {
-                score += analysis['score'];
-            }
-            else {
-                for (var object in analysis) {
-                    console.log("score " + type + ": " + analysis[object]['score']);
-                    score += analysis[object]['score'];
+            if (type === "polarity" || type === "selfishness") {
+                if (analysis['score'] !== undefined) {
+                    score += analysis['score'];
                 }
+                else {
+                    for (var object in analysis) {
+                        console.log("score " + type + ": " + analysis[object]['score']);
+                        score += analysis[object]['score'];
+                    }
+                }
+            }
+            else if (type === "darktriad") {
+                score = analysis;
             }
             var color = _this.getColor(_this.colors, score);
             _this.changeSidebarColor(type, color);
@@ -70,18 +75,46 @@ var WritingInterface = (function () {
                 if (_this.tempSentences[1] !== _this.tempSentences[0]) {
                     console.log("c'est different", _this.tempSentences[1], _this.tempSentences[0]);
                     _this.tempSentences[0] = wordsToAnalyze;
-                    var promise = textAnalysis.translateToEnglish(wordsToAnalyze);
-                    console.log("promise:", promise);
-                    promise.then(function (englishSentence) {
+                    textAnalysis.translateToEnglish(wordsToAnalyze)
+                        .then(function (englishSentence) {
                         console.log("english sentence: " + englishSentence);
                         var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        console.log("darktriad:", darktriad);
-                    }).catch(function (err) { return console.log(err); });
+                        var interpretation = _this.interpretDarktriad(darktriad);
+                        console.log("interpretation", interpretation);
+                        _this.showFeedback(interpretation["score"], "darktriad");
+                    })
+                        .catch(function (err) { return console.log(err); });
                 }
                 else {
                     console.log("c'est pareil!");
                 }
             }
+        };
+        this.interpretDarktriad = function (triad) {
+            var score = 0;
+            var negativeWords = [];
+            var positiveWords = [];
+            for (var trait in triad) {
+                if (triad[trait] !== []) {
+                    for (var word in triad[trait]) {
+                        var _word = triad[trait][word][0];
+                        var wordScore = triad[trait][word][3];
+                        if (wordScore > 0) {
+                            score--;
+                            negativeWords.push(_word);
+                        }
+                        else {
+                            score++;
+                            positiveWords.push(_word);
+                        }
+                    }
+                }
+            }
+            return {
+                "score": score,
+                "negativeWords": negativeWords,
+                "positiveWords": positiveWords
+            };
         };
         this.animateNegativeWords = function (words) {
             console.log("words:");

@@ -80,17 +80,21 @@ export class WritingInterface {
         }
     };
 
-    showFeedback= (analysis: object, type: string) => {
+    showFeedback= (analysis: any, type: string) => {
 
         let score = 0;
 
-        if (analysis['score'] !== undefined) {
-            score += analysis['score'];
-        } else {
-            for (const object in analysis) {
-                console.log(`score ${type}: ${analysis[object]['score']}`);
-                score += analysis[object]['score'];
+        if (type === "polarity" || type === "selfishness") {
+            if (analysis['score'] !== undefined) {
+                score += analysis['score'];
+            } else {
+                for (const object in analysis) {
+                    console.log(`score ${type}: ${analysis[object]['score']}`);
+                    score += analysis[object]['score'];
+                }
             }
+        } else if (type === "darktriad") {
+            score = analysis;
         }
 
         let color = this.getColor(this.colors, score);
@@ -131,13 +135,18 @@ export class WritingInterface {
             if (this.tempSentences[1] !== this.tempSentences[0]) {
                 console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
                 this.tempSentences[0] = wordsToAnalyze;
-                let promise = textAnalysis.translateToEnglish(wordsToAnalyze);
-                console.log(`promise:`, promise);
-                promise.then((englishSentence) => {
-                    console.log(`english sentence: ${englishSentence}`);
-                    const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                    console.log(`darktriad:`, darktriad);
-                }).catch( (err) => console.log(err));
+
+                // traduit la phrase, ce qui prend un peu de temps (promesse)
+                // quand la phrase est traduite, on lance l'analyse
+                textAnalysis.translateToEnglish(wordsToAnalyze)
+                    .then((englishSentence) => {
+                        console.log(`english sentence: ${englishSentence}`);
+                        const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                        const interpretation = this.interpretDarktriad(darktriad);
+                        console.log(`interpretation`, interpretation);
+                        this.showFeedback(interpretation["score"], "darktriad");
+                    })
+                    .catch( err => console.log(err));
             } else {
                 console.log(`c'est pareil!`);
             }
@@ -155,6 +164,38 @@ export class WritingInterface {
         // this.analyzePersonality();
 
 
+    };
+
+    interpretDarktriad = (triad: object): object => {
+
+        let score = 0;
+        let negativeWords = [];
+        let positiveWords = [];
+
+        for (const trait in triad) {
+            // on vérifie que le tableau contient bien quelque chose
+            if (triad[trait] !== []) {
+                for (const word in triad[trait]) {
+                    const _word = triad[trait][word][0]; // correspond au mot (chaine de caractère)
+                    const wordScore = triad[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
+                    // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
+                    if (wordScore > 0) {
+                        score--;
+                        negativeWords.push(_word);
+                    } else {
+                        score++;
+                        positiveWords.push(_word);
+                    }
+                }
+            }
+        }
+
+        // on renvoie la score moyen, ainsi que les mots qui ont influencé globalement le score
+        return {
+            "score": score,
+            "negativeWords": negativeWords,
+            "positiveWords": positiveWords
+        };
     };
 
     sliceWord(word: string, elmtClass: string): string {
