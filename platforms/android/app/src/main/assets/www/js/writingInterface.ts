@@ -17,6 +17,7 @@ export class WritingInterface {
 
     colors: object;
     tempSentences: Array<string>;
+    triadAnalyses: object;
 
     constructor() {
         this.colors = {
@@ -39,6 +40,28 @@ export class WritingInterface {
             "fb0736": -8
         };
         this.tempSentences = ["", ""]; // on utilise cette variable pour optimiser l'usage de le fonction de traduction. On stocke la dernière phrase traduite dedans, et on checke ensuite chaque fois qu'une touche est pressée pour comparer et voir s'il y a un mot supplémentaire
+        this.triadAnalyses = {
+            "triad": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "narcissism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "machiavellianism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "psychopathy": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+        };
     }
 
     startAssistance= () => {
@@ -51,7 +74,8 @@ export class WritingInterface {
     };
 
     public changeSidebarColor= (barSelector: string, color: string) => {
-        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} .fill`);
+        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} > .fill`);
+        console.log(`barselector:`, barSelector);
         sidebar.style.backgroundColor = '#' + color;
     };
 
@@ -83,6 +107,7 @@ export class WritingInterface {
     showFeedback= (analysis: any, type: string) => {
 
         let score = 0;
+        const triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
 
         if (type === "polarity" || type === "selfishness") {
             if (analysis['score'] !== undefined) {
@@ -93,10 +118,10 @@ export class WritingInterface {
                     score += analysis[object]['score'];
                 }
             }
-        } else if (type === "darktriad") {
+            // les analyses de la liste triad donnent directement le score
+        } else if (triad.indexOf(type) !== -1) {
             score = analysis;
         }
-
 
         let color = this.getColor(this.colors, score);
         this.changeSidebarColor(type, color);
@@ -145,59 +170,44 @@ export class WritingInterface {
                         const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
                         const interpretation = this.interpretDarktriad(darktriad);
                         console.log(`interpretation`, interpretation);
-                        this.showFeedback(interpretation["score"], "darktriad");
+                        for (const trait in interpretation) {
+                            this.showFeedback(interpretation[trait].score, String(trait));
+                        }
                     })
                     .catch( err => console.log(err));
             } else {
-                console.log(`c'est pareil!`);
             }
-
-
-
         }
-
-
-
-
-
-        // this.analyzeSelfishness();
-        // this.analyzeDarktriad();
-        // this.analyzePersonality();
-
-
     };
 
     interpretDarktriad = (triad: object): object => {
 
-        let score = 0;
-        let negativeWords = [];
-        let positiveWords = [];
+        // console.log("triad", triad);
+        let analyses = this.triadAnalyses;
 
         for (const trait in triad) {
             // on vérifie que le tableau contient bien quelque chose
+
             if (triad[trait] !== []) {
                 for (const word in triad[trait]) {
                     const _word = triad[trait][word][0]; // correspond au mot (chaine de caractère)
                     const wordScore = triad[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
-                    // si le score du mot est négatif, on arrondi à -1
-                    if (wordScore < 0) {
-                        score--;
-                        negativeWords.push(_word);
-                        // s'il est positif on arrondi à 1
+                    // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
+                    if (wordScore > 0) {
+                        analyses[trait].score--;
+                        analyses[trait].negativeWords.push(_word);
                     } else {
-                        score++;
-                        positiveWords.push(_word);
+                        analyses[trait].score++;
+                        analyses[trait].positiveWords.push(_word);
                     }
                 }
             }
         }
 
+        // console.log(`analyses`, analyses);
+
         // on renvoie la score moyen, ainsi que les mots qui ont influencé globalement le score
-        return {
-            "score": score,
-            "negativeWords": negativeWords,
-            "positiveWords": positiveWords
-        };
+        return analyses;
     };
 
     sliceWord(word: string, elmtClass: string): string {
@@ -258,17 +268,20 @@ export class WritingInterface {
     sendMessage= () => {
         const recipientElement = <HTMLInputElement>document.querySelector('#contactNumber');
         const recipient = recipientElement.value;
-        const messageElement = <HTMLTextAreaElement>document.querySelector('#smsContent');
-        const message = messageElement.value;
+        const messageElement = <HTMLElement>document.querySelector('#smsContent');
+        const message = messageElement.textContent;
         let confirmationMessage = document.querySelector('#confirmationMessage');
 
         SMS.sendSMS(recipient, message, () => {
             console.log(`sms envoyé! destinaire: ${recipient}; message: ${message}`);
             recipientElement.value = '';
-            messageElement.value = '';
+            messageElement.contentEditable = "false";
+            messageElement.style.border = "none";
+            messageElement.style.color = "#aaa";
             confirmationMessage.textContent = "Message correctement envoyé :)";
         }, (err) => {
-            confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...";
+            confirmationMessage.textContent = `Il y a eu une erreur, le message n'est pas parti...
+            Erreur: ${err}`;
             throw err;
         });
 

@@ -16,7 +16,8 @@ var WritingInterface = (function () {
             sendButton.addEventListener('click', _this.sendMessage);
         };
         this.changeSidebarColor = function (barSelector, color) {
-            var sidebar = document.querySelector("#" + barSelector + " .fill");
+            var sidebar = document.querySelector("#" + barSelector + " > .fill");
+            console.log("barselector:", barSelector);
             sidebar.style.backgroundColor = '#' + color;
         };
         this.getColor = function (object, value) {
@@ -43,6 +44,7 @@ var WritingInterface = (function () {
         };
         this.showFeedback = function (analysis, type) {
             var score = 0;
+            var triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
             if (type === "polarity" || type === "selfishness") {
                 if (analysis['score'] !== undefined) {
                     score += analysis['score'];
@@ -54,7 +56,7 @@ var WritingInterface = (function () {
                     }
                 }
             }
-            else if (type === "darktriad") {
+            else if (triad.indexOf(type) !== -1) {
                 score = analysis;
             }
             var color = _this.getColor(_this.colors, score);
@@ -81,40 +83,35 @@ var WritingInterface = (function () {
                         var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
                         var interpretation = _this.interpretDarktriad(darktriad);
                         console.log("interpretation", interpretation);
-                        _this.showFeedback(interpretation["score"], "darktriad");
+                        for (var trait in interpretation) {
+                            _this.showFeedback(interpretation[trait].score, String(trait));
+                        }
                     })
                         .catch(function (err) { return console.log(err); });
                 }
                 else {
-                    console.log("c'est pareil!");
                 }
             }
         };
         this.interpretDarktriad = function (triad) {
-            var score = 0;
-            var negativeWords = [];
-            var positiveWords = [];
+            var analyses = _this.triadAnalyses;
             for (var trait in triad) {
                 if (triad[trait] !== []) {
                     for (var word in triad[trait]) {
                         var _word = triad[trait][word][0];
                         var wordScore = triad[trait][word][3];
                         if (wordScore > 0) {
-                            score--;
-                            negativeWords.push(_word);
+                            analyses[trait].score--;
+                            analyses[trait].negativeWords.push(_word);
                         }
                         else {
-                            score++;
-                            positiveWords.push(_word);
+                            analyses[trait].score++;
+                            analyses[trait].positiveWords.push(_word);
                         }
                     }
                 }
             }
-            return {
-                "score": score,
-                "negativeWords": negativeWords,
-                "positiveWords": positiveWords
-            };
+            return analyses;
         };
         this.animateNegativeWords = function (words) {
             console.log("words:");
@@ -153,15 +150,17 @@ var WritingInterface = (function () {
             var recipientElement = document.querySelector('#contactNumber');
             var recipient = recipientElement.value;
             var messageElement = document.querySelector('#smsContent');
-            var message = messageElement.value;
+            var message = messageElement.textContent;
             var confirmationMessage = document.querySelector('#confirmationMessage');
             SMS.sendSMS(recipient, message, function () {
                 console.log("sms envoy\u00E9! destinaire: " + recipient + "; message: " + message);
                 recipientElement.value = '';
-                messageElement.value = '';
+                messageElement.contentEditable = "false";
+                messageElement.style.border = "none";
+                messageElement.style.color = "#aaa";
                 confirmationMessage.textContent = "Message correctement envoyé :)";
             }, function (err) {
-                confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...";
+                confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...\n            Erreur: " + err;
                 throw err;
             });
         };
@@ -185,6 +184,28 @@ var WritingInterface = (function () {
             "fb0736": -8
         };
         this.tempSentences = ["", ""];
+        this.triadAnalyses = {
+            "triad": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "narcissism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "machiavellianism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "psychopathy": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+        };
     }
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
         var tag = "<span class=\"" + elmtClass + "\">";

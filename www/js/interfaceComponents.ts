@@ -2,6 +2,8 @@ export class InterfaceComponents {
 
     constructor() {
         this.addListeners();
+        // on cache le menu quand le clavier sort
+        window.addEventListener('native.keyboardshow', this.hideBottomMenu);
     }
 
     addListeners = () => {
@@ -33,6 +35,11 @@ export class InterfaceComponents {
 
 
     };
+
+    hideBottomMenu() {
+        const bottomMenu = <HTMLElement> document.querySelector(".bottom-nav");
+        bottomMenu.style.display = "none";
+    }
 
     toggleSettingsNav = () => {
         const settingsNav = document.querySelector(`nav#options-visualisation`);
