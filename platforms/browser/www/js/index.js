@@ -8,6 +8,8 @@ var writingInterface = require("./writingInterface");
 var writingAssistant = new writingInterface.WritingInterface();
 var discussionThread = require("./discussionThread");
 var thread = new discussionThread.DiscussionThread();
+var interfaceComponents = require("./interfaceComponents");
+var Component = new interfaceComponents.InterfaceComponents();
 var translate = require("./../../hooks/translate");
 var keys = require("./apiKeys");
 var sentimentAnalysis_1 = require("./sentimentAnalysis");
@@ -19,23 +21,14 @@ var DataVis = new dataV.Datavisualisation();
 var Keys = new keys.Keys();
 translate.key = Keys.API_KEY;
 translate.from = 'fr';
-require("./../../hooks/p5");
 var CordovaApp = (function () {
     function CordovaApp() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     }
     CordovaApp.prototype.onDeviceReady = function () {
-        new p5(function (monSketch) {
-            var x = 100;
-            var y = 100;
-            monSketch.setup = function () {
-                monSketch.createCanvas(700, 410);
-            };
-            monSketch.draw = function () {
-                monSketch.background(0);
-                monSketch.fill(255);
-                monSketch.rect(x, y, 50, 50);
-            };
+        writingAssistant.startAssistance();
+        var writingMenu = document.querySelector(".nav-link.write");
+        writingMenu.addEventListener("click", function () {
         });
     };
     return CordovaApp;

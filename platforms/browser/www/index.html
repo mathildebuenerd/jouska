@@ -37,8 +37,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
     <title>Quantified talk</title>
 
-    <script src='../apikeys.js'></script>
-
 </head>
 <body>
 <div class="app">
@@ -46,7 +44,7 @@
     <div id="deviceready" class="blink">
     </div>
 
-    <button id="addThisToStorage">Add this to storage</button>
+    <!--<button id="addThisToStorage">Add this to storage</button>-->
 
     <section id="installTheApp">
         <h1>Install the app</h1>
@@ -103,13 +101,40 @@
 
     </section> <!-- install the app -->
 
-    <section id="writing">
+    <section id="writing" class="">
 
         <div id="feedback">
-            <div id="gauge">
-                <div id="fill"></div>
-            </div>
-        </div>
+            <div id="rec"></div>
+            <div id="all-analyses">
+                <div id="polarity" class="gauges">
+                    <div class="fill"></div>
+                    <p class="gauge-name">Polarity</p>
+                </div>
+                <div id="selfishness" class="gauges">
+                    <div class="fill"></div>
+                    <p class="gauge-name">Selfish</p>
+                </div>
+
+                <div id="triad" class="gauges">
+                    <div class="fill"></div>
+                    <p class="gauge-name">Triad</p>
+                    <div class="sub-gauges">
+                        <div id="narcissism" class="single-sub-gauge">
+                            <div class="fill"></div>
+                            <p class="gauge-name">Narcissism</p>
+                        </div>
+                        <div id="machiavellianism" class="single-sub-gauge">
+                            <div class="fill"></div>
+                            <p class="gauge-name">Machiavellianism</p>
+                        </div>
+                        <div id="psychopathy" class="single-sub-gauge">
+                            <div class="fill"></div>
+                            <p class="gauge-name">Psychopathy</p>
+                        </div>
+                    </div> <!-- sub-gauges -->
+                </div> <!-- darktriad block -->
+            </div> <!-- all analyses -->
+        </div> <!-- feeedback -->
 
         <div id="write">
             <div id="contact">
@@ -117,7 +142,7 @@
                 <input type="text" id="contactNumber" placeholder="Destinataire">
             </div>
 
-            <div id="smsContent" contenteditable="true">Ecris un message positif...</div>
+            <div id="smsContent" contenteditable="true">Ecris....</div>
 
             <div id="warning">
                 <span class="icon warning"></span>
@@ -132,7 +157,7 @@
 
     </section>
 
-    <section class="stats">
+    <section id="stats" class="hidden">
 
         <nav class="stats-nav">
             <ul>
@@ -163,7 +188,7 @@
 
     </section>
 
-    <section id="messages">
+    <section id="messages" class="hidden">
 
         <section id="messages-list">
 
@@ -219,20 +244,20 @@
     <nav class="bottom-nav">
         <ul>
             <li class="nav-element">
-                <a class="nav-link">
+                <a class="nav-link message">
                     <span class="icon message"><img alt="icone de message" src="img/icons/icon-message-inactive.png"></span>
                     <span class="nav-item-text">Messages</span>
                 </a>
             </li>
             <li class="nav-element">
-                <a class="nav-link">
+                <a class="nav-link write">
                     <span class="icon write"><img alt="icone de clavier" src="img/icons/icon-write-inactive.png"></span>
                     <span class="nav-item-text">Ecrire</span>
                 </a>
             </li>
             <li class="nav-element">
-                <a class="nav-link active">
-                    <span class="icon stat"><img alt="icone de graphique" src="img/icons/icon-stats-active.png"></span>
+                <a class="nav-link active stat">
+                    <span class="icon stat"><img alt="icone de graphique" src="img/icons/icon-stat-active.png"></span>
                     <span class="nav-item-text">Stats</span>
                 </a>
             </li>
@@ -243,7 +268,7 @@
     <section id="blockSentences"></section>
 
 </div>
-<script src="./../hooks/p5/lib/p5.js"></script>
+<script src="js/p5/p5.js"></script>
 <script src="cordova.js"></script>
 <!--<script src="js/index.js"></script>-->
 <!--<script src="js/manageSMS.js"></script>-->

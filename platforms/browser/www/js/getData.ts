@@ -1,10 +1,10 @@
 import {SMSManager} from "./manageSMS";
 import {TextAnalysis} from "./sentimentAnalysis";
-import * as translate from "./../../hooks/translate";
+import * as gtranslate from "./../../hooks/translate";
 import * as keys from './apiKeys';
 const Keys = new keys.Keys();
-translate.key = Keys.API_KEY;
-translate.from ='fr';
+gtranslate.key = Keys.API_KEY;
+gtranslate.from ='fr';
 
 const sms: SMSManager = new SMSManager();
 const textAnalysis: TextAnalysis = new TextAnalysis();
@@ -122,7 +122,7 @@ export class Installation {
                 // console.log(sms)
                 for (const smsID in smsData[contact][type]) {
                     console.log(smsData[contact][type][smsID].text.original);
-                    translate(smsData[contact][type][smsID].text.original, {to: 'en'}).then(translatedText => {
+                    gtranslate(smsData[contact][type][smsID].text.original, {to: 'en'}).then(translatedText => {
                         let text = translatedText;
                         if (translatedText.indexOf('&#39;') !== -1) { // il y a un problème d'encodage avec l'apostrophe, donc on remplace les erreurs
                             text = translatedText.replace('&#39;', "'");
@@ -183,7 +183,7 @@ export class Installation {
                             };
                             if (darktriad_m[trait] !== []) {
                                 for (const word in darktriad_m[trait]) {
-                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3]; // word[3] c'est la valeur du mot
+                                    analysis.darktriad[trait].score += darktriad_m[trait][word][3]; // word[3] c'est la valeur relative du mot
                                     if (darktriad_m[trait][word][3] > 0) { // le mot peut soit faire augmenter, soit faire baisser un certain trait de personnalité, il faut donc classifier les mots
                                         analysis.darktriad[trait].words.positive.push(darktriad_m[trait][word][0]); // word[0] c'est le mot qui a matché
                                     } else {

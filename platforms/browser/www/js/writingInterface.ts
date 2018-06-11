@@ -7,13 +7,42 @@ const sms = new _SMS.SMSManager();
 import {TextAnalysis} from "./sentimentAnalysis";
 const textAnalysis: TextAnalysis = new TextAnalysis();
 // import * as {SMSMa} from "./manageSMS";
+import * as getData from "./getData"; // on récupère la fonction translate qu'on utilise lors de l'installation de l'app
+const ManageData = new getData.Installation();
 
 declare const SMS: any;
 
 
 export class WritingInterface {
 
+    colors: object;
+    tempSentences: Array<string>;
+
+    constructor() {
+        this.colors = {
+            "a5f31b": 8,
+            "a4ed2b": 7,
+            "a2e739": 6,
+            "a1dc52": 5,
+            "a1d16b": 4,
+            "a1c087": 3,
+            "a1b595": 2,
+            "a1a69f": 1,
+            "a39ba1": 0,
+            "ae849b": -1,
+            "b57794": -2,
+            "c26185": -3,
+            "cf4c74": -4,
+            "db3863": -5,
+            "e82551": -6,
+            "f21542": -7,
+            "fb0736": -8
+        };
+        this.tempSentences = ["", ""]; // on utilise cette variable pour optimiser l'usage de le fonction de traduction. On stocke la dernière phrase traduite dedans, et on checke ensuite chaque fois qu'une touche est pressée pour comparer et voir s'il y a un mot supplémentaire
+    }
+
     startAssistance= () => {
+
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         textArea.addEventListener('keyup', this.analyzeText); // keypress ne fontionne pas avec le clavier android, il faut utiliser keyup
 
@@ -21,8 +50,9 @@ export class WritingInterface {
         sendButton.addEventListener('click', this.sendMessage);
     };
 
-    public changeSidebarColor= (color: string) => {
-        let sidebar = <HTMLElement>document.querySelector('#feedback');
+    public changeSidebarColor= (barSelector: string, color: string) => {
+        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} > .fill`);
+        console.log(`barselector:`, barSelector);
         sidebar.style.backgroundColor = '#' + color;
     };
 
@@ -35,72 +65,147 @@ export class WritingInterface {
         return Object.keys(object).find(key => object[key] === value);
     };
 
-    public analyzeText=() => {
-        const language = 'fr';
-        const textArea = <HTMLElement>document.querySelector('#smsContent');
+    getSentence= (): string => {
+
+        const textArea = <HTMLElement>document.querySelector('#smsContent'); // c'est pas un textArea mais un bloc avec contenteditable
         const text = textArea.textContent;
-        console.log(`text: ${text}`);
-        const allWordsExceptLast = new RegExp(/.+/, 'gim'); // récupère tous les mots
-        const sentence = text.match(allWordsExceptLast); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
+        const allWords = new RegExp(/.+/, 'gim'); // récupère tous les mots
+        const sentence = text.match(allWords);
         const letters = new RegExp(/\S/, 'gi');
 
-        if (letters.test(sentence[0])) { // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
-            console.log(`Sentence existe, voici son analyse:`);
-
-            // let analysis = {};
-            let score = 0;
-            let colors = {
-                "a5f31b": 8,
-                "a4ed2b": 7,
-                "a2e739": 6,
-                "a1dc52": 5,
-                "a1d16b": 4,
-                "a1c087": 3,
-                "a1b595": 2,
-                "a1a69f": 1,
-                "a39ba1": 0,
-                "ae849b": -1,
-                "b57794": -2,
-                "c26185": -3,
-                "cf4c74": -4,
-                "db3863": -5,
-                "e82551": -6,
-                "f21542": -7,
-                "fb0736": -8
-            };
-            const analysis = textAnalysis.sentimentAnalysis(sentence[0], language);
-            console.log(`analysis:`);
-            console.dir(analysis);
-
-            if (analysis['score'] !== undefined) {
-                console.log(`analysis['score'] existe`);
-                console.dir(analysis['score']);
-                score += analysis['score'];
-            } else {
-                console.log(`analysis['score'] n'existe pas`);
-                for (const object in analysis) {
-                    console.dir(analysis[object]['score']);
-                    score += analysis[object]['score'];
-                }
-            }
-            console.log(`colors: ${colors}`);
-            console.log(`score: ${score}`);
-            let color = this.getColor(colors, score);
-            this.changeSidebarColor(color);
-            console.log(`score: ${score}`);
-
-            if (analysis["negative"].length > 0) {
-                console.log(`analysis.negative length > 0`);
-                this.animateNegativeWords(analysis["negative"]);
-            }
-
-
-            // const languages = sms.detectLanguage(String(sentence));
-            // console.log(`languages: `);
-            // console.log(languages);
+        // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
+        if (letters.test(sentence[0])) {
+            return sentence[0]; // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
         } else {
             console.warn(`sentence n'existe pas, elle est égale à ${sentence} et est de type ${typeof sentence}`);
         }
+    };
+
+    showFeedback= (analysis: any, type: string) => {
+
+        let score = 0;
+        const triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
+
+        if (type === "polarity" || type === "selfishness") {
+            if (analysis['score'] !== undefined) {
+                score += analysis['score'];
+            } else {
+                for (const object in analysis) {
+                    console.log(`score ${type}: ${analysis[object]['score']}`);
+                    score += analysis[object]['score'];
+                }
+            }
+            // les analyses de la liste triad donnent directement le score
+        } else if (triad.indexOf(type) !== -1) {
+            score = analysis;
+        }
+
+        let color = this.getColor(this.colors, score);
+        this.changeSidebarColor(type, color);
+
+        // if (analysis["negative"].length > 0) {
+        //     // this.animateNegativeWords(analysis["negative"]);
+        // }
+    };
+
+    public analyzeText=() => {
+
+        const language = 'fr';
+        let sentence = this.getSentence();
+
+
+        if (sentence !== undefined) {
+            // Analyses en français
+            // sentence peut être undefined s'il y a trop peu de lettres
+            const polarity = textAnalysis.sentimentAnalysis(sentence, language);
+            this.showFeedback(polarity, "polarity");
+            const selfish = textAnalysis.selfishnessAnalysis(sentence, language);
+            this.showFeedback(selfish, "selfishness");
+
+            // Analyses en anglais
+            // Pour ces analyses, on traduit en anglais avant d'analyser
+            // D'abord on récupère uniquement les mots entiers
+            const ignoreLastWord = new RegExp(/.+[ !?,.:"]/, 'gim');
+            // const test = sentence.split(" ");
+            // console.log(`test: `, test);
+            const allWordsExceptLast = sentence.match(ignoreLastWord); // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
+            // console.log(`allwordsexc`, allWordsExceptLast);
+            const wordsToAnalyze = String(allWordsExceptLast);
+
+            this.tempSentences[1] = wordsToAnalyze;
+
+            // Si ces deux valeurs sont différentes, c'est qu'il y a un mot de plus ou de moins
+            if (this.tempSentences[1] !== this.tempSentences[0]) {
+                console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
+                this.tempSentences[0] = wordsToAnalyze;
+
+                // traduit la phrase, ce qui prend un peu de temps (promesse)
+                // quand la phrase est traduite, on lance l'analyse
+                textAnalysis.translateToEnglish(wordsToAnalyze)
+                    .then((englishSentence) => {
+                        console.log(`english sentence: ${englishSentence}`);
+                        const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                        const interpretation = this.interpretDarktriad(darktriad);
+                        console.log(`interpretation`, interpretation);
+                        for (const trait in interpretation) {
+                            this.showFeedback(interpretation[trait].score, String(trait));
+                        }
+                    })
+                    .catch( err => console.log(err));
+            } else {
+            }
+        }
+    };
+
+    interpretDarktriad = (triad: object): object => {
+
+        // console.log("triad", triad);
+        let analyses = {
+            "triad": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "narcissism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "machiavellianism": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "psychopathy": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+        };
+
+        for (const trait in triad) {
+            // on vérifie que le tableau contient bien quelque chose
+
+            if (triad[trait] !== []) {
+                for (const word in triad[trait]) {
+                    const _word = triad[trait][word][0]; // correspond au mot (chaine de caractère)
+                    const wordScore = triad[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
+                    // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
+                    if (wordScore > 0) {
+                        analyses[trait].score--;
+                        analyses[trait].negativeWords.push(_word);
+                    } else {
+                        analyses[trait].score++;
+                        analyses[trait].positiveWords.push(_word);
+                    }
+                }
+            }
+        }
+
+        // console.log(`analyses`, analyses);
+
+        // on renvoie la score moyen, ainsi que les mots qui ont influencé globalement le score
+        return analyses;
     };
 
     sliceWord(word: string, elmtClass: string): string {
@@ -161,17 +266,20 @@ export class WritingInterface {
     sendMessage= () => {
         const recipientElement = <HTMLInputElement>document.querySelector('#contactNumber');
         const recipient = recipientElement.value;
-        const messageElement = <HTMLTextAreaElement>document.querySelector('#smsContent');
-        const message = messageElement.value;
+        const messageElement = <HTMLElement>document.querySelector('#smsContent');
+        const message = messageElement.textContent;
         let confirmationMessage = document.querySelector('#confirmationMessage');
 
         SMS.sendSMS(recipient, message, () => {
             console.log(`sms envoyé! destinaire: ${recipient}; message: ${message}`);
             recipientElement.value = '';
-            messageElement.value = '';
+            messageElement.contentEditable = "false";
+            messageElement.style.border = "none";
+            messageElement.style.color = "#aaa";
             confirmationMessage.textContent = "Message correctement envoyé :)";
         }, (err) => {
-            confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...";
+            confirmationMessage.textContent = `Il y a eu une erreur, le message n'est pas parti...
+            Erreur: ${err}`;
             throw err;
         });
 
