@@ -50,10 +50,10 @@ export class WritingInterface {
         sendButton.addEventListener('click', this.sendMessage);
     };
 
-    public changeSidebarColor= (barSelector: string, color: string) => {
+    public changeSidebar= (barSelector: string, score: number) => {
         let sidebar = <HTMLElement>document.querySelector(`#${barSelector} > .fill`);
         console.log(`barselector:`, barSelector);
-        sidebar.style.backgroundColor = '#' + color;
+        sidebar.style.backgroundImage = `url(img/interface-components/jauges/jauge_${score}.png`;
     };
 
     public getColor= (object: object, value: number): string => {
@@ -64,6 +64,22 @@ export class WritingInterface {
         }
         return Object.keys(object).find(key => object[key] === value);
     };
+
+    public getSidebarNumber(score: number) {
+        // le score est usuellement un nombre entre -8 et 8
+        // comme les jauges sont numérotées de 0 à 16, on commence en soustrayant 8
+        let value = score-8;
+
+        // ensuite, si les valeurs sont trop hautes ou trop basses, on égalise
+        if (score > 8) {
+            value = 8;
+        } else if (score < -8) {
+            value = -8;
+        }
+
+        return value;
+
+    }
 
     getSentence= (): string => {
 
@@ -100,8 +116,9 @@ export class WritingInterface {
             score = analysis;
         }
 
-        let color = this.getColor(this.colors, score);
-        this.changeSidebarColor(type, color);
+        // let color = this.getColor(this.colors, score);
+        let scoreBar = this.getSidebarNumber(score);
+        this.changeSidebar(type, scoreBar);
 
         // if (analysis["negative"].length > 0) {
         //     // this.animateNegativeWords(analysis["negative"]);

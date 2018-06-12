@@ -15,10 +15,10 @@ var WritingInterface = (function () {
             var sendButton = document.querySelector('#sendMessage');
             sendButton.addEventListener('click', _this.sendMessage);
         };
-        this.changeSidebarColor = function (barSelector, color) {
+        this.changeSidebar = function (barSelector, score) {
             var sidebar = document.querySelector("#" + barSelector + " > .fill");
             console.log("barselector:", barSelector);
-            sidebar.style.backgroundColor = '#' + color;
+            sidebar.style.backgroundImage = "url(img/interface-components/jauges/jauge_" + score + ".png";
         };
         this.getColor = function (object, value) {
             if (value > 8) {
@@ -59,8 +59,8 @@ var WritingInterface = (function () {
             else if (triad.indexOf(type) !== -1) {
                 score = analysis;
             }
-            var color = _this.getColor(_this.colors, score);
-            _this.changeSidebarColor(type, color);
+            var scoreBar = _this.getSidebarNumber(score);
+            _this.changeSidebar(type, scoreBar);
         };
         this.analyzeText = function () {
             var language = 'fr';
@@ -206,6 +206,16 @@ var WritingInterface = (function () {
         };
         this.tempSentences = ["", ""];
     }
+    WritingInterface.prototype.getSidebarNumber = function (score) {
+        var value = score - 8;
+        if (score > 8) {
+            value = 8;
+        }
+        else if (score < -8) {
+            value = -8;
+        }
+        return value;
+    };
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
         var tag = "<span class=\"" + elmtClass + "\">";
         for (var letter = 0; letter < word.length; letter++) {

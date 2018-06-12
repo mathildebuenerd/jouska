@@ -333,11 +333,12 @@ input#contactNumber:focus, #smsContent:focus {
 }
 
 #rec { /*le petit rond qui montre qu'on est en train d'analyser*/
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 30px;
-    animation: blink 1s infinite;
+    /*width: 10px;*/
+    /*height: 10px;*/
+    /*background-color: red;*/
+    /*border-radius: 30px;*/
+    /*animation: blink 1s infinite;*/
+    display: none;
 }
 
 @keyframes blink {
