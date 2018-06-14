@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Jun 12 23:46:36 CEST 2018
+#Tue Jun 12 23:52:03 CEST 2018
 175.set=ANDROID_RESOURCE
 122.file=D\:\\WebstormProjects\\QuantifiedTalk\\platforms\\android\\app\\build\\intermediates\\assets\\debug\\www\\plugins\\com.dbaq.cordova.contactsPhoneNumbers\\www\\contactsPhoneNumbers.js
 60.set=ANDROID_RESOURCE

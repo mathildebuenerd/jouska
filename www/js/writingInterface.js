@@ -17,7 +17,6 @@ var WritingInterface = (function () {
         };
         this.changeSidebar = function (barSelector, score) {
             var sidebar = document.querySelector("#" + barSelector + " > .fill");
-            console.log("barselector:", barSelector);
             sidebar.style.backgroundImage = "url(img/interface-components/jauges/jauge_" + score + ".png";
         };
         this.getColor = function (object, value) {
@@ -44,7 +43,7 @@ var WritingInterface = (function () {
         };
         this.showFeedback = function (analysis, type) {
             var score = 0;
-            var triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
+            var triad = ["psychopathy", "conscientiousness", "openness"];
             if (type === "polarity" || type === "selfishness") {
                 if (analysis['score'] !== undefined) {
                     score += analysis['score'];
@@ -81,10 +80,15 @@ var WritingInterface = (function () {
                         .then(function (englishSentence) {
                         console.log("english sentence: " + englishSentence);
                         var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        var interpretation = _this.interpretDarktriad(darktriad);
-                        console.log("interpretation", interpretation);
-                        for (var trait in interpretation) {
-                            _this.showFeedback(interpretation[trait].score, String(trait));
+                        var bigfive = textAnalysis.personalityAnalysis(englishSentence);
+                        var interpretationDarkriad = _this.interpretAnalysis("darktriad", darktriad);
+                        var interpretationBigfive = _this.interpretAnalysis("bigfive", bigfive);
+                        var traitDarktriad = "psychopathy";
+                        _this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+                        console.log("interpretation big five", interpretationBigfive);
+                        var traitBigfive = ["conscientiousness", "openness"];
+                        for (var i = 0; i < traitBigfive.length; i++) {
+                            _this.showFeedback(interpretationBigfive[traitBigfive[i]].score, String(traitBigfive));
                         }
                     })
                         .catch(function (err) { return console.log(err); });
@@ -93,8 +97,9 @@ var WritingInterface = (function () {
                 }
             }
         };
-        this.interpretDarktriad = function (triad) {
-            var analyses = {
+        this.interpretAnalysis = function (type, analysis) {
+            var analyses = {};
+            var analysesDark = {
                 "triad": {
                     "score": 0,
                     "negativeWords": [],
@@ -116,11 +121,44 @@ var WritingInterface = (function () {
                     "positiveWords": []
                 },
             };
-            for (var trait in triad) {
-                if (triad[trait] !== []) {
-                    for (var word in triad[trait]) {
-                        var _word = triad[trait][word][0];
-                        var wordScore = triad[trait][word][3];
+            var analysesBigfive = {
+                "O": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "C": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "E": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "A": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "N": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+            };
+            if (type === "darktriad") {
+                var analyses_1 = analysesDark;
+            }
+            else if (type === "bigfive") {
+                var analyses_2 = analysesBigfive;
+            }
+            for (var trait in analysis) {
+                if (analysis[trait] !== []) {
+                    for (var word in analysis[trait]) {
+                        var _word = analysis[trait][word][0];
+                        var wordScore = analysis[trait][word][3];
                         if (wordScore > 0) {
                             analyses[trait].score--;
                             analyses[trait].negativeWords.push(_word);
@@ -135,8 +173,6 @@ var WritingInterface = (function () {
             return analyses;
         };
         this.animateNegativeWords = function (words) {
-            console.log("words:");
-            console.log(words);
             var textArea = document.querySelector('#smsContent');
             for (var word in words) {
                 var slicedWord = _this.sliceWord(words[word], "negative");

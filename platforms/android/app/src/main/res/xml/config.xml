@@ -27,9 +27,9 @@
     <feature name="ContactsPhoneNumbers">
         <param name="android-package" value="com.dbaq.cordova.contactsPhoneNumbers.ContactsManager" />
     </feature>
-    <name>Quantified Talk</name>
+    <name>Jouska</name>
     <description>
-        Quantify what you say, improve your relationships.
+        Messaging app that analyzes your emotions.
     </description>
     <author email="mathilde.buenerd@gmail.com" href="http://chilidesign.fr">
         Math

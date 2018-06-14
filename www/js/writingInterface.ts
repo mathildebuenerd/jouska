@@ -52,7 +52,7 @@ export class WritingInterface {
 
     public changeSidebar= (barSelector: string, score: number) => {
         let sidebar = <HTMLElement>document.querySelector(`#${barSelector} > .fill`);
-        console.log(`barselector:`, barSelector);
+        // console.log(`barselector:`, barSelector);
         sidebar.style.backgroundImage = `url(img/interface-components/jauges/jauge_${score}.png`;
     };
 
@@ -100,7 +100,7 @@ export class WritingInterface {
     showFeedback= (analysis: any, type: string) => {
 
         let score = 0;
-        const triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
+        const triad = ["psychopathy", "conscientiousness", "openness"];
 
         if (type === "polarity" || type === "selfishness") {
             if (analysis['score'] !== undefined) {
@@ -162,11 +162,23 @@ export class WritingInterface {
                     .then((englishSentence) => {
                         console.log(`english sentence: ${englishSentence}`);
                         const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        const interpretation = this.interpretDarktriad(darktriad);
-                        console.log(`interpretation`, interpretation);
-                        for (const trait in interpretation) {
-                            this.showFeedback(interpretation[trait].score, String(trait));
+                        const bigfive = textAnalysis.personalityAnalysis(englishSentence);
+                        const interpretationDarkriad = this.interpretAnalysis("darktriad", darktriad);
+                        const interpretationBigfive = this.interpretAnalysis("bigfive", bigfive);
+                        // for (const trait in interpretation) {
+
+                        // select criteria in psychopathy
+                        const traitDarktriad = "psychopathy";
+                        this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+
+                        console.log(`interpretation big five`, interpretationBigfive);
+                        const traitBigfive = ["conscientiousness", "openness"];
+                        for (let i=0; i<traitBigfive.length; i++) {
+                            this.showFeedback(interpretationBigfive[traitBigfive[i]].score, String(traitBigfive));
                         }
+
+                        // select criteria
+                        // }
                     })
                     .catch( err => console.log(err));
             } else {
@@ -174,10 +186,10 @@ export class WritingInterface {
         }
     };
 
-    interpretDarktriad = (triad: object): object => {
+    interpretAnalysis = (type: string, analysis: object): object => {
 
-        // console.log("triad", triad);
-        let analyses = {
+        let analyses = {};
+        let analysesDark = {
             "triad": {
                 "score": 0,
                 "negativeWords": [],
@@ -199,14 +211,47 @@ export class WritingInterface {
                 "positiveWords": []
             },
         };
+        let analysesBigfive = {
+            "O": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "C": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "E": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "A": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+            "N": {
+                "score": 0,
+                "negativeWords": [],
+                "positiveWords": []
+            },
+        };
 
-        for (const trait in triad) {
+        if (type === "darktriad") {
+            let analyses = analysesDark;
+        } else if (type === "bigfive") {
+            let analyses = analysesBigfive;
+        }
+
+        for (const trait in analysis) {
             // on vérifie que le tableau contient bien quelque chose
 
-            if (triad[trait] !== []) {
-                for (const word in triad[trait]) {
-                    const _word = triad[trait][word][0]; // correspond au mot (chaine de caractère)
-                    const wordScore = triad[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
+            if (analysis[trait] !== []) {
+                for (const word in analysis[trait]) {
+                    const _word = analysis[trait][word][0]; // correspond au mot (chaine de caractère)
+                    const wordScore = analysis[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
                     // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
                     if (wordScore > 0) {
                         analyses[trait].score--;
@@ -236,8 +281,8 @@ export class WritingInterface {
     }
 
     animateNegativeWords= (words: string[]) => {
-        console.log(`words:`);
-        console.log(words);
+        // console.log(`words:`);
+        // console.log(words);
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         for (const word in words) {
             let slicedWord = this.sliceWord(words[word], "negative");

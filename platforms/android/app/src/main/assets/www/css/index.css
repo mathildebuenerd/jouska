@@ -348,15 +348,20 @@ input#contactNumber:focus, #smsContent:focus {
 
 .gauges {
     display: flex;
-    align-items: center;
+    width: 83vw;
+    flex-direction: row-reverse;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
 .gauges .fill {
-    height: 30px;
-    width: 60px;
-    background-color: #aaaaaa;
-    transition: 1s ease;
+    height: 20px;
+    width: 60vw;
+    background: url("../img/interface-components/jauges/jauge_8.png") no-repeat right;
+    background-size: contain;
+    /*background-repeat: no-repeat;*/
+    /*background-position: right;*/
+    /*transition: 1s ease;*/
 }
 
 .gauge-name {
@@ -365,8 +370,8 @@ input#contactNumber:focus, #smsContent:focus {
 
 .gauges > .gauge-name {
     position: relative;
-    left: -50px;
-    color: white;
+    /*left: -50px;*/
+    color: blue;
 }
 
 .sub-gauges {
