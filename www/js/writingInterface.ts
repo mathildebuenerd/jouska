@@ -51,7 +51,8 @@ export class WritingInterface {
     };
 
     public changeSidebar= (barSelector: string, score: number) => {
-        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} > .fill`);
+        console.log(`bar selector`, barSelector);
+        let sidebar = <HTMLElement>document.querySelector(`#${barSelector} .fill`);
         // console.log(`barselector:`, barSelector);
         sidebar.style.backgroundImage = `url(img/interface-components/jauges/jauge_${score}.png`;
     };
@@ -87,32 +88,33 @@ export class WritingInterface {
         const text = textArea.textContent;
         const allWords = new RegExp(/.+/, 'gim'); // récupère tous les mots
         const sentence = text.match(allWords);
-        const letters = new RegExp(/\S/, 'gi');
+        // const letters = new RegExp(/\S/, 'gi');
 
         // sentence[0] est parfois égal à plein d'espaces ('     '), pour être sûr qu'il y a bien du texte, on vérifie qu'il y ai une lettre
-        if (letters.test(sentence[0])) {
+        // if (letters.test(sentence[0])) {
+        // console.log(`sentence 0`, sentence[0]);
             return sentence[0]; // match renvoie un tableau de correspondances, mais avec la regex il n'est sensé renvoyer qu'un seul tableau
-        } else {
-            console.warn(`sentence n'existe pas, elle est égale à ${sentence} et est de type ${typeof sentence}`);
-        }
+        // } else {
+        //     console.warn(`sentence n'existe pas, elle est égale à ${sentence} et est de type ${typeof sentence}`);
+        // }
     };
 
     showFeedback= (analysis: any, type: string) => {
 
         let score = 0;
-        const triad = ["psychopathy", "conscientiousness", "openness"];
+        const otherAnalysis = ["psychopathy", "C", "O"];
 
         if (type === "polarity" || type === "selfishness") {
             if (analysis['score'] !== undefined) {
                 score += analysis['score'];
             } else {
                 for (const object in analysis) {
-                    console.log(`score ${type}: ${analysis[object]['score']}`);
+                    // console.log(`score ${type}: ${analysis[object]['score']}`);
                     score += analysis[object]['score'];
                 }
             }
             // les analyses de la liste triad donnent directement le score
-        } else if (triad.indexOf(type) !== -1) {
+        } else if (otherAnalysis.indexOf(type) !== -1) {
             score = analysis;
         }
 
@@ -129,6 +131,7 @@ export class WritingInterface {
 
         const language = 'fr';
         let sentence = this.getSentence();
+        // console.log(`sentence`, sentence);
 
 
         if (sentence !== undefined) {
@@ -153,14 +156,14 @@ export class WritingInterface {
 
             // Si ces deux valeurs sont différentes, c'est qu'il y a un mot de plus ou de moins
             if (this.tempSentences[1] !== this.tempSentences[0]) {
-                console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
+                // console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
                 this.tempSentences[0] = wordsToAnalyze;
 
                 // traduit la phrase, ce qui prend un peu de temps (promesse)
                 // quand la phrase est traduite, on lance l'analyse
                 textAnalysis.translateToEnglish(wordsToAnalyze)
                     .then((englishSentence) => {
-                        console.log(`english sentence: ${englishSentence}`);
+                        // console.log(`english sentence: ${englishSentence}`);
                         const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
                         const bigfive = textAnalysis.personalityAnalysis(englishSentence);
                         const interpretationDarkriad = this.interpretAnalysis("darktriad", darktriad);
@@ -171,10 +174,15 @@ export class WritingInterface {
                         const traitDarktriad = "psychopathy";
                         this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
 
-                        console.log(`interpretation big five`, interpretationBigfive);
-                        const traitBigfive = ["conscientiousness", "openness"];
+                        // console.log(`initial bigfive`, bigfive);
+                        // console.log(`interpretation big five`, interpretationBigfive);
+                        // console.log(`initial triad`, darktriad);
+                        // console.log(`interprettation triad`, interpretationDarkriad);
+                        const traitBigfive = ["C", "O"];
                         for (let i=0; i<traitBigfive.length; i++) {
-                            this.showFeedback(interpretationBigfive[traitBigfive[i]].score, String(traitBigfive));
+                            // console.log(`intrepret`, traitBigfive[i]);
+                            const subkey = traitBigfive[i];
+                            this.showFeedback(interpretationBigfive[subkey].score, String(traitBigfive[i]));
                         }
 
                         // select criteria
@@ -240,29 +248,47 @@ export class WritingInterface {
         };
 
         if (type === "darktriad") {
-            let analyses = analysesDark;
+            analyses = analysesDark;
+            for (const trait in analysis) {
+                // on vérifie que le tableau contient bien quelque chose
+                if (analysis[trait] !== []) {
+                    for (const word in analysis[trait]) {
+                        const _word = analysis[trait][word][0]; // correspond au mot (chaine de caractère)
+                        // console.log(`_word`, _word, `analysis`, analysis, `trait`, trait);
+                        const wordScore = analysis[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
+                        // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
+                        if (wordScore > 0) {
+                            analyses[trait].score--;
+                            analyses[trait].negativeWords.push(_word);
+                        } else {
+                            analyses[trait].score++;
+                            analyses[trait].positiveWords.push(_word);
+                        }
+                    }
+                }
+            }
         } else if (type === "bigfive") {
-            let analyses = analysesBigfive;
-        }
-
-        for (const trait in analysis) {
-            // on vérifie que le tableau contient bien quelque chose
-
-            if (analysis[trait] !== []) {
-                for (const word in analysis[trait]) {
-                    const _word = analysis[trait][word][0]; // correspond au mot (chaine de caractère)
-                    const wordScore = analysis[trait][word][3]; // le quatrième élément correspond à la valeur relative du mot
-                    // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
-                    if (wordScore > 0) {
-                        analyses[trait].score--;
-                        analyses[trait].negativeWords.push(_word);
-                    } else {
-                        analyses[trait].score++;
-                        analyses[trait].positiveWords.push(_word);
+            analyses = analysesBigfive;
+            for (const trait in analysis) {
+                // on regarde si le tableau n'est pas vide
+                if (analysis[trait].matches !== []) {
+                    for (let i = 0; i < analysis[trait].matches.length; i++) {
+                        const _word = analysis[trait].matches[i][0]; // correspond au mot (chaine de caractère)
+                        const wordScore = analysis[trait].matches[i][3]; // le quatrième élément correspond à la valeur relative du mot
+                        // si le score du mot est positif, ça veut dire que la darktriad est haute, donc c'est plutôt négatif. dans tous les cas on arrondi à 1 pour simplifier
+                        if (wordScore > 0) {
+                            analyses[trait].score--;
+                            analyses[trait].negativeWords.push(_word);
+                        } else {
+                            analyses[trait].score++;
+                            analyses[trait].positiveWords.push(_word);
+                        }
                     }
                 }
             }
         }
+
+
 
         // console.log(`analyses`, analyses);
 
@@ -286,9 +312,9 @@ export class WritingInterface {
         const textArea = <HTMLElement>document.querySelector('#smsContent');
         for (const word in words) {
             let slicedWord = this.sliceWord(words[word], "negative");
-            console.log(`slicedWord:`);
-            console.log(slicedWord);
-            console.log(`textarea.value: ${textArea.textContent}`);
+            // console.log(`slicedWord:`);
+            // console.log(slicedWord);
+            // console.log(`textarea.value: ${textArea.textContent}`);
             const toReplace = new RegExp(`${words[word]}`, 'gi');
             textArea.innerHTML = (textArea.textContent).replace(toReplace, slicedWord);
         }
@@ -334,11 +360,16 @@ export class WritingInterface {
 
         SMS.sendSMS(recipient, message, () => {
             console.log(`sms envoyé! destinaire: ${recipient}; message: ${message}`);
-            recipientElement.value = '';
-            messageElement.contentEditable = "false";
-            messageElement.style.border = "none";
-            messageElement.style.color = "#aaa";
+            recipientElement.value = "";
+            messageElement.textContent = "";
             confirmationMessage.textContent = "Message correctement envoyé :)";
+            setTimeout(() => {
+                confirmationMessage.textContent = "";
+            },3000);
+
+            // on remet le listener sur le bouton
+            const sendButton = <HTMLElement>document.querySelector('#sendMessage');
+            sendButton.addEventListener('click', this.sendMessage);
         }, (err) => {
             confirmationMessage.textContent = `Il y a eu une erreur, le message n'est pas parti...
             Erreur: ${err}`;

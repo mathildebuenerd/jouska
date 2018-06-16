@@ -16,7 +16,8 @@ var WritingInterface = (function () {
             sendButton.addEventListener('click', _this.sendMessage);
         };
         this.changeSidebar = function (barSelector, score) {
-            var sidebar = document.querySelector("#" + barSelector + " > .fill");
+            console.log("bar selector", barSelector);
+            var sidebar = document.querySelector("#" + barSelector + " .fill");
             sidebar.style.backgroundImage = "url(img/interface-components/jauges/jauge_" + score + ".png";
         };
         this.getColor = function (object, value) {
@@ -33,29 +34,22 @@ var WritingInterface = (function () {
             var text = textArea.textContent;
             var allWords = new RegExp(/.+/, 'gim');
             var sentence = text.match(allWords);
-            var letters = new RegExp(/\S/, 'gi');
-            if (letters.test(sentence[0])) {
-                return sentence[0];
-            }
-            else {
-                console.warn("sentence n'existe pas, elle est \u00E9gale \u00E0 " + sentence + " et est de type " + typeof sentence);
-            }
+            return sentence[0];
         };
         this.showFeedback = function (analysis, type) {
             var score = 0;
-            var triad = ["psychopathy", "conscientiousness", "openness"];
+            var otherAnalysis = ["psychopathy", "C", "O"];
             if (type === "polarity" || type === "selfishness") {
                 if (analysis['score'] !== undefined) {
                     score += analysis['score'];
                 }
                 else {
                     for (var object in analysis) {
-                        console.log("score " + type + ": " + analysis[object]['score']);
                         score += analysis[object]['score'];
                     }
                 }
             }
-            else if (triad.indexOf(type) !== -1) {
+            else if (otherAnalysis.indexOf(type) !== -1) {
                 score = analysis;
             }
             var scoreBar = _this.getSidebarNumber(score);
@@ -74,21 +68,19 @@ var WritingInterface = (function () {
                 var wordsToAnalyze = String(allWordsExceptLast);
                 _this.tempSentences[1] = wordsToAnalyze;
                 if (_this.tempSentences[1] !== _this.tempSentences[0]) {
-                    console.log("c'est different", _this.tempSentences[1], _this.tempSentences[0]);
                     _this.tempSentences[0] = wordsToAnalyze;
                     textAnalysis.translateToEnglish(wordsToAnalyze)
                         .then(function (englishSentence) {
-                        console.log("english sentence: " + englishSentence);
                         var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
                         var bigfive = textAnalysis.personalityAnalysis(englishSentence);
                         var interpretationDarkriad = _this.interpretAnalysis("darktriad", darktriad);
                         var interpretationBigfive = _this.interpretAnalysis("bigfive", bigfive);
                         var traitDarktriad = "psychopathy";
                         _this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
-                        console.log("interpretation big five", interpretationBigfive);
-                        var traitBigfive = ["conscientiousness", "openness"];
+                        var traitBigfive = ["C", "O"];
                         for (var i = 0; i < traitBigfive.length; i++) {
-                            _this.showFeedback(interpretationBigfive[traitBigfive[i]].score, String(traitBigfive));
+                            var subkey = traitBigfive[i];
+                            _this.showFeedback(interpretationBigfive[subkey].score, String(traitBigfive[i]));
                         }
                     })
                         .catch(function (err) { return console.log(err); });
@@ -149,23 +141,39 @@ var WritingInterface = (function () {
                 },
             };
             if (type === "darktriad") {
-                var analyses_1 = analysesDark;
+                analyses = analysesDark;
+                for (var trait in analysis) {
+                    if (analysis[trait] !== []) {
+                        for (var word in analysis[trait]) {
+                            var _word = analysis[trait][word][0];
+                            var wordScore = analysis[trait][word][3];
+                            if (wordScore > 0) {
+                                analyses[trait].score--;
+                                analyses[trait].negativeWords.push(_word);
+                            }
+                            else {
+                                analyses[trait].score++;
+                                analyses[trait].positiveWords.push(_word);
+                            }
+                        }
+                    }
+                }
             }
             else if (type === "bigfive") {
-                var analyses_2 = analysesBigfive;
-            }
-            for (var trait in analysis) {
-                if (analysis[trait] !== []) {
-                    for (var word in analysis[trait]) {
-                        var _word = analysis[trait][word][0];
-                        var wordScore = analysis[trait][word][3];
-                        if (wordScore > 0) {
-                            analyses[trait].score--;
-                            analyses[trait].negativeWords.push(_word);
-                        }
-                        else {
-                            analyses[trait].score++;
-                            analyses[trait].positiveWords.push(_word);
+                analyses = analysesBigfive;
+                for (var trait in analysis) {
+                    if (analysis[trait].matches !== []) {
+                        for (var i = 0; i < analysis[trait].matches.length; i++) {
+                            var _word = analysis[trait].matches[i][0];
+                            var wordScore = analysis[trait].matches[i][3];
+                            if (wordScore > 0) {
+                                analyses[trait].score--;
+                                analyses[trait].negativeWords.push(_word);
+                            }
+                            else {
+                                analyses[trait].score++;
+                                analyses[trait].positiveWords.push(_word);
+                            }
                         }
                     }
                 }
@@ -176,9 +184,6 @@ var WritingInterface = (function () {
             var textArea = document.querySelector('#smsContent');
             for (var word in words) {
                 var slicedWord = _this.sliceWord(words[word], "negative");
-                console.log("slicedWord:");
-                console.log(slicedWord);
-                console.log("textarea.value: " + textArea.textContent);
                 var toReplace = new RegExp("" + words[word], 'gi');
                 textArea.innerHTML = (textArea.textContent).replace(toReplace, slicedWord);
             }
@@ -211,11 +216,14 @@ var WritingInterface = (function () {
             var confirmationMessage = document.querySelector('#confirmationMessage');
             SMS.sendSMS(recipient, message, function () {
                 console.log("sms envoy\u00E9! destinaire: " + recipient + "; message: " + message);
-                recipientElement.value = '';
-                messageElement.contentEditable = "false";
-                messageElement.style.border = "none";
-                messageElement.style.color = "#aaa";
+                recipientElement.value = "";
+                messageElement.textContent = "";
                 confirmationMessage.textContent = "Message correctement envoyé :)";
+                setTimeout(function () {
+                    confirmationMessage.textContent = "";
+                }, 3000);
+                var sendButton = document.querySelector('#sendMessage');
+                sendButton.addEventListener('click', _this.sendMessage);
             }, function (err) {
                 confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...\n            Erreur: " + err;
                 throw err;

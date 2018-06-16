@@ -147,6 +147,7 @@ nav ul li.nav-element {
 
 
 .bottom-nav {
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -310,7 +311,7 @@ input#sendMessage {
     padding: 15px 20px;
     background-color: #eee;
     border: 0;
-    border-bottom: 3px solid lightgrey;
+    border-bottom: 3px solid #4343ff;
     font-size: 1.1em;
     text-transform: uppercase;
     letter-spacing: 1px;
