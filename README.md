@@ -15,7 +15,7 @@ The app analyzes the valence of the user’s text messages, and gives clues abou
 
 The app also contains an interactive writing interface, which gives in real time an emotional feedback.
 
-![Jouska - Writing interface (c) Mathilde Buenerd](http://www.chilidesign.fr/jouska/jouska_writing_interface_mathilde_buenerd.gif){:width="300px"}
+<img src="http://www.chilidesign.fr/jouska/jouska_writing_interface_mathilde_buenerd.gif" alt="Jouska - Writing interface (c) Mathilde Buenerd" style="width: 400px; border: 1px solid #ddd;">
 
 
 ## Plugins used
