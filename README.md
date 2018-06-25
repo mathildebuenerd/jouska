@@ -33,7 +33,7 @@ Then, several text analysis are done :
 
 ## Context
 Jouska is a master's project made at HEAD - Geneva, Media Design master. The project has two parts: the former is the app presented here. \
-The second is [a speculative video](https://vimeo.com/276232389) imagining the future of implications of the daily use of sentiment analysis. The video takes place in a near future, in which the app allows its users to have a better understanding of the way they talk, and in the end, of one of the others. This way, they develop a form of immunity at targeted solicitations from advertisers, politicians, or noxious relations.
+The second is [a speculative video](https://vimeo.com/276232389) imagining the future implication of the daily use of sentiment analysis. The video takes place in a near future, in which the app allows its users to have a better understanding of the way they talk, and in the end, of one of the others. This way, they develop a form of immunity at targeted solicitations from advertisers, politicians, or noxious relations.
 
 -----
 
