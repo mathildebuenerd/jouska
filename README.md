@@ -1,4 +1,4 @@
-# Jouska
+﻿# Jouska
 
 _(français en dessous)_
 
@@ -7,7 +7,10 @@ _(français en dessous)_
 
 
 ## Description
+
 Jouska is an Android mobile app that allows people to quantify the way they talk.
+
+By allowing users to have a better understanding of the way they talk, the app train them to read between the lines of one of the others. This way, they can develop a form of immunity at targeted solicitations from advertisers, politicians, or noxious relations. The project is complemented by [a video](https://vimeo.com/276232389) showing how, by a better understanding of the hidden mechanics of sentiment analysis, people could be less a prey for ill-intentioned politicians or journalists. How they could reclaim a technology that is currently massively use against them (let's think about fact-free politics for example). At the same time, it asks the question: with all these technologies focusing on language and emotions, will everyone become more manipulative and manipulable?
 
 The app analyzes the valence of the user’s text messages, and gives clues about the contacts who are the most positive and the most negative. It compares the positivity of the messages sent and received, in order to see if there’s a loss of balance between the two people’s writing. It also looks at the personality of these contacts, to show which kind of personality is the most compatible with the user. Finally, it looks at the positivity of the messages depending on the weekdays/hours they were sent, in order, for example, to recommend people to avoid sending messages on certain days/hours, or on the contrary, to nudge them to do so.
 
