@@ -12,10 +12,10 @@ const Component = new interfaceComponents.InterfaceComponents();
 
 import * as translate from "./../../hooks/translate";
 import * as keys from './apiKeys';
-import {TextAnalysis} from "./sentimentAnalysis";
+import * as textAnalysis from "./sentimentAnalysis";
 import {SMSManager} from "./manageSMS";
 const sms = new SMSManager();
-const text = new TextAnalysis();
+const text = new textAnalysis.TextAnalysis();
 import * as dataV from "./datavisualisation";
 const DataVis = new dataV.Datavisualisation();
 const Keys = new keys.Keys();
@@ -183,6 +183,9 @@ export class CordovaApp {
         // console.log(test);
 
         // console.log(text.sentimentAnalysis())
+
+        // let test = text.personalityAnalysis("hi dude, how are you doing today?");
+        // console.log(`test`, test);
 
         writingAssistant.startAssistance();
 

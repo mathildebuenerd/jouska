@@ -16,7 +16,6 @@ var WritingInterface = (function () {
             sendButton.addEventListener('click', _this.sendMessage);
         };
         this.changeSidebar = function (barSelector, score) {
-            console.log("bar selector", barSelector);
             var sidebar = document.querySelector("#" + barSelector + " .fill");
             sidebar.style.backgroundImage = "url(img/interface-components/jauges/jauge_" + score + ".png";
         };
@@ -37,8 +36,9 @@ var WritingInterface = (function () {
             return sentence[0];
         };
         this.showFeedback = function (analysis, type) {
+            console.log("showFeedback", "analysis", analysis, "type", type);
             var score = 0;
-            var otherAnalysis = ["psychopathy", "C", "O"];
+            var otherAnalysis = ["psychopathy", "conscientiousness", "openness"];
             if (type === "polarity" || type === "selfishness") {
                 if (analysis['score'] !== undefined) {
                     score += analysis['score'];
@@ -69,21 +69,21 @@ var WritingInterface = (function () {
                 _this.tempSentences[1] = wordsToAnalyze;
                 if (_this.tempSentences[1] !== _this.tempSentences[0]) {
                     _this.tempSentences[0] = wordsToAnalyze;
-                    textAnalysis.translateToEnglish(wordsToAnalyze)
-                        .then(function (englishSentence) {
-                        var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        var bigfive = textAnalysis.personalityAnalysis(englishSentence);
-                        var interpretationDarkriad = _this.interpretAnalysis("darktriad", darktriad);
-                        var interpretationBigfive = _this.interpretAnalysis("bigfive", bigfive);
-                        var traitDarktriad = "psychopathy";
-                        _this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
-                        var traitBigfive = ["C", "O"];
-                        for (var i = 0; i < traitBigfive.length; i++) {
-                            var subkey = traitBigfive[i];
-                            _this.showFeedback(interpretationBigfive[subkey].score, String(traitBigfive[i]));
-                        }
-                    })
-                        .catch(function (err) { return console.log(err); });
+                    console.log("wordsToAnalyze", wordsToAnalyze);
+                    if (wordsToAnalyze !== null) {
+                        textAnalysis.translateToEnglish(wordsToAnalyze)
+                            .then(function (englishSentence) {
+                            console.log("la promesse semble r\u00E9ussir");
+                            var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                            console.log("darktriad", darktriad);
+                            var interpretationDarkriad = _this.interpretAnalysis("darktriad", darktriad);
+                            console.log("interpretationdark", interpretationDarkriad);
+                            var traitDarktriad = "psychopathy";
+                            _this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+                            var traitBigfive = ["conscientiousness", "openness"];
+                        })
+                            .catch(function (err) { return console.log(err); });
+                    }
                 }
                 else {
                 }
@@ -114,27 +114,27 @@ var WritingInterface = (function () {
                 },
             };
             var analysesBigfive = {
-                "O": {
+                "openness": {
                     "score": 0,
                     "negativeWords": [],
                     "positiveWords": []
                 },
-                "C": {
+                "conscientiousness": {
                     "score": 0,
                     "negativeWords": [],
                     "positiveWords": []
                 },
-                "E": {
+                "extraversion": {
                     "score": 0,
                     "negativeWords": [],
                     "positiveWords": []
                 },
-                "A": {
+                "agreeableness": {
                     "score": 0,
                     "negativeWords": [],
                     "positiveWords": []
                 },
-                "N": {
+                "neuroticism": {
                     "score": 0,
                     "negativeWords": [],
                     "positiveWords": []

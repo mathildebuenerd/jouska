@@ -5,7 +5,7 @@ const Score = new scores.CalculateScore();
 import * as sms from "./manageSMS";
 const Sms = new sms.SMSManager();
 
-import "p5";
+// import "p5";
 
 
 
@@ -39,88 +39,88 @@ export class Datavisualisation {
     drawBigFiveGraph = (data: object): void => {
 
 
-        new p5( function(bigFive) {
-
-            const colors = [
-                "#2121ff",
-                "#00ffff",
-                "#f2f2f2",
-                "#eccbd9",
-                "#e1eff6"
-            ];
-
-            const values = [
-                data["person"]["openness"],
-                data["person"]["conscientiousness"],
-                data["person"]["extraversion"],
-                data["person"]["agreeableness"],
-                data["person"]["neuroticism"]
-            ];
-            const valuesOther = [
-                data["other"]["openness"],
-                data["other"]["conscientiousness"],
-                data["other"]["extraversion"],
-                data["other"]["agreeableness"],
-                data["other"]["neuroticism"]
-            ];
-            const traits = [
-                "openness",
-                "conscientiousness",
-                "extraversion",
-                "agreeableness",
-                "neuroticism"
-            ];
-            const y = 100;
-            const offset = 45;
-
-            bigFive.setup = function() {
-                let cnv = bigFive.createCanvas(window.innerWidth, 200);
-                cnv.parent("userStats");
-                bigFive.noStroke();
-                bigFive.drawGraph();
-
-            };
-
-            bigFive.drawText = (txt: string, clr: string, x: number, y: number): void => {
-                bigFive.noStroke();
-                bigFive.fill(clr);
-                bigFive.textAlign(bigFive.CENTER);
-                bigFive.textSize(10);
-                bigFive.text(txt, x, y);
-                bigFive.noFill();
-            };
-
-            bigFive.drawGraph = () => {
-
-                for (let i=0; i<5; i++) {
-                    bigFive.noStroke();
-                    // la valeur de la personne demandée
-                    // si la valeur est négative, on ne l'affiche pas de la même couleur
-                    if (values[i] > 0) {
-                        bigFive.fill(colors[i]);
-                    } else {
-                        bigFive.fill("black");
-                    }
-                    const x = 60*i+offset;
-                    bigFive.ellipse(x, y, values[i], values[i]);
-                    bigFive.drawText(traits[i], "black", x, y+30);
-
-
-                    bigFive.noFill();
-                    // la valeur de l'interloculteur
-                    if (valuesOther[i] > 0) {
-                        bigFive.stroke("#ff00ff");
-                    } else {
-                        bigFive.stroke("#aaaaaa");
-                    }
-                    bigFive.ellipse(x, y, valuesOther[i], valuesOther[i]);
-                }
-            };
-
-            bigFive.draw = function() {
-
-            };
-        });
+        // new p5( function(bigFive) {
+        //
+        //     const colors = [
+        //         "#2121ff",
+        //         "#00ffff",
+        //         "#f2f2f2",
+        //         "#eccbd9",
+        //         "#e1eff6"
+        //     ];
+        //
+        //     const values = [
+        //         data["person"]["openness"],
+        //         data["person"]["conscientiousness"],
+        //         data["person"]["extraversion"],
+        //         data["person"]["agreeableness"],
+        //         data["person"]["neuroticism"]
+        //     ];
+        //     const valuesOther = [
+        //         data["other"]["openness"],
+        //         data["other"]["conscientiousness"],
+        //         data["other"]["extraversion"],
+        //         data["other"]["agreeableness"],
+        //         data["other"]["neuroticism"]
+        //     ];
+        //     const traits = [
+        //         "openness",
+        //         "conscientiousness",
+        //         "extraversion",
+        //         "agreeableness",
+        //         "neuroticism"
+        //     ];
+        //     const y = 100;
+        //     const offset = 45;
+        //
+        //     bigFive.setup = function() {
+        //         let cnv = bigFive.createCanvas(window.innerWidth, 200);
+        //         cnv.parent("userStats");
+        //         bigFive.noStroke();
+        //         bigFive.drawGraph();
+        //
+        //     };
+        //
+        //     bigFive.drawText = (txt: string, clr: string, x: number, y: number): void => {
+        //         bigFive.noStroke();
+        //         bigFive.fill(clr);
+        //         bigFive.textAlign(bigFive.CENTER);
+        //         bigFive.textSize(10);
+        //         bigFive.text(txt, x, y);
+        //         bigFive.noFill();
+        //     };
+        //
+        //     bigFive.drawGraph = () => {
+        //
+        //         for (let i=0; i<5; i++) {
+        //             bigFive.noStroke();
+        //             // la valeur de la personne demandée
+        //             // si la valeur est négative, on ne l'affiche pas de la même couleur
+        //             if (values[i] > 0) {
+        //                 bigFive.fill(colors[i]);
+        //             } else {
+        //                 bigFive.fill("black");
+        //             }
+        //             const x = 60*i+offset;
+        //             bigFive.ellipse(x, y, values[i], values[i]);
+        //             bigFive.drawText(traits[i], "black", x, y+30);
+        //
+        //
+        //             bigFive.noFill();
+        //             // la valeur de l'interloculteur
+        //             if (valuesOther[i] > 0) {
+        //                 bigFive.stroke("#ff00ff");
+        //             } else {
+        //                 bigFive.stroke("#aaaaaa");
+        //             }
+        //             bigFive.ellipse(x, y, valuesOther[i], valuesOther[i]);
+        //         }
+        //     };
+        //
+        //     bigFive.draw = function() {
+        //
+        //     };
+        // });
 
     };
 

@@ -1,19 +1,11 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/phonegap-plugin-push/www/push.js",
-        "id": "phonegap-plugin-push.PushNotification",
-        "pluginId": "phonegap-plugin-push",
+        "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
+        "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
+        "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
         "clobbers": [
-            "PushNotification"
-        ]
-    },
-    {
-        "file": "plugins/phonegap-plugin-push/www/browser/push.js",
-        "id": "phonegap-plugin-push.BrowserPush",
-        "pluginId": "phonegap-plugin-push",
-        "clobbers": [
-            "PushNotification"
+            "navigator.contactsPhoneNumbers"
         ]
     },
     {
@@ -220,12 +212,6 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/phonegap-plugin-speech-recognition/www/browser/SpeechRecognition.js",
-        "id": "phonegap-plugin-speech-recognition.SpeechRecognition",
-        "pluginId": "phonegap-plugin-speech-recognition",
-        "runs": true
-    },
-    {
         "file": "plugins/cordova-plugin-sms/www/SMS.js",
         "id": "cordova-plugin-sms.SMS",
         "pluginId": "cordova-plugin-sms",
@@ -242,26 +228,40 @@ module.exports = [
         ]
     },
     {
-        "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
-        "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
-        "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
+        "file": "plugins/phonegap-plugin-push/www/push.js",
+        "id": "phonegap-plugin-push.PushNotification",
+        "pluginId": "phonegap-plugin-push",
         "clobbers": [
-            "navigator.contactsPhoneNumbers"
+            "PushNotification"
         ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-push/www/browser/push.js",
+        "id": "phonegap-plugin-push.BrowserPush",
+        "pluginId": "phonegap-plugin-push",
+        "clobbers": [
+            "PushNotification"
+        ]
+    },
+    {
+        "file": "plugins/phonegap-plugin-speech-recognition/www/browser/SpeechRecognition.js",
+        "id": "phonegap-plugin-speech-recognition.SpeechRecognition",
+        "pluginId": "phonegap-plugin-speech-recognition",
+        "runs": true
     }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "cordova-plugin-whitelist": "1.3.3",
-    "phonegap-plugin-push": "2.1.3",
+    "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10",
+    "cordova-plugin-compat": "1.2.0",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-media": "5.0.2",
-    "cordova-plugin-compat": "1.2.0",
-    "phonegap-plugin-speech-recognition": "0.3.0",
     "cordova-plugin-sms": "1.0.5",
+    "cordova-plugin-whitelist": "1.3.3",
     "cordova-sms-plugin": "0.1.11",
-    "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10"
+    "phonegap-plugin-push": "2.1.3",
+    "phonegap-plugin-speech-recognition": "0.3.0"
 }
 // BOTTOM OF METADATA
 });

@@ -147,6 +147,7 @@ nav ul li.nav-element {
 
 
 .bottom-nav {
+    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -308,9 +309,10 @@ input#sendMessage {
     transform: translateX(-50%) scale(0.8);
     margin-top: 20px;
     padding: 15px 20px;
-    background-color: #eee;
+    background-color: #4f66ff;
+    color: white;
     border: 0;
-    border-bottom: 3px solid lightgrey;
+    border-bottom: 3px solid #0800ff;
     font-size: 1.1em;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -333,11 +335,12 @@ input#contactNumber:focus, #smsContent:focus {
 }
 
 #rec { /*le petit rond qui montre qu'on est en train d'analyser*/
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 30px;
-    animation: blink 1s infinite;
+    /*width: 10px;*/
+    /*height: 10px;*/
+    /*background-color: red;*/
+    /*border-radius: 30px;*/
+    /*animation: blink 1s infinite;*/
+    display: none;
 }
 
 @keyframes blink {
@@ -347,15 +350,20 @@ input#contactNumber:focus, #smsContent:focus {
 
 .gauges {
     display: flex;
-    align-items: center;
+    width: 83vw;
+    flex-direction: row-reverse;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
 .gauges .fill {
-    height: 30px;
-    width: 60px;
-    background-color: #aaaaaa;
-    transition: 1s ease;
+    height: 20px;
+    width: 60vw;
+    background: url("../img/interface-components/jauges/jauge_8.png") no-repeat right;
+    background-size: contain;
+    /*background-repeat: no-repeat;*/
+    /*background-position: right;*/
+    /*transition: 1s ease;*/
 }
 
 .gauge-name {
@@ -364,8 +372,8 @@ input#contactNumber:focus, #smsContent:focus {
 
 .gauges > .gauge-name {
     position: relative;
-    left: -50px;
-    color: white;
+    /*left: -50px;*/
+    color: blue;
 }
 
 .sub-gauges {

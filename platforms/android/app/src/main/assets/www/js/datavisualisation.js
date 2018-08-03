@@ -4,81 +4,10 @@ var scores = require("./calculateScores");
 var Score = new scores.CalculateScore();
 var sms = require("./manageSMS");
 var Sms = new sms.SMSManager();
-require("p5");
 var Datavisualisation = (function () {
     function Datavisualisation() {
         var _this = this;
         this.drawBigFiveGraph = function (data) {
-            new p5(function (bigFive) {
-                var colors = [
-                    "#2121ff",
-                    "#00ffff",
-                    "#f2f2f2",
-                    "#eccbd9",
-                    "#e1eff6"
-                ];
-                var values = [
-                    data["person"]["openness"],
-                    data["person"]["conscientiousness"],
-                    data["person"]["extraversion"],
-                    data["person"]["agreeableness"],
-                    data["person"]["neuroticism"]
-                ];
-                var valuesOther = [
-                    data["other"]["openness"],
-                    data["other"]["conscientiousness"],
-                    data["other"]["extraversion"],
-                    data["other"]["agreeableness"],
-                    data["other"]["neuroticism"]
-                ];
-                var traits = [
-                    "openness",
-                    "conscientiousness",
-                    "extraversion",
-                    "agreeableness",
-                    "neuroticism"
-                ];
-                var y = 100;
-                var offset = 45;
-                bigFive.setup = function () {
-                    var cnv = bigFive.createCanvas(window.innerWidth, 200);
-                    cnv.parent("userStats");
-                    bigFive.noStroke();
-                    bigFive.drawGraph();
-                };
-                bigFive.drawText = function (txt, clr, x, y) {
-                    bigFive.noStroke();
-                    bigFive.fill(clr);
-                    bigFive.textAlign(bigFive.CENTER);
-                    bigFive.textSize(10);
-                    bigFive.text(txt, x, y);
-                    bigFive.noFill();
-                };
-                bigFive.drawGraph = function () {
-                    for (var i = 0; i < 5; i++) {
-                        bigFive.noStroke();
-                        if (values[i] > 0) {
-                            bigFive.fill(colors[i]);
-                        }
-                        else {
-                            bigFive.fill("black");
-                        }
-                        var x = 60 * i + offset;
-                        bigFive.ellipse(x, y, values[i], values[i]);
-                        bigFive.drawText(traits[i], "black", x, y + 30);
-                        bigFive.noFill();
-                        if (valuesOther[i] > 0) {
-                            bigFive.stroke("#ff00ff");
-                        }
-                        else {
-                            bigFive.stroke("#aaaaaa");
-                        }
-                        bigFive.ellipse(x, y, valuesOther[i], valuesOther[i]);
-                    }
-                };
-                bigFive.draw = function () {
-                };
-            });
         };
         this.bigFiveGraph = function (contact, type) {
             var dataOther;

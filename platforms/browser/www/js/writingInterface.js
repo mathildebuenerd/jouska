@@ -15,10 +15,9 @@ var WritingInterface = (function () {
             var sendButton = document.querySelector('#sendMessage');
             sendButton.addEventListener('click', _this.sendMessage);
         };
-        this.changeSidebarColor = function (barSelector, color) {
-            var sidebar = document.querySelector("#" + barSelector + " > .fill");
-            console.log("barselector:", barSelector);
-            sidebar.style.backgroundColor = '#' + color;
+        this.changeSidebar = function (barSelector, score) {
+            var sidebar = document.querySelector("#" + barSelector + " .fill");
+            sidebar.style.backgroundImage = "url(img/interface-components/jauges/jauge_" + score + ".png";
         };
         this.getColor = function (object, value) {
             if (value > 8) {
@@ -34,33 +33,27 @@ var WritingInterface = (function () {
             var text = textArea.textContent;
             var allWords = new RegExp(/.+/, 'gim');
             var sentence = text.match(allWords);
-            var letters = new RegExp(/\S/, 'gi');
-            if (letters.test(sentence[0])) {
-                return sentence[0];
-            }
-            else {
-                console.warn("sentence n'existe pas, elle est \u00E9gale \u00E0 " + sentence + " et est de type " + typeof sentence);
-            }
+            return sentence[0];
         };
         this.showFeedback = function (analysis, type) {
+            console.log("showFeedback", "analysis", analysis, "type", type);
             var score = 0;
-            var triad = ["triad", "narcissism", "machiavellianism", "psychopathy"];
+            var otherAnalysis = ["psychopathy", "conscientiousness", "openness"];
             if (type === "polarity" || type === "selfishness") {
                 if (analysis['score'] !== undefined) {
                     score += analysis['score'];
                 }
                 else {
                     for (var object in analysis) {
-                        console.log("score " + type + ": " + analysis[object]['score']);
                         score += analysis[object]['score'];
                     }
                 }
             }
-            else if (triad.indexOf(type) !== -1) {
+            else if (otherAnalysis.indexOf(type) !== -1) {
                 score = analysis;
             }
-            var color = _this.getColor(_this.colors, score);
-            _this.changeSidebarColor(type, color);
+            var scoreBar = _this.getSidebarNumber(score);
+            _this.changeSidebar(type, scoreBar);
         };
         this.analyzeText = function () {
             var language = 'fr';
@@ -75,26 +68,30 @@ var WritingInterface = (function () {
                 var wordsToAnalyze = String(allWordsExceptLast);
                 _this.tempSentences[1] = wordsToAnalyze;
                 if (_this.tempSentences[1] !== _this.tempSentences[0]) {
-                    console.log("c'est different", _this.tempSentences[1], _this.tempSentences[0]);
                     _this.tempSentences[0] = wordsToAnalyze;
-                    textAnalysis.translateToEnglish(wordsToAnalyze)
-                        .then(function (englishSentence) {
-                        console.log("english sentence: " + englishSentence);
-                        var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        var interpretation = _this.interpretDarktriad(darktriad);
-                        console.log("interpretation", interpretation);
-                        for (var trait in interpretation) {
-                            _this.showFeedback(interpretation[trait].score, String(trait));
-                        }
-                    })
-                        .catch(function (err) { return console.log(err); });
+                    console.log("wordsToAnalyze", wordsToAnalyze);
+                    if (wordsToAnalyze !== null) {
+                        textAnalysis.translateToEnglish(wordsToAnalyze)
+                            .then(function (englishSentence) {
+                            console.log("la promesse semble r\u00E9ussir");
+                            var darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                            console.log("darktriad", darktriad);
+                            var interpretationDarkriad = _this.interpretAnalysis("darktriad", darktriad);
+                            console.log("interpretationdark", interpretationDarkriad);
+                            var traitDarktriad = "psychopathy";
+                            _this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+                            var traitBigfive = ["conscientiousness", "openness"];
+                        })
+                            .catch(function (err) { return console.log(err); });
+                    }
                 }
                 else {
                 }
             }
         };
-        this.interpretDarktriad = function (triad) {
-            var analyses = {
+        this.interpretAnalysis = function (type, analysis) {
+            var analyses = {};
+            var analysesDark = {
                 "triad": {
                     "score": 0,
                     "negativeWords": [],
@@ -116,18 +113,67 @@ var WritingInterface = (function () {
                     "positiveWords": []
                 },
             };
-            for (var trait in triad) {
-                if (triad[trait] !== []) {
-                    for (var word in triad[trait]) {
-                        var _word = triad[trait][word][0];
-                        var wordScore = triad[trait][word][3];
-                        if (wordScore > 0) {
-                            analyses[trait].score--;
-                            analyses[trait].negativeWords.push(_word);
+            var analysesBigfive = {
+                "openness": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "conscientiousness": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "extraversion": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "agreeableness": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+                "neuroticism": {
+                    "score": 0,
+                    "negativeWords": [],
+                    "positiveWords": []
+                },
+            };
+            if (type === "darktriad") {
+                analyses = analysesDark;
+                for (var trait in analysis) {
+                    if (analysis[trait] !== []) {
+                        for (var word in analysis[trait]) {
+                            var _word = analysis[trait][word][0];
+                            var wordScore = analysis[trait][word][3];
+                            if (wordScore > 0) {
+                                analyses[trait].score--;
+                                analyses[trait].negativeWords.push(_word);
+                            }
+                            else {
+                                analyses[trait].score++;
+                                analyses[trait].positiveWords.push(_word);
+                            }
                         }
-                        else {
-                            analyses[trait].score++;
-                            analyses[trait].positiveWords.push(_word);
+                    }
+                }
+            }
+            else if (type === "bigfive") {
+                analyses = analysesBigfive;
+                for (var trait in analysis) {
+                    if (analysis[trait].matches !== []) {
+                        for (var i = 0; i < analysis[trait].matches.length; i++) {
+                            var _word = analysis[trait].matches[i][0];
+                            var wordScore = analysis[trait].matches[i][3];
+                            if (wordScore > 0) {
+                                analyses[trait].score--;
+                                analyses[trait].negativeWords.push(_word);
+                            }
+                            else {
+                                analyses[trait].score++;
+                                analyses[trait].positiveWords.push(_word);
+                            }
                         }
                     }
                 }
@@ -135,14 +181,9 @@ var WritingInterface = (function () {
             return analyses;
         };
         this.animateNegativeWords = function (words) {
-            console.log("words:");
-            console.log(words);
             var textArea = document.querySelector('#smsContent');
             for (var word in words) {
                 var slicedWord = _this.sliceWord(words[word], "negative");
-                console.log("slicedWord:");
-                console.log(slicedWord);
-                console.log("textarea.value: " + textArea.textContent);
                 var toReplace = new RegExp("" + words[word], 'gi');
                 textArea.innerHTML = (textArea.textContent).replace(toReplace, slicedWord);
             }
@@ -175,11 +216,14 @@ var WritingInterface = (function () {
             var confirmationMessage = document.querySelector('#confirmationMessage');
             SMS.sendSMS(recipient, message, function () {
                 console.log("sms envoy\u00E9! destinaire: " + recipient + "; message: " + message);
-                recipientElement.value = '';
-                messageElement.contentEditable = "false";
-                messageElement.style.border = "none";
-                messageElement.style.color = "#aaa";
+                recipientElement.value = "";
+                messageElement.textContent = "";
                 confirmationMessage.textContent = "Message correctement envoyé :)";
+                setTimeout(function () {
+                    confirmationMessage.textContent = "";
+                }, 3000);
+                var sendButton = document.querySelector('#sendMessage');
+                sendButton.addEventListener('click', _this.sendMessage);
             }, function (err) {
                 confirmationMessage.textContent = "Il y a eu une erreur, le message n'est pas parti...\n            Erreur: " + err;
                 throw err;
@@ -206,6 +250,16 @@ var WritingInterface = (function () {
         };
         this.tempSentences = ["", ""];
     }
+    WritingInterface.prototype.getSidebarNumber = function (score) {
+        var value = score + 8;
+        if (score > 8) {
+            value = 8;
+        }
+        else if (score < -8) {
+            value = -8;
+        }
+        return value;
+    };
     WritingInterface.prototype.sliceWord = function (word, elmtClass) {
         var tag = "<span class=\"" + elmtClass + "\">";
         for (var letter = 0; letter < word.length; letter++) {

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.quantifiedtalk.test" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Quantified Talk</name>
+    <name>Jouska</name>
     <description>
-        Quantify what you say, improve your relationships.
+        Messaging app that analyzes your emotions.
     </description>
     <author email="mathilde.buenerd@gmail.com" href="http://chilidesign.fr">
         Math

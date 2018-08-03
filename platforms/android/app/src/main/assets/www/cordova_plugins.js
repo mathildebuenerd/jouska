@@ -1,11 +1,11 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
   {
-    "id": "phonegap-plugin-push.PushNotification",
-    "file": "plugins/phonegap-plugin-push/www/push.js",
-    "pluginId": "phonegap-plugin-push",
+    "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
+    "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
+    "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
     "clobbers": [
-      "PushNotification"
+      "navigator.contactsPhoneNumbers"
     ]
   },
   {
@@ -198,6 +198,30 @@ module.exports = [
     ]
   },
   {
+    "id": "cordova-plugin-sms.SMS",
+    "file": "plugins/cordova-plugin-sms/www/SMS.js",
+    "pluginId": "cordova-plugin-sms",
+    "clobbers": [
+      "window.SMS"
+    ]
+  },
+  {
+    "id": "cordova-sms-plugin.Sms",
+    "file": "plugins/cordova-sms-plugin/www/sms.js",
+    "pluginId": "cordova-sms-plugin",
+    "clobbers": [
+      "window.sms"
+    ]
+  },
+  {
+    "id": "phonegap-plugin-push.PushNotification",
+    "file": "plugins/phonegap-plugin-push/www/push.js",
+    "pluginId": "phonegap-plugin-push",
+    "clobbers": [
+      "PushNotification"
+    ]
+  },
+  {
     "id": "phonegap-plugin-speech-recognition.SpeechRecognition",
     "file": "plugins/phonegap-plugin-speech-recognition/www/SpeechRecognition.js",
     "pluginId": "phonegap-plugin-speech-recognition",
@@ -260,43 +284,19 @@ module.exports = [
     "clobbers": [
       "SpeechGrammarList"
     ]
-  },
-  {
-    "id": "cordova-plugin-sms.SMS",
-    "file": "plugins/cordova-plugin-sms/www/SMS.js",
-    "pluginId": "cordova-plugin-sms",
-    "clobbers": [
-      "window.SMS"
-    ]
-  },
-  {
-    "id": "cordova-sms-plugin.Sms",
-    "file": "plugins/cordova-sms-plugin/www/sms.js",
-    "pluginId": "cordova-sms-plugin",
-    "clobbers": [
-      "window.sms"
-    ]
-  },
-  {
-    "id": "com.dbaq.cordova.contactsPhoneNumbers.contactsPhoneNumbers",
-    "file": "plugins/com.dbaq.cordova.contactsPhoneNumbers/www/contactsPhoneNumbers.js",
-    "pluginId": "com.dbaq.cordova.contactsPhoneNumbers",
-    "clobbers": [
-      "navigator.contactsPhoneNumbers"
-    ]
   }
 ];
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "cordova-plugin-whitelist": "1.3.3",
-  "phonegap-plugin-push": "2.1.3",
+  "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-media": "5.0.2",
-  "phonegap-plugin-speech-recognition": "0.3.0",
   "cordova-plugin-sms": "1.0.5",
+  "cordova-plugin-whitelist": "1.3.3",
   "cordova-sms-plugin": "0.1.11",
-  "com.dbaq.cordova.contactsPhoneNumbers": "0.0.10"
+  "phonegap-plugin-push": "2.1.3",
+  "phonegap-plugin-speech-recognition": "0.3.0"
 };
 // BOTTOM OF METADATA
 });

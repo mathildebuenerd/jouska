@@ -92,18 +92,18 @@ var SMSManager = (function () {
             }
         }).then(function (data) {
             var contacts = {};
-            for (var key_1 in data) {
+            for (var key in data) {
                 var type = filters.box;
-                var address = SMSManager.normalizeAddress(data[key_1].address);
-                var myid = data[key_1]._id;
+                var address = SMSManager.normalizeAddress(data[key].address);
+                var myid = data[key]._id;
                 if (address.length > 7 && address.match("[0-9]+")) {
                     console.log("date:");
-                    console.log(data[key_1].date);
-                    var date = SMSManager.convertUnixDate(data[key_1].date);
+                    console.log(data[key].date);
+                    var date = SMSManager.convertUnixDate(data[key].date);
                     if (address in contacts) {
                         contacts[address][type][myid] = {
                             "text": {
-                                "original": data[key_1].body
+                                "original": data[key].body
                             },
                             "date": date,
                             "type": type
@@ -114,7 +114,7 @@ var SMSManager = (function () {
                         contacts[address][type] = {};
                         contacts[address][type][myid] = {
                             "text": {
-                                "original": data[key_1].body
+                                "original": data[key].body
                             },
                             "date": date,
                             "type": type

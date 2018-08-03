@@ -309,9 +309,10 @@ input#sendMessage {
     transform: translateX(-50%) scale(0.8);
     margin-top: 20px;
     padding: 15px 20px;
-    background-color: #eee;
+    background-color: #4f66ff;
+    color: white;
     border: 0;
-    border-bottom: 3px solid #4343ff;
+    border-bottom: 3px solid #0800ff;
     font-size: 1.1em;
     text-transform: uppercase;
     letter-spacing: 1px;

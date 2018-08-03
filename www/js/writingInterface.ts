@@ -51,7 +51,7 @@ export class WritingInterface {
     };
 
     public changeSidebar= (barSelector: string, score: number) => {
-        console.log(`bar selector`, barSelector);
+        // console.log(`bar selector`, barSelector);
         let sidebar = <HTMLElement>document.querySelector(`#${barSelector} .fill`);
         // console.log(`barselector:`, barSelector);
         sidebar.style.backgroundImage = `url(img/interface-components/jauges/jauge_${score}.png`;
@@ -100,9 +100,11 @@ export class WritingInterface {
     };
 
     showFeedback= (analysis: any, type: string) => {
+        console.log(`showFeedback`, `analysis`, analysis, `type`, type);
+
 
         let score = 0;
-        const otherAnalysis = ["psychopathy", "C", "O"];
+        const otherAnalysis = ["psychopathy", "conscientiousness", "openness"];
 
         if (type === "polarity" || type === "selfishness") {
             if (analysis['score'] !== undefined) {
@@ -159,36 +161,42 @@ export class WritingInterface {
                 // console.log(`c'est different`, this.tempSentences[1], this.tempSentences[0]);
                 this.tempSentences[0] = wordsToAnalyze;
 
+                console.log("wordsToAnalyze", wordsToAnalyze);
+
                 // traduit la phrase, ce qui prend un peu de temps (promesse)
                 // quand la phrase est traduite, on lance l'analyse
-                textAnalysis.translateToEnglish(wordsToAnalyze)
-                    .then((englishSentence) => {
-                        // console.log(`english sentence: ${englishSentence}`);
-                        const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
-                        const bigfive = textAnalysis.personalityAnalysis(englishSentence);
-                        const interpretationDarkriad = this.interpretAnalysis("darktriad", darktriad);
-                        const interpretationBigfive = this.interpretAnalysis("bigfive", bigfive);
-                        // for (const trait in interpretation) {
+                if (wordsToAnalyze !== null) {
+                    textAnalysis.translateToEnglish(wordsToAnalyze)
+                        .then((englishSentence) => {
+                            console.log(`la promesse semble réussir`);
+                            // console.log(`english sentence: ${englishSentence}`);
+                            const darktriad = textAnalysis.darktriadAnalysis(englishSentence);
+                            console.log("darktriad", darktriad);
 
-                        // select criteria in psychopathy
-                        const traitDarktriad = "psychopathy";
-                        this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+                            // const bigfive = textAnalysis.personalityAnalysis(englishSentence);
+                            // console.log("bigfive", bigfive);
 
-                        // console.log(`initial bigfive`, bigfive);
-                        // console.log(`interpretation big five`, interpretationBigfive);
-                        // console.log(`initial triad`, darktriad);
-                        // console.log(`interprettation triad`, interpretationDarkriad);
-                        const traitBigfive = ["C", "O"];
-                        for (let i=0; i<traitBigfive.length; i++) {
-                            // console.log(`intrepret`, traitBigfive[i]);
-                            const subkey = traitBigfive[i];
-                            this.showFeedback(interpretationBigfive[subkey].score, String(traitBigfive[i]));
-                        }
+                            const interpretationDarkriad = this.interpretAnalysis("darktriad", darktriad);
+                            // const interpretationBigfive = this.interpretAnalysis("bigfive", bigfive);
+                            // for (const trait in interpretation) {
 
-                        // select criteria
-                        // }
-                    })
-                    .catch( err => console.log(err));
+                            console.log("interpretationdark", interpretationDarkriad);
+                            // console.log("interpretationbigf", interpretationBigfive);
+                            // select criteria in psychopathy
+                            const traitDarktriad = "psychopathy";
+                            this.showFeedback(interpretationDarkriad[traitDarktriad].score, String(traitDarktriad));
+
+                            const traitBigfive = ["conscientiousness", "openness"];
+                            // for (let i=0; i<traitBigfive.length; i++) {
+                            //     // console.log(`intrepret`, traitBigfive[i]);
+                            //     const subkey = traitBigfive[i];
+                            //     this.showFeedback(interpretationBigfive[subkey].score, String(traitBigfive[i]));
+                            // }
+
+
+                        })
+                        .catch( err => console.log(err));
+                }
             } else {
             }
         }
@@ -220,27 +228,27 @@ export class WritingInterface {
             },
         };
         let analysesBigfive = {
-            "O": {
+            "openness": {
                 "score": 0,
                 "negativeWords": [],
                 "positiveWords": []
             },
-            "C": {
+            "conscientiousness": {
                 "score": 0,
                 "negativeWords": [],
                 "positiveWords": []
             },
-            "E": {
+            "extraversion": {
                 "score": 0,
                 "negativeWords": [],
                 "positiveWords": []
             },
-            "A": {
+            "agreeableness": {
                 "score": 0,
                 "negativeWords": [],
                 "positiveWords": []
             },
-            "N": {
+            "neuroticism": {
                 "score": 0,
                 "negativeWords": [],
                 "positiveWords": []
